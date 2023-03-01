@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL", "BLL\BLL.csproj", "{7C6A1D44-DD4A-43CF-94D2-D039F58087D6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{5DCA269F-285E-4912-86CE-ABA4BD6FE519}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVC", "MVC\MVC.csproj", "{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{7C6A1D44-DD4A-43CF-94D2-D039F58087D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7C6A1D44-DD4A-43CF-94D2-D039F58087D6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7C6A1D44-DD4A-43CF-94D2-D039F58087D6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7C6A1D44-DD4A-43CF-94D2-D039F58087D6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5DCA269F-285E-4912-86CE-ABA4BD6FE519}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5DCA269F-285E-4912-86CE-ABA4BD6FE519}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5DCA269F-285E-4912-86CE-ABA4BD6FE519}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5DCA269F-285E-4912-86CE-ABA4BD6FE519}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

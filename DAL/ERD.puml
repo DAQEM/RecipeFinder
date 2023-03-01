@@ -1,0 +1,82 @@
+﻿@startuml
+
+hide circle
+skinparam LineType ortho
+
+entity Cook {
+  *id : char(36) <<generated>>
+  --
+  *username : varchar(16)
+  *fullname : varchar(100)
+  *image_url : varchar(255)
+  *created_at : datetime <<generated>>
+}
+
+entity Credential {
+  *id : char(36) <<generated>>
+  --
+  *email : varchar(100)
+  *password : varchar(255)
+  *cook_id : char(36) <<FK>>
+}
+
+entity Recipe {
+  *id : char(36) <<generated>>
+  --
+  *name : varchar(100)
+  *image_url : varchar(255)
+  *description : text
+  *preparation_time : time
+  *category : tinyint
+  *created_at : datetime <<generated>>
+  *updated_at : datetime
+  *cook_id : char(36) <<FK>>
+}
+
+entity RecipeReview {
+  *id : char(36) <<generated>>
+  --
+  *rating : tinyint
+  *comment : text
+  *created_at : datetime <<generated>>
+  *recipe_id : char(36) <<FK>>
+  *reviewer_id : char(36) <<FK>>
+}
+
+entity CookReview {
+  *id : char(36) <<generated>>
+  --
+  *rating : tinyint
+  *comment : text
+  *created_at : datetime <<generated>>
+  *cook_id : char(36) <<FK>>
+  *reviewer_id : char(36) <<FK>>
+}
+
+entity Ingredient {
+  *id : char(36) <<generated>>
+  --
+  *name : varchar(100)
+  *description : text
+  *unit : tinyint
+  *quantity : decimal(10,2)
+  *recipe_id : char(36) <<FK>>
+}
+
+entity PreparationStep {
+  *id : char(36) <<generated>>
+  --
+  *order : tinyint
+  *description : text
+  *recipe_id : char(36) <<FK>>
+}
+
+Cook ||..|| Credential
+Cook ||..o{ Recipe
+Cook ||..o{ CookReview
+
+Recipe ||..o{ RecipeReview
+Recipe ||..o{ Ingredient
+Recipe ||..o{ PreparationStep
+
+@enduml

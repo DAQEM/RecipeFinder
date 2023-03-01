@@ -1,0 +1,18 @@
+﻿@model MVC.Models.Cook.CookListModel
+
+@foreach(BLL.Entities.Cook cook in Model.Cooks)
+{
+    <div>
+        <a href="/Cook/Cook/@cook.Id">
+            <h2>@cook.Id</h2>
+        </a>
+        <p>@cook.UserName</p>
+        <p>@cook.FullName</p>
+        <p>@cook.ImageUrl</p>
+        <p>@cook.CreatedAt</p>
+    </div>
+} 
+@if (Model.Cooks.Count == 0)
+{
+    <p>No cooks found</p>
+}

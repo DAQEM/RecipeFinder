@@ -1,0 +1,92 @@
+﻿@startuml
+'https://plantuml.com/class-diagram
+
+skinparam groupInheritance 2
+
+class Recipe {
+    Guid Id
+    string Name
+    string ImageUrl
+    string Description
+    TimeSpan PreparationTime
+    DateTime CreatedAt
+    DateTime UpdatedAt
+}
+
+class Cook {
+    Guid Id
+    string UserName
+    string FullName
+    string ImageUrl
+    DateTime CreatedAt
+}
+
+class Credential {
+    string Email
+    string EncryptedPassword
+    DateTime UpdatedAt
+}
+
+class Ingredient {
+    string Name
+    string Description
+    decimal Quantity
+}
+
+enum Unit {
+    Milliliter,
+    Deciliter,
+    Liter,
+    Milligram,
+    Gram,
+    Kilogram,
+    Teaspoon,
+    Tablespoon,
+    FluidOunce,
+    Cup,
+    Pint,
+    Quart,
+    Gallon,
+    Pound,
+    Ounce
+}
+
+class PreparationStep {
+    int Order
+    string Description
+}
+
+enum Category {
+    Appetizer
+    MainCourse
+    Dessert
+}
+
+abstract class Review {
+    Guid ReviewerId
+    string Comment
+    int Rating
+    DateTime CreatedAt
+}
+
+class CookReview {
+}
+
+class RecipeReview {
+}
+
+Review <|-- CookReview
+Review <|-- RecipeReview
+
+Cook --> "*" Recipe
+Cook -- Credential
+Cook --> "*" CookReview
+
+Recipe --> "*" Ingredient
+Recipe --> "*" PreparationStep
+Recipe --> "*" Category
+Recipe --> "*" RecipeReview
+
+Ingredient -- Unit
+
+@enduml

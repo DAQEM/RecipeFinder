@@ -1,0 +1,60 @@
+@startuml
+
+skinparam LineType ortho
+
+package "Business Logic Layer" as BLL {
+    interface ICookRepository {
+        +GetAll(): List<Cook>
+        +GetById(id: Guid): Cook
+        +Add(cook: Cook): void
+        +Update(cook: Cook): void
+        +Delete(cook: Cook): void
+    }
+    
+    class CookService {
+        -cookRepository: ICookRepository
+        +CookService(cookRepository: ICookRepository)
+        +GetAllCooks(): List<Cook>
+        +GetCookById(id: Guid): Cook
+        +AddCook(cook: Cook): void
+        +UpdateCook(cook: Cook): void
+        +DeleteCook(cook: Cook): void
+    }
+    
+    class Cook {
+        +Guid Id
+        +string UserName
+        +string FullName
+        +string ImageUrl
+        +DateTime CreatedAt
+    }
+}
+
+package "Data Access Layer" as DAL {
+    class CookRepository implements ICookRepository {
+        -cooks: List<Cook>
+        +GetAll(): List<Cook>
+        +GetById(id: Guid): Cook
+        +Add(cook: Cook): void
+        +Update(cook: Cook): void
+        +Delete(cook: Cook): void
+    }
+}
+
+package "Presentation Layer" as PRES {
+    class CookController {
+        -cookService: CookService
+        +CookController(cookService: CookService)
+        +GetAllCooks(): Response
+        +GetCookById(id: Guid): Response
+        +AddCook(cook: Cook): Response
+        +UpdateCook(cook: Cook): Response
+        +DeleteCook(cook: Cook): Response
+    }
+}
+
+CookService --> ICookRepository
+CookController ---> CookService
+CookController ------> CookRepository
+
+@enduml
