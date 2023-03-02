@@ -1,6 +1,6 @@
 ﻿using BLL.Data.Cook;
 using BLL.Entities;
-using DAL.Cook;
+using DAL.Repositories.Cook;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.Cook;
 
@@ -16,6 +16,7 @@ public class CookController : Controller
     }
     
     // GET Cook
+    [Route("Cook")]
     public IActionResult Index()
     {
         List<Cook> cooks = _cookService.GetAll();
@@ -23,9 +24,10 @@ public class CookController : Controller
     }
     
     // GET Cook/Cook/Guid
-    public IActionResult Cook(Guid id)
+    [Route("Cook/{username}")]
+    public IActionResult Cook(string username)
     {
-        Cook cook = _cookService.GetById(id);
+        Cook cook = _cookService.GetByUserName(username);
         return View(new CookModel { Cook = cook });
     }
 }

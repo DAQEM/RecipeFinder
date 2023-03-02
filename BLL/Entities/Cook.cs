@@ -1,4 +1,6 @@
-﻿namespace BLL.Entities;
+﻿using BLL.Entities.Review;
+
+namespace BLL.Entities;
 
 public class Cook
 {
@@ -8,13 +10,16 @@ public class Cook
     private string _imageUrl;
     private readonly DateTime _createdAt;
     
-    public Cook(Guid id, string userName, string fullName, string imageUrl, DateTime createdAt)
+    private List<CookReview> _cookReviews = new();
+    
+    private Cook(Guid id, string userName, string fullName, string imageUrl, DateTime createdAt, List<CookReview> cookReviews)
     {
         _id = id;
         _userName = userName;
         _fullName = fullName;
         _imageUrl = imageUrl;
         _createdAt = createdAt;
+        _cookReviews = cookReviews;
     }
     
     public Guid Id => _id;
@@ -45,6 +50,8 @@ public class Cook
         private string _fullName = string.Empty;
         private string _imageUrl = string.Empty;
         private DateTime _createdAt = DateTime.Now;
+        
+        private List<CookReview> _cookReviews = new();
 
         public Builder WithId(Guid id)
         {
@@ -76,9 +83,15 @@ public class Cook
             return this;
         }
 
+        public Builder WithCookReviews(List<CookReview> cookReviews)
+        {
+            _cookReviews = cookReviews;
+            return this;
+        }
+
         public Cook Build()
         {
-            return new Cook(_id, _userName, _fullName, _imageUrl, _createdAt);
+            return new Cook(_id, _userName, _fullName, _imageUrl, _createdAt, _cookReviews);
         }
     }
 }

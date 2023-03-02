@@ -1,0 +1,27 @@
+﻿@model MVC.Models.Auth.RegisterModel
+
+<div>
+    <h1>Register page</h1>
+    
+    @if(ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+    
+    @Html.BeginForm())
+    {
+        <label>UserName</label>
+        @Html.TextBoxFor(m => m.Username)
+        <label>FullName</label>
+        @Html.TextBoxFor(m => m.FullName)
+        <label>Email</label>
+        @Html.TextBoxFor(m => m.Email)
+        <label>Password</label>
+        @Html.PasswordFor(m => m.Password)
+        <label>ConfirmPassword</label>
+        @Html.PasswordFor(m => m.ConfirmPassword)
+        <input type="submit" value="Login" />
+    }
+</div>

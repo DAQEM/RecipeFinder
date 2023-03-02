@@ -1,0 +1,28 @@
+﻿@using Microsoft.AspNetCore.Http
+@using System.Text
+@inject IHttpContextAccessor HttpContextAccessor
+
+<ul class="navbar-nav">
+    @if (HttpContextAccessor.HttpContext != null)
+    {
+        @if (HttpContextAccessor.HttpContext.Session.Get("Username") != null)
+        {
+            string username = Encoding.UTF8.GetString(HttpContextAccessor.HttpContext.Session.Get("Username"));
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/Cook/@username" title="Manage">Hello @username!</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/Logout">Logout</a>
+            </li>
+        }
+        else
+        {
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/Register">Register</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-dark" href="/Login">Login</a>
+            </li>
+        }
+    }
+</ul>

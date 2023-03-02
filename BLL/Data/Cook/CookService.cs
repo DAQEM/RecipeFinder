@@ -19,6 +19,11 @@ public class CookService
         return _cookRepository.GetById(id);
     }
     
+    public Entities.Cook GetByUserName(string username)
+    {
+        return _cookRepository.GetByUserName(username);
+    }
+    
     public void Add(Entities.Cook cook)
     {
         _cookRepository.Add(cook);
