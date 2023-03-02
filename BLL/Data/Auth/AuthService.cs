@@ -1,4 +1,6 @@
-﻿namespace BLL.Data.Auth;
+﻿using BLL.Security;
+
+namespace BLL.Data.Auth;
 
 public class AuthService
 {
@@ -8,16 +10,18 @@ public class AuthService
     {
         _authRepository = authRepository;
     }
-    
+
     public string? Login(string username, string password)
     {
-        return _authRepository.Login(username, password);
+        string hashedPassword = PasswordSecurity.HashPassword(password);
+        return _authRepository.Login(username, hashedPassword);
     }
     
     public void Register(string username, string fullName, string email, string password)
     {
         Guid cookId = Guid.NewGuid();
         Guid credentialId = Guid.NewGuid();
-        _authRepository.Register(cookId, credentialId, username, fullName, email, password);
+        string hashedPassword = PasswordSecurity.HashPassword(password);
+        _authRepository.Register(cookId, credentialId, username, fullName, email, hashedPassword);
     }
 }

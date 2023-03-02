@@ -5,21 +5,21 @@ namespace DAL.Repositories.Auth;
 
 public class AuthRepository : IAuthRepository
 {
-    public string? Login(string username, string password)
+    public string? Login(string username, string hashedPassword)
     {
-        const string query = "SELECT username FROM Cook WHERE id = (SELECT cook_id FROM Credential WHERE cook_id = (SELECT id FROM Cook WHERE username = @username) AND password = @password);";
+        const string query = "SELECT username FROM Cook WHERE id = (SELECT cook_id FROM Credential WHERE cook_id = (SELECT id FROM Cook WHERE username = @username) AND password = @hashedPassword);";
         MySqlParameter[] parameters =
         {
             new("@username", username),
-            new("@password", password)
+            new("@hashedPassword", hashedPassword)
         };
         return QueryHelper.QuerySingle(query, parameters, reader => reader.GetString("username"));
     }
 
-    public void Register(Guid cookId, Guid credentialId, string username, string fullName, string email, string password)
+    public void Register(Guid cookId, Guid credentialId, string username, string fullName, string email, string hashedPassword)
     {
         CreateCook(cookId, username, fullName);
-        CreateCredential(credentialId, cookId, email, password);
+        CreateCredential(credentialId, cookId, email, hashedPassword);
     }
 
     private static void CreateCook(Guid id, string username, string fullName)
