@@ -1,55 +1,59 @@
 ﻿using BLL.Entities.Review;
 
-namespace BLL.Entities;
+namespace BLL.Entities.Cook;
 
 public class Cook
 {
     private readonly Guid _id;
-    private string _userName;
-    private string _fullName;
+    private string _username;
+    private string _fullname;
     private string _imageUrl;
     private readonly DateTime _createdAt;
+    private readonly Credential _credential;
     
     private List<CookReview> _cookReviews;
     
-    private Cook(Guid id, string userName, string fullName, string imageUrl, DateTime createdAt, List<CookReview> cookReviews)
+    private Cook(Guid id, string username, string fullname, string imageUrl, DateTime createdAt, List<CookReview> cookReviews, Credential credential)
     {
         _id = id;
-        _userName = userName;
-        _fullName = fullName;
+        _username = username;
+        _fullname = fullname;
         _imageUrl = imageUrl;
         _createdAt = createdAt;
         _cookReviews = cookReviews;
+        _credential = credential;
     }
     
     public Guid Id => _id;
-    public string UserName => _userName;
-    public string FullName => _fullName;
+    public string Username => _username;
+    public string Fullname => _fullname;
     public string ImageUrl => _imageUrl;
     public DateTime CreatedAt => _createdAt;
+    public Credential Credential => _credential;
     
     public void UpdateUserName(string userName)
     {
-        _userName = userName;
+        _username = userName;
     }
     
     public void UpdateFullName(string fullName)
     {
-        _fullName = fullName;
+        _fullname = fullName;
     }
     
     public void UpdateImageUri(string imageUrl)
     {
         _imageUrl = imageUrl;
     }
-    
+
     public class Builder
     {
-        private Guid _id = new();
+        private Guid _id;
         private string _userName = string.Empty;
         private string _fullName = string.Empty;
         private string _imageUrl = string.Empty;
         private DateTime _createdAt = DateTime.Now;
+        private Credential _credential = new(string.Empty, string.Empty, DateTime.Now);
         
         private List<CookReview> _cookReviews = new();
 
@@ -88,10 +92,16 @@ public class Cook
             _cookReviews = cookReviews;
             return this;
         }
+        
+        public Builder WithCredential(Credential credential)
+        {
+            _credential = credential;
+            return this;
+        }
 
         public Cook Build()
         {
-            return new Cook(_id, _userName, _fullName, _imageUrl, _createdAt, _cookReviews);
+            return new Cook(_id, _userName, _fullName, _imageUrl, _createdAt, _cookReviews, _credential);
         }
     }
 }

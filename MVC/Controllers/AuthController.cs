@@ -3,25 +3,30 @@ using BLL.Data.Auth;
 using BLL.Exceptions;
 using DAL.Repositories.Auth;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
+using MVC.Handlers;
 using MVC.Models.Auth;
 
 namespace MVC.Controllers;
 
 public class AuthController : Controller
 {
-    private const string UsernameSessionKey = "Username";
     private readonly AuthService _authService;
+    private readonly SecurityHandler _securityHandler;
     
     public AuthController()
     {
         _authService = new AuthService(new AuthRepository());
+        _securityHandler = new SecurityHandler(this);
     }
     
     [HttpGet]
     [Route("Login")]
     public IActionResult Login()
     {
-        return View();
+        return _securityHandler.IsLoggedIn() 
+            ? RedirectToAction("Index", "Home") 
+            : View();
     }
     
     [HttpGet]
@@ -35,8 +40,7 @@ public class AuthController : Controller
     [Route("Logout")]
     public IActionResult Logout()
     {
-        HttpContext.Session.Remove(UsernameSessionKey);
-        return RedirectToAction("Index", "Home");
+        return _securityHandler.LogoutAndRedirectToHome();
     }
 
     [HttpPost]
@@ -49,8 +53,7 @@ public class AuthController : Controller
 
             if (username != null)
             {
-                HttpContext.Session.SetString(UsernameSessionKey, username);
-                return RedirectToAction("Index", "Home");
+                return _securityHandler.LoginAndRedirectToHome(username);
             } 
         }
         ViewBag.ErrorMessage = "Invalid username or password.";
@@ -62,99 +65,25 @@ public class AuthController : Controller
     [Route("Register")]
     public IActionResult Register(RegisterModel model)
     {
-        model.TrimAll();
-        
-        if (HasError(model)) return View(model);
-
-        try
+        if (ModelState.IsValid)
         {
-            _authService.Register(model.Username, model.Fullname, model.Email, model.Password);
-
-            HttpContext.Session.SetString(UsernameSessionKey, model.Username);
-
-            return RedirectToAction("Index", "Home");
-        }
-        catch (Exception e) 
-            when(e is UsernameTakenException or EmailTakenException)
-        {
-            ViewBag.ErrorMessage = e.Message;
-            return View(model);
-        }
-    }
-
-    private bool HasError(RegisterModel model)
-    {
-        bool hasError = false;
-        hasError = CheckPasswordMatch(model, hasError);
-        hasError = CheckPasswordLength(model, hasError);
-        hasError = CheckUsernameLength(model, hasError);
-        hasError = CheckFullNameLength(model, hasError);
-        hasError = CheckEmailValid(model, hasError);
-
-        return hasError;
-    }
-
-    private bool CheckEmailValid(RegisterModel model, bool hasError)
-    {
-        try
-        {
-            if (model.Email == string.Empty ||
-                model.Email.EndsWith(".") ||
-                new MailAddress(model.Email).Address != model.Email)
+            List<string> errors = RegisterHandler.GetErrors(model);
+            if (!errors.Any())
             {
-                ViewBag.ErrorMessage = "Email is not valid.";
-                hasError = true;
+                try
+                {
+                    _authService.Register(model.Username, model.Fullname, model.Email, model.Password);
+                    return _securityHandler.LoginAndRedirectToHome(model.Username);
+                }
+                catch (Exception e) when (e is UsernameTakenException or EmailTakenException)
+                {
+                    errors.Add(e.Message);
+                }
             }
-        } catch (FormatException)
-        {
-            ViewBag.ErrorMessage = "Email is not valid.";
-            hasError = true;
+            ViewBag.ErrorMessages = errors;
         }
-
-        return hasError;
+        return View(model);
     }
 
-    private bool CheckFullNameLength(RegisterModel model, bool hasError)
-    {
-        if (model.Fullname.Length < 3)
-        {
-            ViewBag.ErrorMessage = "Full name must be at least 3 characters long.";
-            hasError = true;
-        }
-
-        return hasError;
-    }
-
-    private bool CheckUsernameLength(RegisterModel model, bool hasError)
-    {
-        if (model.Username.Length < 3)
-        {
-            ViewBag.ErrorMessage = "Username must be at least 3 characters long.";
-            hasError = true;
-        }
-
-        return hasError;
-    }
-
-    private bool CheckPasswordLength(RegisterModel model, bool hasError)
-    {
-        if (model.Password.Length < 8)
-        {
-            ViewBag.ErrorMessage = "Password must be at least 8 characters long.";
-            hasError = true;
-        }
-
-        return hasError;
-    }
-
-    private bool CheckPasswordMatch(RegisterModel model, bool hasError)
-    {
-        if (model.Password != model.ConfirmPassword)
-        {
-            ViewBag.ErrorMessage = "Passwords do not match.";
-            hasError = true;
-        }
-
-        return hasError;
-    }
+    
 }

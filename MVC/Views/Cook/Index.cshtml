@@ -1,18 +1,19 @@
-﻿@model MVC.Models.Cook.CookListModel
+﻿@using BLL.Entities.Cook
+@model MVC.Models.Cook.CookListModel
 
-@foreach(BLL.Entities.Cook cook in Model.Cooks)
+@foreach(Cook cook in Model.Cooks)
 {
     <div style="display: flex; justify-content: center; margin: 15px">
-        <a href="/Cook/@cook.UserName" style="color: inherit; text-decoration: none">
+        <a href="/Cook/@cook.Username" style="color: inherit; text-decoration: none">
             <div style="display: flex; padding: 20px; width: 800px; background-color: #eee; border-radius: 20px">
                 <div style="display: flex">
                     <div style="width: 100px">
-                        <img src="@cook.ImageUrl" width="100px" height="100px" alt="@cook.FullName's image"/>
+                        <img src="@cook.ImageUrl" width="100px" height="100px" alt="@cook.Fullname's image"/>
                     </div>
                     <div style="flex: 1; margin-left: 20px">
-                        <h2 style="margin: 0">@cook.FullName</h2>
+                        <h2 style="margin: 0">@cook.Fullname</h2>
                         @{
-                            string username = "@" + cook.UserName;
+                            string username = "@" + cook.Username;
                         }
                         <p style="margin: 0; font-size: 18px; color: #888">@username</p>
                         <p style="margin: 0; font-size: 14px; color: #aaa">Joined on: @cook.CreatedAt</p>

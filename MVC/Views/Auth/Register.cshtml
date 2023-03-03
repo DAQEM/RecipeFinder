@@ -1,43 +1,29 @@
 ﻿@model MVC.Models.Auth.RegisterModel
 
-<section style="display: flex; justify-content: center; align-items: center; margin: 50px; flex-direction: column">
-    @if(ViewBag.ErrorMessage != null)
-    {
-        <div class="alert alert-danger" style="width: 400px; padding: 1rem 40px">
-            @ViewBag.ErrorMessage
-        </div>
-    }
-    <div style="width: 400px; border-radius:6px; background-color: #339933; padding: 40px">
-        <form method="post" style="display: flex; flex-direction: column">
-            <h3 style="color: white">Create a new account</h3>
+<section class="flex center column" style="margin-top: 50px">
+    <div style="width: 400px">
+        @if (ViewBag.ErrorMessages != null)
+        {
+            @foreach (string error in ViewBag.ErrorMessages)
+            {
+                <div class="alert alert-danger" style="padding: 1rem 40px">
+                    @error
+                </div>
+            }
+        }
+        <form method="post" class="flex column">
+            <h1 class="text-white text-xl">Create a new account</h1>
             <label>Username</label>
-            <input type="text" placeholder="&#xF002;  Username" name="Username" style="font-family:Arial, FontAwesome,serif"/>
+            @Html.TextBoxFor(model => model.Username, new { placeholder = "\uF002 Username", required = true, oninvalid = "this.setCustomValidity('Please enter your username.')" })
             <label>Full name</label>
-            <input type="text" placeholder="&#xF007;  Full name" name="Fullname" style="font-family:Arial, FontAwesome,serif"/>
+            @Html.TextBoxFor(model => model.Fullname, new { placeholder = "\uF007 Full name", required = true, oninvalid = "this.setCustomValidity('Please enter your full name.')" })
             <label>Email address</label>
-            <input type="email" placeholder="&#xF0E0;  Email address" name="Email" style="font-family:Arial, FontAwesome,serif"/>
+            @Html.TextBoxFor(model => model.Email, new { placeholder = "\uF0E0 Email address", type = "email", required = true, oninvalid = "this.setCustomValidity('Please enter your email address.')" })
             <label>Password</label>
-            <input type="password" placeholder="&#xF084;  Password" name="Password" style="font-family:Arial, FontAwesome,serif"/>
+            @Html.PasswordFor(model => model.Password, new { placeholder = "\uF084 Password", required = true, oninvalid = "this.setCustomValidity('Please enter your password.')" })
             <label>Confirm password</label>
-            <input type="password" placeholder="&#xF084;  Confirm password" name="ConfirmPassword" style="font-family:Arial, FontAwesome,serif"/>
-            <button type="submit" class="btn" style="background-color: #1c3ab6; color: white; font-weight: 600; margin-top: 16px">Register</button>
+            @Html.PasswordFor(model => model.ConfirmPassword, new { placeholder = "\uF084 Confirm password", required = true, oninvalid = "this.setCustomValidity('Please enter your password again.')" })
+            <button type="submit" class="button" style="margin-top: 16px">Register</button>
         </form>
     </div>
 </section>
-
-<style>
-    input {
-        border-width: 0;
-        margin: 0 0 16px 0;
-        border-radius: 4px;
-        padding: 8px 16px;
-    }
-    input:focus {
-        outline: none !important;
-    }
-    label {
-        font-size: 16px;
-        color: white;
-        margin: 0;
-    }
-</style>

@@ -1,0 +1,36 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace MVC.Handlers;
+
+public class SecurityHandler
+{
+    private const string UsernameSessionKey = "Username";
+    private readonly Controller _controller;
+    
+    public SecurityHandler(Controller controller)
+    {
+        _controller = controller;
+    }
+    
+    public bool IsLoggedIn()
+    {
+        return _controller.HttpContext.Session.GetString(UsernameSessionKey) != null;
+    }
+    
+    public IActionResult LoginAndRedirectToHome(string username)
+    {
+        _controller.HttpContext.Session.SetString(UsernameSessionKey, username);
+        return RedirectToHome();
+    }
+    
+    public IActionResult LogoutAndRedirectToHome()
+    {
+        _controller.HttpContext.Session.Remove(UsernameSessionKey);
+        return RedirectToHome();
+    }
+    
+    private IActionResult RedirectToHome()
+    {
+        return _controller.RedirectToAction("Index", "Home");
+    }
+}

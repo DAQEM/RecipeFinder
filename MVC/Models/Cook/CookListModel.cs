@@ -2,5 +2,5 @@
 
 public class CookListModel
 {
-    public List<BLL.Entities.Cook> Cooks { get; set; }
+    public List<BLL.Entities.Cook.Cook> Cooks { get; set; }
 }

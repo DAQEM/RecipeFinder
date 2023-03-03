@@ -9,12 +9,12 @@ else
     <div style="display: flex; justify-content: center">
         <div style="display: flex">
             <div style="flex: 0 0.2 100px">
-                <img src="@Model.Cook.ImageUrl" width="100px" height="100px" alt="@Model.Cook.FullName's image"/>
+                <img src="@Model.Cook.ImageUrl" width="100px" height="100px" alt="@Model.Cook.Fullname's image"/>
             </div>
             <div style="flex: 1; margin-left: 20px">
-                <h2 style="margin: 0">@Model.Cook.FullName</h2>
+                <h2 style="margin: 0">@Model.Cook.Fullname</h2>
                 @{
-                    string username = "@" + Model.Cook.UserName;
+                    string username = "@" + Model.Cook.Username;
                 }
                 <p style="margin: 0; font-size: 18px; color: #aaa">@username</p>
                 <p style="margin: 0; font-size: 14px; color: #ccc">Joined on: @Model.Cook.CreatedAt</p>

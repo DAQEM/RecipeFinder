@@ -1,58 +1,39 @@
 ﻿@model MVC.Models.Auth.LoginModel
 
-<section style="display: flex; justify-content: center; flex-wrap: wrap">
-    <div style="flex: 1; margin: 10%">
-        <div style="display: flex; justify-content: center; flex-direction: column">
+<section class="flex center warp">
+    <div class="flex1" style="margin: 10%">
+        <div class="flex jcenter column">
             @if (ViewBag.ErrorMessage != null)
             {
                 <div class="alert alert-danger" style="padding: 1rem 40px">
                     @ViewBag.ErrorMessage
                 </div>
             }
-            <form method="post" style="border-radius:6px; background-color: #339933; padding: 40px">
-                <div style="display: flex; flex-direction: column">
-                    <h3 style="color: white">Login to your account</h3>
+            <form method="post">
+                <div class="flex column">
+                    <h1 class="text-white text-xl">Login to your account</h1>
                     <label>Username</label>
-                    <input type="text" placeholder="&#xF007;  Username" name="Username" style="font-family:Arial, FontAwesome,serif"/>
+                    @Html.TextBoxFor(model => model.Username, new { placeholder="\uF007 Username", required = true, oninvalid = "this.setCustomValidity('Please enter your username.')" })
                     <label>Password</label>
-                    <input type="password" placeholder="&#xF084;  Password" name="Password" style="font-family:Arial, FontAwesome,serif"/>
+                    @Html.PasswordFor(model => model.Password, new { placeholder="\uF084 Password", required = true, oninvalid = "this.setCustomValidity('Please enter your password.')" })
                 </div>
-                <button class="btn btn-primary" type="submit">Login!</button>
+                <button class="button" type="submit">Login!</button>
             </form>
         </div>
     </div>
-    <div style="flex: 1; margin: 10%">
-        <h1 style="font-size: 22px">Create a new account</h1>
-        <p style="font-size: 16px">
+    <div class="flex1" style="margin: 10%">
+        <h1 class="text-xl">Create a new account</h1>
+        <p>
             RecipeFinder is a website where you can find recipes and share your own.
             Would you also like to share your own recipes?
             Then create an account!
         </p>
-        <a class="btn btn-primary" href="/Register" >Register!</a>
+        <button type="button" class="button" onclick="location.href = '/Register';" >Register!</button>
     </div>
 </section>
 
 <style>
-    label {
-        font-size: 16px;
-        width: 100%;
-        color: white;
-    }
-    input {
-        font-size: 16px;
-        margin: 0 0 16px 0;
-        padding: 8px 16px;
-        border: 1px solid #ccc;
-        border-radius: 4px;
-        width: 100%;
-    }
-    input:focus {
-        outline: none !important;
-    }
-    .btn {
-        font-weight: 600;
+    .button {
         width: 120px;
-        background-color: #1c3ab6;
-        border: 0;
     }
 </style>

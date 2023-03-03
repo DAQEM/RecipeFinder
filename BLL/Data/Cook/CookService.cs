@@ -9,32 +9,32 @@ public class CookService
         _cookRepository = cookRepository;
     }
     
-    public List<Entities.Cook> GetAll()
+    public List<Entities.Cook.Cook> GetAll()
     {
         return _cookRepository.GetAll();
     }
     
-    public Entities.Cook GetById(Guid id)
+    public Entities.Cook.Cook? GetById(Guid id)
     {
         return _cookRepository.GetById(id);
     }
     
-    public Entities.Cook GetByUserName(string username)
+    public Entities.Cook.Cook? GetByUserName(string username)
     {
         return _cookRepository.GetByUserName(username);
     }
     
-    public void Add(Entities.Cook cook)
+    public void Add(Entities.Cook.Cook cook)
     {
         _cookRepository.Add(cook);
     }
     
-    public void Update(Entities.Cook cook)
+    public void Update(Entities.Cook.Cook cook)
     {
         _cookRepository.Update(cook);
     }
     
-    public void Delete(Entities.Cook cook)
+    public void Delete(Entities.Cook.Cook cook)
     {
         _cookRepository.Delete(cook);
     }

@@ -1,0 +1,29 @@
+﻿@model MVC.Models.Cook.EditCookModel
+
+<div>
+    @using (Html.BeginForm("EditCook", "Cook", FormMethod.Post))
+    {
+        <div>
+            @Html.LabelFor(model => model.Username)
+            @Html.TextBoxFor(model => model.Username)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Fullname)
+            @Html.TextBoxFor(model => model.Fullname)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.ImageUrl)
+            @Html.TextBoxFor(model => model.ImageUrl)
+        </div>
+        <div>
+            @Html.LabelFor(model => model.Email)
+            @Html.TextBoxFor(model => model.Email)
+        </div>
+        <button type="button" class="btn btn-primary">Change Password</button>
+        
+        
+        <div>
+            <input type="submit" value="Edit" />
+        </div>
+    }
+</div>
