@@ -1,4 +1,5 @@
 ﻿using BLL.Data.Auth;
+using BLL.Exceptions;
 using MySql.Data.MySqlClient;
 
 namespace DAL.Repositories.Auth;
@@ -18,10 +19,35 @@ public class AuthRepository : IAuthRepository
 
     public void Register(Guid cookId, Guid credentialId, string username, string fullName, string email, string hashedPassword)
     {
+        if (CheckUsernameTaken(username)) throw new UsernameTakenException();
+        if (CheckEmailTaken(email)) throw new EmailTakenException();
+
+        Console.WriteLine("Both username and email are available.");
+        
         CreateCook(cookId, username, fullName);
         CreateCredential(credentialId, cookId, email, hashedPassword);
     }
 
+    private bool CheckEmailTaken(string email)
+    {
+        return CheckTaken("Credential", "email", email);
+    }
+
+    private bool CheckUsernameTaken(string username)
+    {
+        return CheckTaken("Cook", "username", username);
+    }
+
+    private bool CheckTaken(string table, string column, string toCheck)
+    {
+        string query = $"SELECT COUNT(*) FROM {table} WHERE {column} = @toCheck;";
+        MySqlParameter[] parameters =
+        {
+            new("@toCheck", toCheck)
+        };
+        return QueryHelper.QuerySingle(query, parameters, reader => reader.GetInt32("COUNT(*)")) > 0;
+    }
+    
     private static void CreateCook(Guid id, string username, string fullName)
     {
         const string query =

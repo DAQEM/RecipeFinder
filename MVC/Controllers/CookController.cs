@@ -15,7 +15,7 @@ public class CookController : Controller
         _cookService = new CookService(new CookRepository());
     }
     
-    // GET Cook
+    [HttpGet]
     [Route("Cook")]
     public IActionResult Index()
     {
@@ -23,7 +23,7 @@ public class CookController : Controller
         return View(new CookListModel { Cooks = cooks });
     }
     
-    // GET Cook/Cook/Guid
+    [HttpGet]
     [Route("Cook/{username}")]
     public IActionResult Cook(string username)
     {

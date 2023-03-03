@@ -10,7 +10,7 @@ public class Cook
     private string _imageUrl;
     private readonly DateTime _createdAt;
     
-    private List<CookReview> _cookReviews = new();
+    private List<CookReview> _cookReviews;
     
     private Cook(Guid id, string userName, string fullName, string imageUrl, DateTime createdAt, List<CookReview> cookReviews)
     {

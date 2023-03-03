@@ -1,0 +1,67 @@
+﻿@startuml
+title Example only!
+
+skinparam LineType ortho
+
+package "Presentation" as UI {
+    class CookController {
+        +GetCook(Cook cook)
+    }
+}
+
+package "Logic Factory" as LogicFactory {
+    class CookFactory {
+        +GetCook(Cook cook)
+    }
+}
+
+package Logic {
+    class Cook {
+        +Id: Guid
+        +Username: string
+        +Fullname: string
+    }
+    
+    class CookImpl implements LogicInterfaces.ICook {
+            +GetCook(Cook cook)
+        }
+}
+
+package "Logic Interfaces" as LogicInterfaces {
+    interface ICook {
+        +GetCook(Cook cook)
+    }
+}
+
+package "DAL Factory" as DalFactory {
+    class CookService {
+        +GetCook(Cook cook)
+    }
+}
+
+package DAL {
+    class CookDTO {
+        +Id: Guid
+        +Username: string
+        +Fullname: string
+    }
+    
+    class CookRepository implements DalInterfaces.ICookRepository {
+            +GetCook(Cook cook)
+        }
+}
+
+package "DAL Interfaces" as DalInterfaces {
+    interface ICookRepository {
+        +GetCook(Cook cook)
+    }
+    
+}
+
+CookController --> CookFactory
+CookFactory --> LogicInterfaces.ICook
+
+LogicInterfaces.ICook ---> CookService
+CookService --> DalInterfaces.ICookRepository
+
+@enduml

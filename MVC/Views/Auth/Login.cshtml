@@ -1,19 +1,58 @@
 ﻿@model MVC.Models.Auth.LoginModel
 
-<div>
-    <h1>Login page</h1>
-    
-    @if(ViewBag.ErrorMessage != null)
-    {
-        <div class="alert alert-danger">
-            @ViewBag.ErrorMessage
+<section style="display: flex; justify-content: center; flex-wrap: wrap">
+    <div style="flex: 1; margin: 10%">
+        <div style="display: flex; justify-content: center; flex-direction: column">
+            @if (ViewBag.ErrorMessage != null)
+            {
+                <div class="alert alert-danger" style="padding: 1rem 40px">
+                    @ViewBag.ErrorMessage
+                </div>
+            }
+            <form method="post" style="border-radius:6px; background-color: #339933; padding: 40px">
+                <div style="display: flex; flex-direction: column">
+                    <h3 style="color: white">Login to your account</h3>
+                    <label>Username</label>
+                    <input type="text" placeholder="&#xF007;  Username" name="Username" style="font-family:Arial, FontAwesome,serif"/>
+                    <label>Password</label>
+                    <input type="password" placeholder="&#xF084;  Password" name="Password" style="font-family:Arial, FontAwesome,serif"/>
+                </div>
+                <button class="btn btn-primary" type="submit">Login!</button>
+            </form>
         </div>
-    }
+    </div>
+    <div style="flex: 1; margin: 10%">
+        <h1 style="font-size: 22px">Create a new account</h1>
+        <p style="font-size: 16px">
+            RecipeFinder is a website where you can find recipes and share your own.
+            Would you also like to share your own recipes?
+            Then create an account!
+        </p>
+        <a class="btn btn-primary" href="/Register" >Register!</a>
+    </div>
+</section>
 
-    @Html.BeginForm())
-    {
-        @Html.TextBoxFor(m => m.Username)
-        @Html.PasswordFor(m => m.Password)
-        <input type="submit" value="Login" />
+<style>
+    label {
+        font-size: 16px;
+        width: 100%;
+        color: white;
     }
-</div>
+    input {
+        font-size: 16px;
+        margin: 0 0 16px 0;
+        padding: 8px 16px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        width: 100%;
+    }
+    input:focus {
+        outline: none !important;
+    }
+    .btn {
+        font-weight: 600;
+        width: 120px;
+        background-color: #1c3ab6;
+        border: 0;
+    }
+</style>

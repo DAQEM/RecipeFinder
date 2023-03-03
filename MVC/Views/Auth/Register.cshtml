@@ -1,27 +1,43 @@
 ﻿@model MVC.Models.Auth.RegisterModel
 
-<div>
-    <h1>Register page</h1>
-    
+<section style="display: flex; justify-content: center; align-items: center; margin: 50px; flex-direction: column">
     @if(ViewBag.ErrorMessage != null)
     {
-        <div class="alert alert-danger">
+        <div class="alert alert-danger" style="width: 400px; padding: 1rem 40px">
             @ViewBag.ErrorMessage
         </div>
     }
-    
-    @Html.BeginForm())
-    {
-        <label>UserName</label>
-        @Html.TextBoxFor(m => m.Username)
-        <label>FullName</label>
-        @Html.TextBoxFor(m => m.FullName)
-        <label>Email</label>
-        @Html.TextBoxFor(m => m.Email)
-        <label>Password</label>
-        @Html.PasswordFor(m => m.Password)
-        <label>ConfirmPassword</label>
-        @Html.PasswordFor(m => m.ConfirmPassword)
-        <input type="submit" value="Login" />
+    <div style="width: 400px; border-radius:6px; background-color: #339933; padding: 40px">
+        <form method="post" style="display: flex; flex-direction: column">
+            <h3 style="color: white">Create a new account</h3>
+            <label>Username</label>
+            <input type="text" placeholder="&#xF002;  Username" name="Username" style="font-family:Arial, FontAwesome,serif"/>
+            <label>Full name</label>
+            <input type="text" placeholder="&#xF007;  Full name" name="Fullname" style="font-family:Arial, FontAwesome,serif"/>
+            <label>Email address</label>
+            <input type="email" placeholder="&#xF0E0;  Email address" name="Email" style="font-family:Arial, FontAwesome,serif"/>
+            <label>Password</label>
+            <input type="password" placeholder="&#xF084;  Password" name="Password" style="font-family:Arial, FontAwesome,serif"/>
+            <label>Confirm password</label>
+            <input type="password" placeholder="&#xF084;  Confirm password" name="ConfirmPassword" style="font-family:Arial, FontAwesome,serif"/>
+            <button type="submit" class="btn" style="background-color: #1c3ab6; color: white; font-weight: 600; margin-top: 16px">Register</button>
+        </form>
+    </div>
+</section>
+
+<style>
+    input {
+        border-width: 0;
+        margin: 0 0 16px 0;
+        border-radius: 4px;
+        padding: 8px 16px;
     }
-</div>
+    input:focus {
+        outline: none !important;
+    }
+    label {
+        font-size: 16px;
+        color: white;
+        margin: 0;
+    }
+</style>
