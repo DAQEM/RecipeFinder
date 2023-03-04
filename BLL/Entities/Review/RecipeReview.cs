@@ -2,8 +2,8 @@
 
 public class RecipeReview : Review
 {
-    public RecipeReview(Guid reviewerId, string comment, int rating, DateTime createdAt) 
-        : base(reviewerId, comment, rating, createdAt)
+    public RecipeReview(Guid id, string reviewerName, string reviewerImageUrl, string comment, int rating, DateTime createdAt) 
+        : base(id, reviewerName, reviewerImageUrl, comment, rating, createdAt)
     {
     }
 }

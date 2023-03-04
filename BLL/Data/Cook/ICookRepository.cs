@@ -1,4 +1,7 @@
-﻿namespace BLL.Data.Cook;
+﻿using BLL.Entities.Recipe;
+using BLL.Entities.Review;
+
+namespace BLL.Data.Cook;
 
 public interface ICookRepository
 {
@@ -8,4 +11,6 @@ public interface ICookRepository
     void Add(Entities.Cook.Cook cook);
     void Update(Entities.Cook.Cook cook);
     void Delete(Entities.Cook.Cook cook);
+    List<Recipe> GetRecipesByUsername(string username);
+    List<CookReview> GetReviewsForUsername(string username);
 }

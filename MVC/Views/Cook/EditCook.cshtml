@@ -1,29 +1,32 @@
 ﻿@model MVC.Models.Cook.EditCookModel
 
-<div>
-    @using (Html.BeginForm("EditCook", "Cook", FormMethod.Post))
-    {
-        <div>
-            @Html.LabelFor(model => model.Username)
-            @Html.TextBoxFor(model => model.Username)
-        </div>
-        <div>
-            @Html.LabelFor(model => model.Fullname)
-            @Html.TextBoxFor(model => model.Fullname)
-        </div>
-        <div>
-            @Html.LabelFor(model => model.ImageUrl)
-            @Html.TextBoxFor(model => model.ImageUrl)
-        </div>
-        <div>
-            @Html.LabelFor(model => model.Email)
-            @Html.TextBoxFor(model => model.Email)
-        </div>
-        <button type="button" class="btn btn-primary">Change Password</button>
-        
-        
-        <div>
-            <input type="submit" value="Edit" />
-        </div>
-    }
-</div>
+<section class="flex center column" style="margin-top: 50px">
+    <div style="width: 400px">
+        @if (ViewBag.ErrorMessages != null)
+        {
+            @foreach (string error in ViewBag.ErrorMessages)
+            {
+                <div class="alert alert-danger" style="padding: 1rem 40px">
+                    @error
+                </div>
+            }
+        }
+        @if(ViewBag.SuccessMessage != null)
+        {
+            <div class="alert alert-success" style="padding: 1rem 40px">
+                @ViewBag.SuccessMessage
+            </div>
+        }
+        <form method="post" class="flex column">
+            <h1 class="text-white text-xl">Edit your profile details</h1>
+            <label>Full name</label>
+            @Html.TextBoxFor(model => model.Fullname, new { placeholder = "\uF007 Full name", required = true, oninvalid = "this.setCustomValidity('Please enter your full name.')" })
+            <label>Email address</label>
+            @Html.TextBoxFor(model => model.Email, new { placeholder = "\uF0E0 Email address", type = "email", required = true, oninvalid = "this.setCustomValidity('Please enter your email address.')" })
+            <label>Profile picture URL</label>
+            @Html.TextBoxFor(model => model.ImageUrl, new { placeholder = "\uF030 Profile picture URL", type = "text", required = true, oninvalid = "this.setCustomValidity('Please enter a URL for your profile picture.')" })
+            <button type="button" class="bg-dark button" style="margin-top: 16px">Change Password</button>
+            <button type="submit" class="button" style="margin-top: 16px">Edit profile details</button>
+        </form>
+    </div>
+</section>

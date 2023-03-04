@@ -1,4 +1,7 @@
-﻿namespace BLL.Data.Cook;
+﻿using BLL.Entities.Recipe;
+using BLL.Entities.Review;
+
+namespace BLL.Data.Cook;
 
 public class CookService
 {
@@ -37,5 +40,15 @@ public class CookService
     public void Delete(Entities.Cook.Cook cook)
     {
         _cookRepository.Delete(cook);
+    }
+
+    public List<Recipe> GetRecipesByUsername(string username)
+    {
+        return _cookRepository.GetRecipesByUsername(username);
+    }
+
+    public List<CookReview> GetReviewsForUsername(string username)
+    {
+        return _cookRepository.GetReviewsForUsername(username);
     }
 }

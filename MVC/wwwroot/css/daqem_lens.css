@@ -38,8 +38,20 @@
 .bg-background {
     background-color: var(--background) !important;
 }
-.text-white {
+.txt-white {
     color: white;
+}
+.txt-light {
+    color: var(--light);
+}
+.txt-primary {
+    color: var(--primary);
+}
+.txt-secondary {
+    color: var(--secondary);
+}
+.txt-dark {
+    color: var(--dark);
 }
 .text-xxs {
     font-size: .5rem;

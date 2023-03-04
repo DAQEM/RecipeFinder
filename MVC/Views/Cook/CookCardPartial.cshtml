@@ -2,19 +2,6 @@
 
 <div class="flex jcenter" style="margin: 10px 0">
     <a href="/Cook/@Model.Cook.Username" style="color: inherit; text-decoration: none; width: 100%">
-        @* <div class="flex bg-primary" style="display: flex; padding: 20px; border-radius: 20px"> *@
-        @*     <div style="display: flex"> *@
-        @*         <img src="@Model.Cook.ImageUrl" style="width: 100px; height: 100px; border-radius: 50%" alt="@Model.Cook.Fullname image"/> *@
-        @*         <div style="flex: 1; margin-left: 20px"> *@
-        @*             <h2 style="margin: 0">@Model.Cook.Fullname</h2> *@
-        @*             @{ *@
-        @*                 string username = "@" + Model.Cook.Username; *@
-        @*             } *@
-        @*             <p style="margin: 0; font-size: 18px; color: #888">@username</p> *@
-        @*             <p style="margin: 0; font-size: 14px; color: #aaa">Joined on: @Model.Cook.CreatedAt</p> *@
-        @*         </div> *@
-        @*     </div> *@
-        @* </div> *@
         <div class="flex bg-white b-radius" style="padding: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
             <img src="@Model.Cook.ImageUrl" style="width: 60px; height: 60px; border-radius: 50%" alt="@Model.Cook.Fullname image"/>
             <div class="flex justify-content-between mx-2" style="width: 100%">

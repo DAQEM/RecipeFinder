@@ -14,7 +14,7 @@ public class SecurityHandler
     
     public bool IsLoggedIn()
     {
-        return _controller.HttpContext.Session.GetString(UsernameSessionKey) != null;
+        return GetSessionUsername() != null;
     }
     
     public IActionResult LoginAndRedirectToHome(string username)
@@ -32,5 +32,20 @@ public class SecurityHandler
     private IActionResult RedirectToHome()
     {
         return _controller.RedirectToAction("Index", "Home");
+    }
+
+    public bool IsUser(string username)
+    {
+        return IsLoggedIn() && string.Equals(GetSessionUsername(), username, StringComparison.CurrentCultureIgnoreCase);
+    }
+    
+    public IActionResult RedirectToNoPermission()
+    {
+        return _controller.RedirectToAction("NoPermission", "Security");
+    }
+    
+    private string? GetSessionUsername()
+    {
+        return _controller.HttpContext.Session.GetString(UsernameSessionKey);
     }
 }

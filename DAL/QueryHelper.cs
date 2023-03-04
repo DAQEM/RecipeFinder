@@ -68,38 +68,10 @@ public static class QueryHelper
         return results;
     }
     
-    public static bool HasRows(string query, MySqlParameter[]? parameters)
-    {
-        using MySqlConnection connection = ConnectionHelper.GetConnection();
-        using MySqlCommand command = new(query, connection);
-
-        if (parameters != null)
-        {
-            foreach (MySqlParameter parameter in parameters)
-            {
-                command.Parameters.Add(parameter);
-            }
-        }
-        
-        try
-        {
-            connection.Open();
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            return reader.HasRows;
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-
-        return false;
-    }
-    
     public static void NonQuery(string query, MySqlParameter[]? parameters)
     {
         using MySqlConnection connection = ConnectionHelper.GetConnection();
-        using MySqlCommand command = new MySqlCommand(query, connection);
+        using MySqlCommand command = new(query, connection);
         if (parameters != null)
         {
             foreach (MySqlParameter parameter in parameters)

@@ -63,19 +63,19 @@ public class Cook
             return this;
         }
 
-        public Builder WithUserName(string userName)
+        public Builder WithUsername(string userName)
         {
             _userName = userName;
             return this;
         }
 
-        public Builder WithFullName(string fullName)
+        public Builder WithFullname(string fullName)
         {
             _fullName = fullName;
             return this;
         }
 
-        public Builder WithImageUri(string imageUrl)
+        public Builder WithImageUrl(string imageUrl)
         {
             _imageUrl = imageUrl;
             return this;
