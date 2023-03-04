@@ -1,8 +1,10 @@
-﻿using BLL.Data.Cook;
+﻿using System.Web;
+using BLL.Data.Cook;
 using BLL.Entities;
 using BLL.Entities.Cook;
 using DAL.Repositories.Cook;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Primitives;
 using MVC.Models.Cook;
 
 namespace MVC.Controllers;
@@ -21,6 +23,15 @@ public class CookController : Controller
     public IActionResult Index()
     {
         List<Cook> cooks = _cookService.GetAll();
+        StringValues searchValues = HttpContext.Request.Query["search"];
+        if (searchValues.Any())
+        {
+            string search = searchValues.ToString();
+            cooks = cooks
+                .Where(c => c.Username.ToLower().Contains(search.ToLower()) 
+                            || c.Fullname.ToLower().Contains(search.ToLower()))
+                .ToList();
+        } 
         return View(new CookListModel { Cooks = cooks });
     }
     

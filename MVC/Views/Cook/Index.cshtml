@@ -1,29 +1,52 @@
 ﻿@using BLL.Entities.Cook
+@using MVC.Models.Cook
 @model MVC.Models.Cook.CookListModel
 
-@foreach(Cook cook in Model.Cooks)
-{
-    <div style="display: flex; justify-content: center; margin: 15px">
-        <a href="/Cook/@cook.Username" style="color: inherit; text-decoration: none">
-            <div style="display: flex; padding: 20px; width: 800px; background-color: #eee; border-radius: 20px">
-                <div style="display: flex">
-                    <div style="width: 100px">
-                        <img src="@cook.ImageUrl" width="100px" height="100px" alt="@cook.Fullname's image"/>
-                    </div>
-                    <div style="flex: 1; margin-left: 20px">
-                        <h2 style="margin: 0">@cook.Fullname</h2>
-                        @{
-                            string username = "@" + cook.Username;
-                        }
-                        <p style="margin: 0; font-size: 18px; color: #888">@username</p>
-                        <p style="margin: 0; font-size: 14px; color: #aaa">Joined on: @cook.CreatedAt</p>
-                    </div>
+@{
+    ViewData["Title"] = "Cooks";
+    Layout = "_LayoutWide";
+}
+
+<div class="flex jcenter" style="width: 100%">
+    <div style="width: 60%; min-width: 360px">
+        <div class="flex jcenter b-radius" style="padding: 40px; background-color: var(--secondary)">
+            <div class="flex column" style="width: 100%">
+                <h1 class="text-white">Search for Cooks</h1>
+                <div class="flex justify-content-between">
+                    @Html.TextBox("search", "", new { placeholder = "Search on Recipe Finder", id = "searchBox", style = "width: 100%; flex: 0.83; margin: 0", onkeydown = "OnKeyDown(event)" })
+                    <button class="button" style="flex: 0.15" onclick="Search()">Search</button>
                 </div>
             </div>
-        </a>
+        </div>
+        <div class="flex jcenter my-4" style="width: 100%">
+            <div class="flex jcenter column" style="width: 60%; min-width: 360px">
+                @if (Model.Cooks.Count == 0)
+                {
+                    <p>No cooks found</p>
+                }
+                else
+                {
+                    @foreach (Cook cook in Model.Cooks)
+                    {
+                        @await Html.PartialAsync("CookCardPartial", new CookModel { Cook = cook })
+                    }
+                }
+            </div>
+        </div>
     </div>
-} 
-@if (Model.Cooks.Count == 0)
-{
-    <p>No cooks found</p>
-}
+</div>
+
+<script>
+    const EnterKey = 13;
+
+    function OnKeyDown(event) {
+        if (event.keyCode === EnterKey) {
+            Search();
+        }
+    }
+
+    function Search() {
+        const search = document.getElementById("searchBox").value;
+        location.href = "/Cook/?search=" + search;
+    }
+</script>
