@@ -29,7 +29,35 @@
                     onclick="location.href = '@Url.Action("ChangePassword", "Auth")'">Change Password</button>
             <button type="submit" class="button" style="margin-top: 16px">Edit profile details</button>
             <button type="button" class="bg-danger button" style="margin-top: 16px" 
-                    onclick="location.href = '@Url.Action("Delete", "Cook", new { username = Model.Username})'">Delete profile</button>
+                    onclick="document.getElementById('modal').style.display='block'">Delete profile</button>
         </form>
     </div>
 </section>
+
+<div id="modal" class="modal w-100 h-100 top-0 start-0 overflow-auto">
+    <div class="flex justify-content-center">
+        <form class="modal-content text-center bg-white" method="post" action="/Cook/@Model.Username/Delete">
+            <h1>Delete Account</h1>
+            <p>Are you sure you want to delete your account?</p>
+            <div>
+                <button type="button" onclick="document.getElementById('modal').style.display='none'" class="button">Cancel</button>
+                <button type="submit" onclick="document.getElementById('modal').style.display='none'" class="button bg-danger">Delete</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<style>
+    .modal {
+        display: none;
+        position: fixed;
+        z-index: 1;
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+    .modal-content {
+        margin: 15% auto;
+        padding: 20px;
+        border: 1px solid #888;
+        flex: 0 1 800px;
+    }
+</style>
