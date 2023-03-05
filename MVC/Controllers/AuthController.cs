@@ -1,11 +1,10 @@
-﻿using System.Net.Mail;
-using BLL.Data.Auth;
+﻿using BLL.Data.Auth;
 using BLL.Exceptions;
 using DAL.Repositories.Auth;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using MVC.Handlers;
 using MVC.Models.Auth;
+using MVC.Models.Cook;
 
 namespace MVC.Controllers;
 
@@ -85,5 +84,38 @@ public class AuthController : Controller
         return View(model);
     }
 
+    [HttpGet]
+    [Route("ChangePassword")]
+    public IActionResult ChangePassword()
+    {
+        Console.WriteLine(_securityHandler.GetSessionUsername());
+        return !_securityHandler.IsLoggedIn() 
+            ? _securityHandler.RedirectToNoPermission() 
+            : View(new ChangePasswordModel { Username = _securityHandler.GetSessionUsername()! });
+    }
     
+    [HttpPost]
+    [Route("ChangePassword")]
+    public IActionResult ChangePassword(ChangePasswordModel model)
+    {
+        Console.WriteLine(model.Username);
+        if (ModelState.IsValid)
+        {
+            List<string> errors = ChangePasswordHandler.GetErrors(model);
+            if (!errors.Any())
+            {
+                try
+                {
+                    _authService.ChangePassword(model.Username, model.OldPassword, model.NewPassword);
+                    return _securityHandler.LoginAndRedirectToHome(model.Username);
+                }
+                catch (Exception e) when (e is WrongPasswordException or UsernameNotFoundException)
+                {
+                    errors.Add(e.Message);
+                }
+            }
+            ViewBag.ErrorMessages = errors;
+        }
+        return View(model);
+    }
 }

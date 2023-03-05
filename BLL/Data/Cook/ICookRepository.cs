@@ -10,7 +10,7 @@ public interface ICookRepository
     Entities.Cook.Cook GetByUserName(string username);
     void Add(Entities.Cook.Cook cook);
     void Update(Entities.Cook.Cook cook);
-    void Delete(Entities.Cook.Cook cook);
+    void Delete(string username);
     List<Recipe> GetRecipesByUsername(string username);
     List<CookReview> GetReviewsForUsername(string username);
 }

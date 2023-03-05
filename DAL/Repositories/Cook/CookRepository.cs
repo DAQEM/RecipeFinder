@@ -118,9 +118,14 @@ public class CookRepository : ICookRepository
         QueryHelper.NonQuery(cookQuery, cookParameters);
     }
 
-    public void Delete(BLL.Entities.Cook.Cook cook)
+    public void Delete(string username)
     {
-        
+        const string query = "DELETE FROM Cook WHERE username = @username;";
+        MySqlParameter[] parameters =
+        {
+            new("@username", username)
+        };
+        QueryHelper.NonQuery(query, parameters);
     }
     
     public List<Recipe> GetRecipesByUsername(string username)

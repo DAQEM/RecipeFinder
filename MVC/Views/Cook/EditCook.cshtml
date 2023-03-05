@@ -25,8 +25,11 @@
             @Html.TextBoxFor(model => model.Email, new { placeholder = "\uF0E0 Email address", type = "email", required = true, oninvalid = "this.setCustomValidity('Please enter your email address.')" })
             <label>Profile picture URL</label>
             @Html.TextBoxFor(model => model.ImageUrl, new { placeholder = "\uF030 Profile picture URL", type = "text", required = true, oninvalid = "this.setCustomValidity('Please enter a URL for your profile picture.')" })
-            <button type="button" class="bg-dark button" style="margin-top: 16px">Change Password</button>
+            <button type="button" class="bg-dark button" style="margin-top: 16px"
+                    onclick="location.href = '@Url.Action("ChangePassword", "Auth")'">Change Password</button>
             <button type="submit" class="button" style="margin-top: 16px">Edit profile details</button>
+            <button type="button" class="bg-danger button" style="margin-top: 16px" 
+                    onclick="location.href = '@Url.Action("Delete", "Cook", new { username = Model.Username})'">Delete profile</button>
         </form>
     </div>
 </section>

@@ -44,7 +44,7 @@ public class SecurityHandler
         return _controller.RedirectToAction("NoPermission", "Security");
     }
     
-    private string? GetSessionUsername()
+    public string? GetSessionUsername()
     {
         return _controller.HttpContext.Session.GetString(UsernameSessionKey);
     }

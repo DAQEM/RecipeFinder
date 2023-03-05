@@ -99,4 +99,16 @@ public class CookController : Controller
             ? View(model)
             : _securityHandler.RedirectToNoPermission();
     }
+
+    [HttpPost]
+    [Route("{username}/Delete")]
+    public IActionResult Delete(string username)
+    {
+        if (_securityHandler.IsUser(username))
+        {
+            _cookService.Delete(username);
+            return _securityHandler.LogoutAndRedirectToHome();
+        }
+        return _securityHandler.RedirectToNoPermission();
+    }
 }

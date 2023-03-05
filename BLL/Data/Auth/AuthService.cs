@@ -24,4 +24,11 @@ public class AuthService
         string hashedPassword = PasswordSecurity.HashPassword(password);
         _authRepository.Register(cookId, credentialId, username, fullName, email, hashedPassword);
     }
+
+    public void ChangePassword(string username, string oldPassword, string newPassword)
+    {
+        string hashedOldPassword = PasswordSecurity.HashPassword(oldPassword);
+        string hashedNewPassword = PasswordSecurity.HashPassword(newPassword);
+        _authRepository.ChangePassword(username, hashedOldPassword, hashedNewPassword);
+    }
 }

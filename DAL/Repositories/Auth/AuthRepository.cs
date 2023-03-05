@@ -26,6 +26,38 @@ public class AuthRepository : IAuthRepository
         CreateCredential(credentialId, cookId, email, hashedPassword);
     }
 
+    public void ChangePassword(string username, string hashedOldPassword, string hashedNewPassword)
+    {
+        if (!UsernameTaken(username)) throw new UsernameNotFoundException();
+        if (!PasswordCorrect(username, hashedOldPassword)) throw new WrongPasswordException();
+        
+        const string query = "UPDATE Credential " +
+                             "SET password = @hashedNewPassword " +
+                             "WHERE cook_id = (SELECT id FROM Cook WHERE username = @username);";
+        
+        MySqlParameter[] parameters = { 
+            new("@hashedNewPassword", hashedNewPassword), 
+            new("@username", username) 
+        };
+        
+        QueryHelper.NonQuery(query, parameters);
+    }
+
+    private bool PasswordCorrect(string username, string hashedOldPassword)
+    {
+        string query = "SELECT COUNT(*) " +
+                       "FROM Credential " +
+                       "WHERE cook_id = (SELECT id FROM Cook WHERE username = @username) " +
+                       "AND password = @hashedOldPassword;";
+        
+        MySqlParameter[] parameters = {
+            new("@username", username), 
+            new("@hashedOldPassword", hashedOldPassword)
+        };
+        
+        return QueryHelper.QuerySingle(query, parameters, reader => reader.GetInt32("COUNT(*)")) == 1;
+    }
+
     private bool EmailTaken(string email)
     {
         return CheckTaken("Credential", "email", email);

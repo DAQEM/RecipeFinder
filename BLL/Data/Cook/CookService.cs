@@ -37,9 +37,9 @@ public class CookService
         _cookRepository.Update(cook);
     }
     
-    public void Delete(Entities.Cook.Cook cook)
+    public void Delete(string username)
     {
-        _cookRepository.Delete(cook);
+        _cookRepository.Delete(username);
     }
 
     public List<Recipe> GetRecipesByUsername(string username)
