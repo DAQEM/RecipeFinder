@@ -70,8 +70,6 @@ public class CookController : Controller
     [Route("{username}/Edit/")]
     public IActionResult EditCook(string username, EditCookModel model)
     {
-        Console.WriteLine(username);
-        Console.WriteLine(HttpContext.Session.GetString("Username"));
         List<string> errors = RegisterHandler.GetErrors(new RegisterModel { Username = model.Username, Fullname = model.Fullname, Email = model.Email })
             .Where(s => !s.ToLower().Contains("password") && !s.ToLower().Contains("username")).ToList();
         if (!(Uri.TryCreate(model.ImageUrl, UriKind.Absolute, out Uri? uriResult) 

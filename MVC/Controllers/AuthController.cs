@@ -88,7 +88,6 @@ public class AuthController : Controller
     [Route("ChangePassword")]
     public IActionResult ChangePassword()
     {
-        Console.WriteLine(_securityHandler.GetSessionUsername());
         return !_securityHandler.IsLoggedIn() 
             ? _securityHandler.RedirectToNoPermission() 
             : View(new ChangePasswordModel { Username = _securityHandler.GetSessionUsername()! });
@@ -98,7 +97,6 @@ public class AuthController : Controller
     [Route("ChangePassword")]
     public IActionResult ChangePassword(ChangePasswordModel model)
     {
-        Console.WriteLine(model.Username);
         if (ModelState.IsValid)
         {
             List<string> errors = ChangePasswordHandler.GetErrors(model);
