@@ -1,8 +1,9 @@
 ﻿using BLL.Data.Auth;
 using BLL.Exceptions;
+using DAL.Helpers;
 using MySql.Data.MySqlClient;
 
-namespace DAL.Repositories.Auth;
+namespace DAL.Repositories;
 
 public class AuthRepository : IAuthRepository
 {

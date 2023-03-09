@@ -1,6 +1,6 @@
 ﻿using BLL.Data.Auth;
 using BLL.Exceptions;
-using DAL.Repositories.Auth;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Handlers;
 using MVC.Models.Auth;

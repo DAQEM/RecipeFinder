@@ -1,6 +1,6 @@
 ﻿using MySql.Data.MySqlClient;
 
-namespace DAL;
+namespace DAL.Helpers;
 
 public static class QueryHelper
 {

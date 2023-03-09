@@ -2,19 +2,20 @@
 using BLL.Entities.Cook;
 using BLL.Entities.Recipe;
 using BLL.Entities.Review;
+using DAL.Helpers;
 using MySql.Data.MySqlClient;
 
-namespace DAL.Repositories.Cook;
+namespace DAL.Repositories;
 
 public class CookRepository : ICookRepository
 {
-    public List<BLL.Entities.Cook.Cook> GetAll()
+    public List<Cook> GetAll()
     {
         const string query = "SELECT Cook.*, Credential.email, Credential.password, Credential.updated_at " +
                              "FROM Cook " +
                              "INNER JOIN Credential ON Cook.id = Credential.cook_id;";
         return QueryHelper.QueryMultiple(query, null,
-            reader => new BLL.Entities.Cook.Cook.Builder()
+            reader => new Cook.Builder()
                 .WithId(reader.GetGuid("id"))
                 .WithUsername(reader.GetString("username"))
                 .WithFullname(reader.GetString("fullname"))
@@ -27,7 +28,7 @@ public class CookRepository : ICookRepository
                 .Build());
     }
 
-    public BLL.Entities.Cook.Cook? GetById(Guid id)
+    public Cook? GetById(Guid id)
     {
         const string query = "SELECT Cook.*, Credential.email, Credential.password, Credential.updated_at " +
                              "FROM Cook " +
@@ -38,7 +39,7 @@ public class CookRepository : ICookRepository
             new("@id", id)
         };
         return QueryHelper.QuerySingle(query, parameters,
-            reader => new BLL.Entities.Cook.Cook.Builder()
+            reader => new Cook.Builder()
                 .WithId(reader.GetGuid("id"))
                 .WithUsername(reader.GetString("username"))
                 .WithFullname(reader.GetString("fullname"))
@@ -51,7 +52,7 @@ public class CookRepository : ICookRepository
                 .Build());
     }
 
-    public BLL.Entities.Cook.Cook? GetByUserName(string username)
+    public Cook? GetByUserName(string username)
     {
         const string query = "SELECT Cook.*, Credential.email, Credential.password, Credential.updated_at " +
                              "FROM Cook " +
@@ -62,7 +63,7 @@ public class CookRepository : ICookRepository
             new("@username", username)
         };
         return QueryHelper.QuerySingle(query, parameters,
-            reader => new BLL.Entities.Cook.Cook.Builder()
+            reader => new Cook.Builder()
                 .WithId(reader.GetGuid("id"))
                 .WithUsername(reader.GetString("username"))
                 .WithFullname(reader.GetString("fullname"))
@@ -75,18 +76,18 @@ public class CookRepository : ICookRepository
                 .Build());
     }
 
-    public void Add(BLL.Entities.Cook.Cook cook)
+    public void Add(Cook cook)
     {
         
     }
 
-    public void Update(BLL.Entities.Cook.Cook cook)
+    public void Update(Cook cook)
     {
         UpdateCook(cook);
         UpdateCredential(cook);
     }
 
-    private static void UpdateCredential(BLL.Entities.Cook.Cook cook)
+    private static void UpdateCredential(Cook cook)
     {
         const string credentialQuery = "UPDATE Credential " +
                                        "SET email = @email " +
@@ -101,7 +102,7 @@ public class CookRepository : ICookRepository
         QueryHelper.NonQuery(credentialQuery, credentialParameters);
     }
 
-    private static void UpdateCook(BLL.Entities.Cook.Cook cook)
+    private static void UpdateCook(Cook cook)
     {
         const string cookQuery = "UPDATE Cook " +
                                  "SET username = @username, fullname = @fullname, image_url = @image_url " +
@@ -168,7 +169,7 @@ public class CookRepository : ICookRepository
         return QueryHelper.QueryMultiple(query, parameters,
             reader =>
             {
-                BLL.Entities.Cook.Cook? reviewer = GetById(reader.GetGuid("reviewer_id"));
+                Cook? reviewer = GetById(reader.GetGuid("reviewer_id"));
                 return new CookReview.Builder()
                     .WithCookId(reader.GetGuid("cook_id"))
                     .WithId(reader.GetGuid("id"))
@@ -179,6 +180,5 @@ public class CookRepository : ICookRepository
                     .WithReviewerImageUrl(reviewer == null ? "" : reviewer.ImageUrl)
                     .Build();
             });
-
     }
 }

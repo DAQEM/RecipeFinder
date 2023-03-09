@@ -5,22 +5,19 @@ namespace BLL.Entities.Cook;
 public class Cook
 {
     private readonly Guid _id;
-    private string _username;
-    private string _fullname;
-    private string _imageUrl;
+    private readonly string _username;
+    private readonly string _fullname;
+    private readonly string _imageUrl;
     private readonly DateTime _createdAt;
     private readonly Credential _credential;
-    
-    private List<CookReview> _cookReviews;
-    
-    private Cook(Guid id, string username, string fullname, string imageUrl, DateTime createdAt, List<CookReview> cookReviews, Credential credential)
+
+    private Cook(Guid id, string username, string fullname, string imageUrl, DateTime createdAt, Credential credential)
     {
         _id = id;
         _username = username;
         _fullname = fullname;
         _imageUrl = imageUrl;
         _createdAt = createdAt;
-        _cookReviews = cookReviews;
         _credential = credential;
     }
     
@@ -30,21 +27,6 @@ public class Cook
     public string ImageUrl => _imageUrl;
     public DateTime CreatedAt => _createdAt;
     public Credential Credential => _credential;
-    
-    public void UpdateUserName(string userName)
-    {
-        _username = userName;
-    }
-    
-    public void UpdateFullName(string fullName)
-    {
-        _fullname = fullName;
-    }
-    
-    public void UpdateImageUri(string imageUrl)
-    {
-        _imageUrl = imageUrl;
-    }
 
     public class Builder
     {
@@ -54,8 +36,6 @@ public class Cook
         private string _imageUrl = string.Empty;
         private DateTime _createdAt = DateTime.Now;
         private Credential _credential = new(string.Empty, string.Empty, DateTime.Now);
-        
-        private List<CookReview> _cookReviews = new();
 
         public Builder WithId(Guid id)
         {
@@ -87,12 +67,6 @@ public class Cook
             return this;
         }
 
-        public Builder WithCookReviews(List<CookReview> cookReviews)
-        {
-            _cookReviews = cookReviews;
-            return this;
-        }
-        
         public Builder WithCredential(Credential credential)
         {
             _credential = credential;
@@ -101,7 +75,7 @@ public class Cook
 
         public Cook Build()
         {
-            return new Cook(_id, _userName, _fullName, _imageUrl, _createdAt, _cookReviews, _credential);
+            return new Cook(_id, _userName, _fullName, _imageUrl, _createdAt, _credential);
         }
     }
 }

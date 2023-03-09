@@ -71,12 +71,40 @@ entity PreparationStep {
   *recipe_id : char(36) <<FK>>
 }
 
-Cook ||..|| Credential
-Cook ||..o{ Recipe
-Cook ||..o{ CookReview
+entity Follower {
+  *id : char(36) <<generated>>
+  --
+  *flowed_at : datetime <<generated>>
+  *follower_id : char(36) <<FK>>
+  *followed_id : char(36) <<FK>>
+}
 
-Recipe ||..o{ RecipeReview
-Recipe ||..o{ Ingredient
-Recipe ||..o{ PreparationStep
+entity Save {
+  *id : char(36) <<generated>>
+  --
+  *saved_at : datetime <<generated>>
+  *cook_id : char(36) <<FK>>
+  *recipe_id : char(36) <<FK>>
+}
+
+entity Likes {
+  *id : char(36) <<generated>>
+  --
+  *liked_at : datetime <<generated>>
+  *cook_id : char(36) <<FK>>
+  *recipe_id : char(36) <<FK>>
+}
+
+Cook ||.|| Credential
+Cook ||...o{ Recipe
+Cook ||..o{ CookReview
+Cook ||..o{ Follower
+Cook ||.o{ Save
+
+Recipe ||...o{ RecipeReview
+Recipe ||...o{ Ingredient
+Recipe ||...o{ PreparationStep
+Recipe ||.o{ Likes
+Recipe ||..o{ Save
 
 @enduml

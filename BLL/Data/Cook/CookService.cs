@@ -42,7 +42,7 @@ public class CookService
         _cookRepository.Delete(username);
     }
 
-    public List<Recipe> GetRecipesByUsername(string username)
+    public List<Entities.Recipe.Recipe> GetRecipesByUsername(string username)
     {
         return _cookRepository.GetRecipesByUsername(username);
     }

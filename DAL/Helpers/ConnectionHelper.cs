@@ -1,7 +1,7 @@
 ﻿using System.Configuration;
 using MySql.Data.MySqlClient;
 
-namespace DAL;
+namespace DAL.Helpers;
 
 public static class ConnectionHelper
 {
@@ -11,7 +11,7 @@ public static class ConnectionHelper
         return new MySqlConnection(GetConnectionString());
     }
 
-    public static string GetConnectionString()
+    private static string GetConnectionString()
     {
         try
         {

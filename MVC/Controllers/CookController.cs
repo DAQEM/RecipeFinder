@@ -1,6 +1,6 @@
 ﻿using BLL.Data.Cook;
 using BLL.Entities.Cook;
-using DAL.Repositories.Cook;
+using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using MVC.Handlers;
