@@ -8,18 +8,18 @@
 }
 else
 {
-    <div class="flex bg-secondary center column b-radius" style="height: 200px" >
-        <div class="flex justify-content-end align-items-center m-3" style="">
+    <div class="flex center column b-radius bg-white" style="height: 200px" >
+        <div class="flex justify-content-end align-items-center m-3">
             <div>
-                <img style="border-radius: 50%; border: 3px solid var(--dark)" src="@Model.Cook.ImageUrl" width="100px" height="100px" alt="@Model.Cook.Fullname's image"/>
+                <img style="border-radius: 50%" src="@Model.Cook.ImageUrl" width="100px" height="100px" alt="@Model.Cook.Fullname's image"/>
             </div>
             <div class="ms-3">
-                <h2 class="m-0 txt-dark">@Model.Cook.Fullname</h2>
+                <h2 class="m-0">@Model.Cook.Fullname</h2>
                 @{
                     string username = "@" + Model.Cook.Username;
                 }
-                <p class="m-0 text-m txt-white">@username</p>
-                <p class="m-0 text-s txt-white">Joined on: @Model.Cook.CreatedAt</p>
+                <p class="m-0 text-m text-black-50">@username</p>
+                <p class="m-0 text-s text-black-50">Joined on: @Model.Cook.CreatedAt.ToShortDateString()</p>
             </div>
         </div>
         <div class="flex justify-content-end w-100 px-3">
@@ -33,7 +33,7 @@ else
         <div class="flex jcenter">
             <button
                 id="RecipesTab"
-                class="px-4 py-2 mx-1 bg-secondary border-0 active"
+                class="px-4 py-2 mx-1 border-0 bg-secondary active"
                 style="border-top-left-radius: 6px; border-top-right-radius: 6px"
                 onclick="{
                     location.href = '/Cook/@Model.Cook.Username/?tab=Recipes';
@@ -42,7 +42,7 @@ else
             </button>
             <button
                 id="ReviewsTab"
-                class="px-4 py-2 mx-1 bg-secondary border-0"
+                class="px-4 py-2 mx-1 border-0 bg-secondary"
                 style="border-top-left-radius: 6px; border-top-right-radius: 6px"
                 onclick="{
                 location.href = '/Cook/@Model.Cook.Username/?tab=CookReviews';
@@ -51,18 +51,18 @@ else
             </button>
         </div>
         <div class="flex jcenter">
-            <div class="bg-primary b-radius w-75" style="min-width: 370px">
+            <div class="b-radius w-75 bg-white" style="min-width: 370px">
                 @if (ViewBag.CookReviews != null)
                 {
                     if (ViewBag.CookReviews.Count == 0)
                     {
-                        <div class="flex jcenter text-white bg-primary b-radius" style="padding: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
+                        <div class="flex jcenter text-white b-radius" style="padding: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
                             <p class="text-s m-0">No reviews found.</p>
                         </div>
                     }
                     @foreach (CookReview cookReview in ViewBag.CookReviews)
                     {
-                        <div class="flex jcenter text-white column bg-primary b-radius">
+                        <div class="flex jcenter text-white column b-radius">
                             <div class="flex jcenter" style="padding: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
                                 <div class="flex justify-content-between mx-2 wrap" style="width: 100%">
                                     <div class="flex acenter flex1" style="flex: 0 1 190px">
@@ -108,16 +108,16 @@ else
                 {
                     if (ViewBag.Recipes.Count == 0)
                     {
-                        <div class="flex jcenter text-white bg-primary b-radius" style="padding: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
+                        <div class="flex jcenter b-radius" style="padding: 8px;">
                             <p class="text-s m-0">No recipes found.</p>
                         </div>
                     }
                     @foreach (Recipe recipe in ViewBag.Recipes)
                     {
-                        <a class="flex text-white jcenter column bg-primary b-radius" 
+                        <a class="flex jcenter column b-radius" 
                            style="text-decoration: none"
                            href="/Recipe/@recipe.Id">
-                            <div class="flex center" style="padding: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
+                            <div class="flex center" style="padding: 8px; ">
                                 <img src="@recipe.ImageUrl" style="width: 60px; height: 60px; border-radius: 50%" alt="@recipe.Name image"/>
                                 <div class="flex justify-content-between mx-2" style="width: 100%">
                                     <div class="flex1">

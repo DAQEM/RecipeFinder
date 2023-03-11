@@ -10,12 +10,12 @@ namespace MVC.Controllers;
 
 public class AuthController : Controller
 {
-    private readonly AuthService _authService;
+    private readonly IAuthService _authService;
     private readonly SecurityHandler _securityHandler;
     
-    public AuthController()
+    public AuthController(IAuthService service)
     {
-        _authService = new AuthService(new AuthRepository());
+        _authService = service;
         _securityHandler = new SecurityHandler(this);
     }
     

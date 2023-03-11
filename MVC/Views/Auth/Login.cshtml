@@ -1,7 +1,7 @@
 ﻿@model MVC.Models.Auth.LoginModel
 
-<section class="flex center wrap">
-    <div class="flex1" style="margin: 10%">
+<div class="flex acenter wrap justify-content-between" style="height: 75vh">
+    <div style="flex: 0 1 400px">
         <div class="flex jcenter column">
             @if (ViewBag.ErrorMessage != null)
             {
@@ -9,28 +9,32 @@
                     @ViewBag.ErrorMessage
                 </div>
             }
-            <form method="post">
-                <div class="flex column">
-                    <h1 class="text-white text-xl">Login to your account</h1>
-                    <label>Username</label>
-                    @Html.TextBoxFor(model => model.Username, new { placeholder="\uF007 Username", required = true, oninvalid = "this.setCustomValidity('Please enter your username.')" })
-                    <label>Password</label>
-                    @Html.PasswordFor(model => model.Password, new { placeholder="\uF084 Password", required = true, oninvalid = "this.setCustomValidity('Please enter your password.')" })
-                </div>
-                <button class="button" type="submit">Login!</button>
-            </form>
+            <section>
+                <form method="post">
+                    <div class="flex column">
+                        <h1 class="text-xl">Login to your account</h1>
+                        <label>Username</label>
+                        @Html.TextBoxFor(model => model.Username, new { placeholder="\uF007  Username", required = true, oninvalid = "this.setCustomValidity('Please enter your username.')" })
+                        <label>Password</label>
+                        @Html.PasswordFor(model => model.Password, new { placeholder="\uF023  Password", required = true, oninvalid = "this.setCustomValidity('Please enter your password.')" })
+                    </div>
+                    <button class="button" type="submit">Login!</button>
+                </form>
+            </section>
         </div>
     </div>
-    <div class="flex1" style="margin: 10%">
-        <h1 class="text-xl">Create a new account</h1>
-        <p>
-            RecipeFinder is a website where you can find recipes and share your own.
-            Would you also like to share your own recipes?
-            Then create an account!
-        </p>
-        <button type="button" class="button" onclick="location.href = '/Register';" >Register!</button>
+    <div style="flex: 0.5 1 400px" class="login-img">
+        <section>
+            <h1 class="text-xl">Create a new account</h1>
+            <p>
+                RecipeFinder is a website where you can find recipes and share your own.
+                Would you also like to share your own recipes?
+                Then create an account!
+            </p>
+            <button type="button" class="button" onclick="location.href = '/Register';">Register!</button>
+        </section>
     </div>
-</section>
+</div>
 
 <style>
     .button {

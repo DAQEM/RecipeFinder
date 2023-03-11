@@ -7,19 +7,20 @@
     Layout = "_LayoutWide";
 }
 
-<div class="flex jcenter" style="width: 100%">
-    <div style="width: 60%; min-width: 360px">
-        <div class="flex jcenter b-radius" style="padding: 40px; background-color: var(--secondary)">
-            <div class="flex column" style="width: 100%">
-                <h1 class="text-white">Search for Cooks</h1>
+<div class="flex jcenter w-100">
+    <div class="w-100">
+        <div class="flex center w-100" style="padding: 40px; height: 300px; background-image: url(https://img.hellofresh.com/c_fill,f_auto,fl_lossy,h_650,q_auto:eco,w_1900/hellofresh_website/gb/cms/homepage/HF_App_web_landing_page_newbanners_desktop_2560x700.jpg);
+                                           background-repeat: no-repeat; background-size: cover; background-position: center center;">
+            <div class="flex column">
+                <h1>Search for Cooks</h1>
                 <div class="flex justify-content-between">
-                    @Html.TextBox("search", "", new { placeholder = "Search on Recipe Finder", id = "searchBox", style = "width: 100%; flex: 0.83; margin: 0", onkeydown = "OnKeyDown(event)" })
+                    @Html.TextBox("search", "", new { placeholder = "Search on Recipe Finder", id = "searchBox", style = "width: 100%; flex: 0.83; margin: 0; border-width: 0", onkeydown = "OnKeyDown(event)" })
                     <button class="button" style="flex: 0.15" onclick="Search()">Search</button>
                 </div>
             </div>
         </div>
-        <div class="flex jcenter my-4" style="width: 100%">
-            <div class="flex jcenter column" style="width: 60%; min-width: 360px">
+        <div class="flex center wrap my-4 w-100">
+            <div class="flex jcenter wrap" style="width: 60%; min-width: 360px">
                 @if (Model.Cooks.Count == 0)
                 {
                     <p>No cooks found</p>
@@ -50,3 +51,9 @@
         location.href = "/Cook/?search=" + search;
     }
 </script>
+
+<style>
+    .navbar {
+        margin: 0 !important;
+    }
+</style>

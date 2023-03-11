@@ -1,7 +1,7 @@
 ﻿@model MVC.Models.Cook.EditCookModel
 
-<section class="flex center column" style="margin-top: 50px">
-    <div style="width: 400px">
+<div class="flex center column" style="margin-top: 50px">
+    <section style="min-width: 370px; max-width: 450px" class="m-3">
         @if (ViewBag.ErrorMessages != null)
         {
             @foreach (string error in ViewBag.ErrorMessages)
@@ -18,21 +18,21 @@
             </div>
         }
         <form method="post" class="flex column">
-            <h1 class="text-white text-xl">Edit your profile details</h1>
+            <h1 class="text-xl">Edit your profile details</h1>
             <label>Full name</label>
-            @Html.TextBoxFor(model => model.Fullname, new { placeholder = "\uF007 Full name", required = true, oninvalid = "this.setCustomValidity('Please enter your full name.')" })
+            @Html.TextBoxFor(model => model.Fullname, new { placeholder = "\uF007  Full name", required = true, oninvalid = "this.setCustomValidity('Please enter your full name.')" })
             <label>Email address</label>
-            @Html.TextBoxFor(model => model.Email, new { placeholder = "\uF0E0 Email address", type = "email", required = true, oninvalid = "this.setCustomValidity('Please enter your email address.')" })
+            @Html.TextBoxFor(model => model.Email, new { placeholder = "\uF0E0  Email address", type = "email", required = true, oninvalid = "this.setCustomValidity('Please enter your email address.')" })
             <label>Profile picture URL</label>
-            @Html.TextBoxFor(model => model.ImageUrl, new { placeholder = "\uF030 Profile picture URL", type = "text", required = true, oninvalid = "this.setCustomValidity('Please enter a URL for your profile picture.')" })
+            @Html.TextBoxFor(model => model.ImageUrl, new { placeholder = "\uF030  Profile picture URL", type = "text", required = true, oninvalid = "this.setCustomValidity('Please enter a URL for your profile picture.')" })
             <button type="button" class="bg-dark button" style="margin-top: 16px"
                     onclick="location.href = '@Url.Action("ChangePassword", "Auth")'">Change Password</button>
             <button type="submit" class="button" style="margin-top: 16px">Edit profile details</button>
             <button type="button" class="bg-danger button" style="margin-top: 16px" 
                     onclick="document.getElementById('modal').style.display='block'">Delete profile</button>
         </form>
-    </div>
-</section>
+    </section>
+</div>
 
 <div id="modal" class="modal w-100 h-100 top-0 start-0 overflow-auto">
     <div class="flex justify-content-center">

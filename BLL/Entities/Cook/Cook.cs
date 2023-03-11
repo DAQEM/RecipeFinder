@@ -1,6 +1,4 @@
-﻿using BLL.Entities.Review;
-
-namespace BLL.Entities.Cook;
+﻿namespace BLL.Entities.Cook;
 
 public class Cook
 {

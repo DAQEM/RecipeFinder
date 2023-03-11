@@ -2,7 +2,7 @@
 
 namespace BLL.Data.Auth;
 
-public class AuthService
+public class AuthService : IAuthService
 {
     private readonly IAuthRepository _authRepository;
 

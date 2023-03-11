@@ -3,7 +3,7 @@ using BLL.Entities.Review;
 
 namespace BLL.Data.Cook;
 
-public class CookService
+public class CookService : ICookService
 {
     private readonly ICookRepository _cookRepository;
 

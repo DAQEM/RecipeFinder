@@ -12,12 +12,12 @@ namespace MVC.Controllers;
 [Route("Cook")]
 public class CookController : Controller
 {
-    private readonly CookService _cookService;
+    private readonly ICookService _cookService;
     private readonly SecurityHandler _securityHandler;
     
-    public CookController()
+    public CookController(ICookService service)
     {
-        _cookService = new CookService(new CookRepository());
+        _cookService = service;
         _securityHandler = new SecurityHandler(this);
     }
     
