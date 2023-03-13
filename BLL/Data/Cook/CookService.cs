@@ -22,7 +22,7 @@ public class CookService : ICookService
         return _cookRepository.GetById(id);
     }
     
-    public Entities.Cook.Cook? GetByUserName(string username)
+    public Entities.Cook.Cook? GetByUsername(string username)
     {
         return _cookRepository.GetByUserName(username);
     }
@@ -42,13 +42,13 @@ public class CookService : ICookService
         _cookRepository.Delete(username);
     }
 
-    public List<Entities.Recipe.Recipe> GetRecipesByUsername(string username)
+    public Entities.Cook.Cook? GetByUsernameWithRecipes(string username)
     {
-        return _cookRepository.GetRecipesByUsername(username);
+        return _cookRepository.GetByUsernameWithRecipes(username);
     }
 
-    public List<CookReview> GetReviewsForUsername(string username)
+    public Entities.Cook.Cook? GetByUsernameWithCookReviews(string username)
     {
-        return _cookRepository.GetReviewsForUsername(username);
+        return _cookRepository.GetByUsernameWithCookReviews(username);
     }
 }

@@ -1,0 +1,22 @@
+﻿@model RatingModel
+
+<div>
+    @for (int i = 1; i <= 10; i++)
+    {
+        if (i % 2 == 0)
+        {
+            if (i <= Model.Rating)
+            {
+                <img height="20px" src="/images/star.png" alt="star"/>
+            }
+            else if (i - 1 == Model.Rating)
+            {
+                <img height="20px" src="/images/half_star.png" alt="half star"/>
+            }
+            else
+            {
+                <img height="20px" src="/images/no_star.png" alt="no star"/>
+            }
+        }
+    }
+</div>

@@ -42,28 +42,25 @@ public class CookController : Controller
     [Route("{username}")]
     public IActionResult Cook(string username)
     {
-        StringValues searchValues = HttpContext.Request.Query["tab"];
-        string tab = searchValues.Any() ? searchValues.ToString() : "Recipes";
-        switch (tab)
-        {
-            case "Recipes":
-                ViewBag.Recipes = _cookService.GetRecipesByUsername(username);
-                break;
-            case "CookReviews":
-                ViewBag.CookReviews = _cookService.GetReviewsForUsername(username);
-                break;
-        }
         ViewBag.IsOwner = _securityHandler.IsUser(username);
-        return View(new CookModel { Cook = _cookService.GetByUserName(username)! });
+        return View("CookRecipes", new CookModel { Cook = _cookService.GetByUsernameWithRecipes(username)!});
     }
-
+    
+    [HttpGet]
+    [Route("{username}/Reviews")]
+    public IActionResult CookReviews(string username)
+    {
+        ViewBag.IsOwner = _securityHandler.IsUser(username);
+        return View("CookReviews", new CookModel { Cook = _cookService.GetByUsernameWithCookReviews(username)!});
+    }
+    
     [HttpGet]
     [Route("{username}/Edit")]
     public IActionResult EditCook(string username)
     {
         return !_securityHandler.IsUser(username) 
             ? _securityHandler.RedirectToNoPermission() 
-            : View(EditCookModel.FromCook(_cookService.GetByUserName(username)!));
+            : View(EditCookModel.FromCook(_cookService.GetByUsername(username)!));
     }
     
     [HttpPost]
@@ -80,7 +77,7 @@ public class CookController : Controller
         if (!errors.Any())
         {
             ViewBag.SuccessMessage = "Successfully saved changes.";
-            Cook cook = _cookService.GetByUserName(username)!;
+            Cook cook = _cookService.GetByUsername(username)!;
             _cookService.Update(new Cook.Builder()
                 .WithId(cook.Id)
                 .WithUsername(cook.Username)

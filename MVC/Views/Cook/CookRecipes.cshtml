@@ -1,0 +1,31 @@
+﻿@using BLL.Entities.Recipe
+@model MVC.Models.Cook.CookModel
+
+@{
+    Layout = "_CookLayout";
+}
+
+@if (Model.Cook.Recipes.Length == 0)
+{
+    <div class="flex jcenter b-radius" style="padding: 8px;">
+        <p class="text-s m-0">No recipes found.</p>
+    </div>
+}
+@foreach (Recipe recipe in Model.Cook.Recipes)
+{
+    <a class="flex jcenter column b-radius" 
+       style="text-decoration: none"
+       href="/Recipe/@recipe.Id">
+        <div class="flex center" style="padding: 8px; ">
+            <img src="@recipe.ImageUrl" style="width: 60px; height: 60px; border-radius: 50%" alt="@recipe.Name image"/>
+            <div class="flex justify-content-between mx-2" style="width: 100%">
+                <div class="flex1">
+                    <h1 class="text-l m-0">@recipe.Name</h1>
+                </div>
+                <div class="flex flex1 acenter text-center justify-content-end">
+                    <p class="text-s m-0">@recipe.CreatedAt</p>
+                </div>
+            </div>
+        </div>
+    </a>
+}

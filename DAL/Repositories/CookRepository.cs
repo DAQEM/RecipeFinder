@@ -1,4 +1,6 @@
 ﻿using BLL.Data.Cook;
+using BLL.Data.Recipe;
+using BLL.Data.Review;
 using BLL.Data.Review.Reviewer;
 using BLL.Entities.Cook;
 using BLL.Entities.Recipe;
@@ -11,10 +13,15 @@ namespace DAL.Repositories;
 public class CookRepository : ICookRepository
 {
     private readonly IReviewerRepository _reviewerRepository;
-    
-    public CookRepository(IReviewerRepository reviewerRepository)
+    private readonly IRecipeRepository _recipeRepository;
+    private readonly ICookReviewRepository _cookReviewRepository;
+
+    public CookRepository(IReviewerRepository reviewerRepository, IRecipeRepository recipeRepository,
+        ICookReviewRepository cookReviewRepository)
     {
         _reviewerRepository = reviewerRepository;
+        _recipeRepository = recipeRepository;
+        _cookReviewRepository = cookReviewRepository;
     }
 
     public List<Cook> GetAll()
@@ -136,56 +143,26 @@ public class CookRepository : ICookRepository
         };
         QueryHelper.NonQuery(query, parameters);
     }
-    
-    public List<Recipe> GetRecipesByUsername(string username)
-    {
-        const string query = "SELECT Recipe.*" +
-                             "FROM Recipe " +
-                             "INNER JOIN Cook ON Recipe.cook_id = Cook.id " +
-                             "WHERE Cook.username = @username;";
-        MySqlParameter[] parameters =
-        {
-            new("@username", username)
-        };
-        return QueryHelper.QueryMultiple(query, parameters,
-            reader => new Recipe.Builder()
-                .WithId(reader.GetGuid("id"))
-                .WithName(reader.GetString("name"))
-                .WithImageUrl(reader.GetString("image_url"))
-                .WithDescription(reader.GetString("description"))
-                .WithPreparationTime(reader.GetTimeSpan("preparation_time"))
-                .WithCategory((Category)reader.GetInt32("category"))
-                .WithCreatedAt(reader.GetDateTime("created_at"))
-                .WithUpdatedAt(reader.GetDateTime("updated_at"))
-                .WithCookId(reader.GetGuid("cook_id"))
-                .WithIngredients(null)
-                .WithPreparationSteps(null)
-                .Build());
-    }
-    
-    public List<CookReview> GetReviewsForUsername(string username)
-    {
-        const string query = "SELECT CookReview.*" +
-                             "FROM CookReview " +
-                             "INNER JOIN Cook ON CookReview.cook_id = Cook.id " +
-                             "WHERE Cook.username = @username;";
-        MySqlParameter[] parameters =
-        {
-            new("@username", username)
-        };
 
-        return QueryHelper.QueryMultiple(query, parameters,
-            reader =>
-            {
-                Reviewer? reviewer = _reviewerRepository.GetReviewerByCookId(reader.GetGuid("reviewer_id"));
-                return new CookReview.Builder()
-                    .WithCookId(reader.GetGuid("cook_id"))
-                    .WithId(reader.GetGuid("id"))
-                    .WithRating(reader.GetInt32("rating"))
-                    .WithComment(reader.GetString("comment"))
-                    .WithCreatedAt(reader.GetDateTime("created_at"))
-                    .WithReviewer(reviewer ?? Reviewer.Empty)
-                    .Build();
-            });
+    public Cook? GetByUsernameWithRecipes(string username)
+    {
+        Cook? cook = GetByUserName(username);
+        List<Recipe> recipes = _recipeRepository.GetRecipesByUsername(username);
+        
+        return new Cook.Builder()
+            .WithCook(cook!)
+            .WithRecipes(recipes.ToArray())
+            .Build();
+    }
+
+    public Cook? GetByUsernameWithCookReviews(string username)
+    {
+        Cook? cook = GetByUserName(username);
+        List<CookReview> cookReviews = _cookReviewRepository.GetReviewsByCookUsername(username);
+        
+        return new Cook.Builder()
+            .WithCook(cook!)
+            .WithReviews(cookReviews.ToArray())
+            .Build();
     }
 }

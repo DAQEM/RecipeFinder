@@ -6,6 +6,7 @@ using BLL.Data.Recipe.Ingredient;
 using BLL.Data.Recipe.Like;
 using BLL.Data.Recipe.Preparation;
 using BLL.Data.Recipe.Save;
+using BLL.Data.Review;
 using BLL.Data.Review.Reviewer;
 using DAL.Repositories;
 
@@ -39,7 +40,13 @@ services.AddSingleton<ISaveService, SaveService>(provider => new SaveService(pro
 services.AddSingleton<IReviewerRepository, ReviewerRepository>();
 services.AddSingleton<IReviewerService, ReviewerService>(provider => new ReviewerService(provider.GetService<IReviewerRepository>()));
 
-services.AddSingleton<ICookRepository, CookRepository>(provider => new CookRepository(provider.GetService<IReviewerRepository>()));
+services.AddSingleton<ICookReviewRepository, CookReviewRepository>();
+services.AddSingleton<ICookReviewService, CookReviewService>(provider => new CookReviewService(provider.GetService<ICookReviewRepository>()));
+
+services.AddSingleton<IRecipeReviewRepository, RecipeReviewRepository>();
+services.AddSingleton<IRecipeReviewService, RecipeReviewService>(provider => new RecipeReviewService(provider.GetService<IRecipeReviewRepository>()));
+
+services.AddSingleton<ICookRepository, CookRepository>(provider => new CookRepository(provider.GetService<IReviewerRepository>(), provider.GetService<IRecipeRepository>(), provider.GetService<ICookReviewRepository>()));
 services.AddSingleton<ICookService, CookService>(provider => new CookService(provider.GetService<ICookRepository>()));
 
 services.AddSession(options =>

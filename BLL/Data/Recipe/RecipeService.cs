@@ -8,4 +8,9 @@ public class RecipeService : IRecipeService
     {
         _recipeRepository = recipeRepository;
     }
+    
+    public List<Entities.Recipe.Recipe> GetRecipesByUsername(string username)
+    {
+        return _recipeRepository.GetRecipesByUsername(username);
+    }
 }

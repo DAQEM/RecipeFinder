@@ -1,0 +1,79 @@
+﻿@model MVC.Models.Cook.CookModel
+
+@{
+    Layout = "_Layout";
+}
+
+@if (Model.Cook == null)
+{
+    <h2>Cook not found.</h2>
+}
+else
+{
+    <div class="flex center column b-radius bg-white" style="height: 200px" >
+        <div class="flex justify-content-end align-items-center m-3">
+            <div>
+                <img style="border-radius: 50%" src="@Model.Cook.ImageUrl" width="100px" height="100px" alt="@Model.Cook.Fullname's image"/>
+            </div>
+            <div class="ms-3">
+                <h2 class="m-0">@Model.Cook.Fullname</h2>
+                @{
+                    string username = "@" + Model.Cook.Username;
+                }
+                <p class="m-0 text-m text-black-50">@username</p>
+                <p class="m-0 text-s text-black-50">Joined on: @Model.Cook.CreatedAt.ToShortDateString()</p>
+            </div>
+        </div>
+        <div class="flex justify-content-end w-100 px-3">
+            @if (ViewBag.IsOwner)
+            {
+                <button class="button" onclick="location.href = '/Cook/@Model.Cook.Username/Edit'">Edit Profile</button>
+            }
+        </div>
+    </div>
+    <div class="flex jcenter column mt-3">
+        <div class="flex jcenter">
+            <button
+                id="RecipesTab"
+                class="px-4 py-2 mx-1 border-0 bg-secondary active"
+                style="border-top-left-radius: 6px; border-top-right-radius: 6px"
+                onclick="{
+                    location.href = '/Cook/@Model.Cook.Username';
+                }">
+                Recipes
+            </button>
+            <button
+                id="ReviewsTab"
+                class="px-4 py-2 mx-1 border-0 bg-secondary"
+                style="border-top-left-radius: 6px; border-top-right-radius: 6px"
+                onclick="{
+                location.href = '/Cook/@Model.Cook.Username/Reviews';
+            }">
+                Reviews
+            </button>
+        </div>
+        <div class="flex jcenter">
+            <div class="b-radius w-75 bg-white" style="min-width: 370px">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+    
+    <style>
+        .active {
+            background-color: var(--primary) !important;
+            color: white !important;
+        }
+    </style>
+           
+    <script>
+        const url = window.location.href;
+        if (url.endsWith('Reviews') || url.endsWith('Reviews/')) {
+            document.getElementById('ReviewsTab').classList.add('active');
+            document.getElementById('RecipesTab').classList.remove('active');
+        } else {
+            document.getElementById('RecipesTab').classList.add('active');
+            document.getElementById('ReviewsTab').classList.remove('active');
+        }
+    </script>
+}

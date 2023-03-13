@@ -89,6 +89,17 @@ public class Cook
             _credential = credential;
             return this;
         }
+        
+        public Builder WithCook(Cook cook)
+        {
+            _id = cook.Id;
+            _userName = cook.Username;
+            _fullName = cook.Fullname;
+            _imageUrl = cook.ImageUrl;
+            _createdAt = cook.CreatedAt;
+            _credential = cook.Credential;
+            return this;
+        }
 
         public Builder WithRecipes(Recipe.Recipe[] recipes)
         {

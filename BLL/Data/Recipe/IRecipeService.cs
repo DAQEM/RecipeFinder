@@ -2,5 +2,5 @@
 
 public interface IRecipeService
 {
-    
+    List<Entities.Recipe.Recipe> GetRecipesByUsername(string username);
 }

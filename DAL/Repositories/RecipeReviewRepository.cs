@@ -1,21 +1,10 @@
-﻿using BLL.Entities.Review;
+﻿using BLL.Data.Review;
+using BLL.Entities.Review;
 
-namespace BLL.Data.Review;
+namespace DAL.Repositories;
 
-public class RecipeReviewService : IRecipeReviewService
+public class RecipeReviewRepository : IRecipeReviewRepository
 {
-    private readonly IRecipeReviewRepository _recipeReviewRepository;
-    
-    public RecipeReviewService(IRecipeReviewRepository recipeReviewRepository)
-    {
-        _recipeReviewRepository = recipeReviewRepository;
-    }
-    
-    public RecipeReview GetForRecipeId(Guid recipeId)
-    {
-        return _recipeReviewRepository.GetForRecipeId(recipeId);
-    }
-
     public List<RecipeReview> GetAll()
     {
         throw new NotImplementedException();
@@ -27,6 +16,11 @@ public class RecipeReviewService : IRecipeReviewService
     }
 
     public RecipeReview GetByCookUsername(string username)
+    {
+        throw new NotImplementedException();
+    }
+
+    public List<RecipeReview> GetReviewsByCookUsername(string username)
     {
         throw new NotImplementedException();
     }
@@ -47,6 +41,11 @@ public class RecipeReviewService : IRecipeReviewService
     }
 
     public void Delete(RecipeReview review)
+    {
+        throw new NotImplementedException();
+    }
+
+    public RecipeReview GetForRecipeId(Guid recipeId)
     {
         throw new NotImplementedException();
     }
