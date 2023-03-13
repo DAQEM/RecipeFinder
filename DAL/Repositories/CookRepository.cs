@@ -148,9 +148,10 @@ public class CookRepository : ICookRepository
     {
         Cook? cook = GetByUserName(username);
         List<Recipe> recipes = _recipeRepository.GetRecipesByUsername(username);
-        
+
+        if (cook == null) return null;
         return new Cook.Builder()
-            .WithCook(cook!)
+            .FromCook(cook)
             .WithRecipes(recipes.ToArray())
             .Build();
     }
@@ -160,8 +161,9 @@ public class CookRepository : ICookRepository
         Cook? cook = GetByUserName(username);
         List<CookReview> cookReviews = _cookReviewRepository.GetReviewsByCookUsername(username);
         
+        if (cook == null) return null;
         return new Cook.Builder()
-            .WithCook(cook!)
+            .FromCook(cook)
             .WithReviews(cookReviews.ToArray())
             .Build();
     }

@@ -4,34 +4,40 @@
 @{
     Layout = "_CookLayout";
 }
-
-@if (Model.Cook.Reviews.Length == 0)
+@if (Model.Cook != null)
 {
-    <div class="flex jcenter text-white b-radius" style="padding: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
-        <p class="text-s m-0">No reviews found.</p>
-    </div>
-}
-@foreach (CookReview cookReview in Model.Cook.Reviews)
-{
-    <div class="flex jcenter text-white column b-radius">
-        <div class="flex jcenter" style="padding: 8px">
-            <div class="flex justify-content-between mx-2 wrap" style="width: 100%">
-                <div class="flex acenter flex1" style="flex: 0 1 190px">
-                    <div>
-                        <img src="@cookReview.Reviewer.ImageUrl" style="width: 60px; height: 60px; border-radius: 50%" alt="@cookReview.Reviewer.Fullname image"/>
+    @if (Model.Cook.Reviews.Length == 0)
+    {
+        <div class="flex jcenter text-white b-radius" style="padding: 8px; box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);">
+            <p class="text-s m-0">No reviews found.</p>
+        </div>
+    }
+    @foreach (CookReview cookReview in Model.Cook.Reviews)
+    {
+        <div class="flex jcenter text-white column b-radius">
+            <div class="flex jcenter" style="padding: 8px">
+                <div class="flex justify-content-between mx-2 wrap" style="width: 100%">
+                    <div class="flex acenter flex1" style="flex: 0 1 190px">
+                        <div>
+                            <img src="@cookReview.Reviewer.ImageUrl" style="width: 60px; height: 60px; border-radius: 50%" alt="@cookReview.Reviewer.Fullname image"/>
+                        </div>
+                        <div class="ms-2 flex column">
+                            <h1 class="text-l m-0">@cookReview.Reviewer.Fullname</h1>
+                            @await Html.PartialAsync("Partial/RatingPartial", new RatingModel { Rating = cookReview.Rating })
+                        </div>
                     </div>
-                    <div class="ms-2 flex column">
-                        <h1 class="text-l m-0">@cookReview.Reviewer.Fullname</h1>
-                        @await Html.PartialAsync("Partial/RatingPartial", new RatingModel { Rating = cookReview.Rating })
+                    <div class="flex center p-3" style="flex: 0 1 600px">
+                        <p class="text-s m-0">@cookReview.Comment</p>
                     </div>
-                </div>
-                <div class="flex center p-3" style="flex: 0 1 600px">
-                    <p class="text-s m-0">@cookReview.Comment</p>
-                </div>
-                <div class="flex center text-center" style="flex: 0 1 100px">
-                    <p class="text-s m-0">@cookReview.CreatedAt</p>
+                    <div class="flex center text-center" style="flex: 0 1 100px">
+                        <p class="text-s m-0">@cookReview.CreatedAt</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
+    }
+}
+else
+{
+    <div></div>
 }

@@ -6,7 +6,10 @@
 
 @if (Model.Cook == null)
 {
-    <h2>Cook not found.</h2>
+    IgnoreBody();
+    <div class="flex center column b-radius bg-white" style="height: 200px" >
+        <h2>Cook not found.</h2>
+    </div>
 }
 else
 {

@@ -54,6 +54,21 @@ public class Cook
         private CookReview[] _reviews = Array.Empty<CookReview>();
         private Follower[] _followers = Array.Empty<Follower>();
 
+        public Builder FromCook(Cook cook)
+        {
+            _id = cook.Id;
+            _userName = cook.Username;
+            _fullName = cook.Fullname;
+            _imageUrl = cook.ImageUrl;
+            _createdAt = cook.CreatedAt;
+            _credential = cook.Credential;
+            _recipes = cook.Recipes;
+            _reviews = cook.Reviews;
+            _followers = cook.Followers;
+            return this;
+        }
+
+        
         public Builder WithId(Guid id)
         {
             _id = id;
@@ -90,17 +105,6 @@ public class Cook
             return this;
         }
         
-        public Builder WithCook(Cook cook)
-        {
-            _id = cook.Id;
-            _userName = cook.Username;
-            _fullName = cook.Fullname;
-            _imageUrl = cook.ImageUrl;
-            _createdAt = cook.CreatedAt;
-            _credential = cook.Credential;
-            return this;
-        }
-
         public Builder WithRecipes(Recipe.Recipe[] recipes)
         {
             _recipes = recipes;
