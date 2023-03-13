@@ -1,6 +1,6 @@
 @startuml
 
-skinparam LineType ortho
+'skinparam LineType ortho
 
 package "Business Logic Layer" as BLL {
     interface ICookRepository {
@@ -11,7 +11,17 @@ package "Business Logic Layer" as BLL {
         +Delete(cook: Cook): void
     }
     
-    class CookService {
+    interface ICookService {
+            -cookRepository: ICookRepository
+            +CookService(cookRepository: ICookRepository)
+            +GetAllCooks(): List<Cook>
+            +GetCookById(id: Guid): Cook
+            +AddCook(cook: Cook): void
+            +UpdateCook(cook: Cook): void
+            +DeleteCook(cook: Cook): void
+        }
+    
+    class CookService implements ICookService {
         -cookRepository: ICookRepository
         +CookService(cookRepository: ICookRepository)
         +GetAllCooks(): List<Cook>
@@ -31,7 +41,7 @@ package "Business Logic Layer" as BLL {
 }
 
 package "Data Access Layer" as DAL {
-    class CookRepository implements ICookRepository {
+    class CookRepository implements BLL.ICookRepository {
         -cooks: List<Cook>
         +GetAll(): List<Cook>
         +GetById(id: Guid): Cook
@@ -45,27 +55,16 @@ package "Presentation Layer" as PRES {
     class CookController {
         -cookService: CookService
         +CookController(cookService: CookService)
-        +GetAll(): Response
-        +GetById(id: Guid): Response
-        +Add(cook: Cook): Response
-        +Update(cook: Cook): Response
-        +Delete(cook: Cook): Response
+        +GetAllCooks(): Response
+        +GetCookById(id: Guid): Response
+        +AddCook(cook: Cook): Response
+        +UpdateCook(cook: Cook): Response
+        +DeleteCook(cook: Cook): Response
     }
 }
 
-package "Data Access Factory" as DAF {
-    class CookDataFactory {
-        -cookService: CookService
-        +GetAll(): List<Cook>
-        +GetById(id: Guid): Cook
-        +Add(cook: Cook): void
-        +Update(cook: Cook): void
-        +Delete(cook: Cook): void
-    }
-}
-
-CookService --> ICookRepository
-CookController ---> CookDataFactory
-CookDataFactory --> CookService
+ICookService -> ICookRepository
+CookController -> ICookService
+CookController --> ICookRepository
 
 @enduml

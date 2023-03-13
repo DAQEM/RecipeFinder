@@ -6,19 +6,17 @@ using BLL.Data.Recipe.Ingredient;
 using BLL.Data.Recipe.Like;
 using BLL.Data.Recipe.Preparation;
 using BLL.Data.Recipe.Save;
+using BLL.Data.Review.Reviewer;
 using DAL.Repositories;
 
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 IServiceCollection services = builder.Services;
-// Add services to the container.
+
 services.AddControllersWithViews().AddRazorRuntimeCompilation();
 services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
 services.AddSingleton<IAuthRepository, AuthRepository>();
 services.AddSingleton<IAuthService, AuthService>(provider => new AuthService(provider.GetService<IAuthRepository>()));
-
-services.AddSingleton<ICookRepository, CookRepository>();
-services.AddSingleton<ICookService, CookService>(provider => new CookService(provider.GetService<ICookRepository>()));
 
 services.AddSingleton<IFollowerRepository, FollowerRepository>();
 services.AddSingleton<IFollowerService, FollowerService>(provider => new FollowerService(provider.GetService<IFollowerRepository>()));
@@ -37,6 +35,12 @@ services.AddSingleton<IRecipeService, RecipeService>(provider => new RecipeServi
 
 services.AddSingleton<ISaveRepository, SaveRepository>();
 services.AddSingleton<ISaveService, SaveService>(provider => new SaveService(provider.GetService<ISaveRepository>()));
+
+services.AddSingleton<IReviewerRepository, ReviewerRepository>();
+services.AddSingleton<IReviewerService, ReviewerService>(provider => new ReviewerService(provider.GetService<IReviewerRepository>()));
+
+services.AddSingleton<ICookRepository, CookRepository>(provider => new CookRepository(provider.GetService<IReviewerRepository>()));
+services.AddSingleton<ICookService, CookService>(provider => new CookService(provider.GetService<ICookRepository>()));
 
 services.AddSession(options =>
 {

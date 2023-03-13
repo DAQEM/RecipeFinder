@@ -1,21 +1,30 @@
-﻿namespace BLL.Entities.Recipe;
+﻿using BLL.Entities.Review;
+
+namespace BLL.Entities.Recipe;
 
 public class Recipe
 {
     private readonly Guid _id;
-    private string _name;
-    private string _imageUrl;
-    private string _description;
-    private TimeSpan _preparationTime;
-    private Category _category;
+    private readonly string _name;
+    private readonly string _imageUrl;
+    private readonly string _description;
+    private readonly TimeSpan _preparationTime;
+    private readonly Category _category;
     private readonly DateTime _createdAt;
-    private DateTime _updatedAt;
-    private Guid _cookId;
+    private readonly DateTime _updatedAt;
+    private readonly Guid _cookId;
     
-    private List<Ingredient.Ingredient> _ingredients;
-    private List<PreparationStep> _preparationSteps;
+    private readonly Ingredient.Ingredient[] _ingredients;
+    private readonly PreparationStep[] _preparationSteps;
+    private readonly RecipeReview[] _reviews;
+    private readonly Liker[] _likers;
+    private readonly Saver[] _savers;
     
-    public Recipe(Guid id, string name, string imageUrl, string description, TimeSpan preparationTime, Category category, DateTime createdAt, DateTime updatedAt, Guid cookId, List<Ingredient.Ingredient> ingredients, List<PreparationStep> preparationSteps)
+    private Recipe(Guid id, string name, string imageUrl, string description, 
+        TimeSpan preparationTime, Category category, DateTime createdAt, 
+        DateTime updatedAt, Guid cookId, Ingredient.Ingredient[] ingredients, 
+        PreparationStep[] preparationSteps, RecipeReview[] reviews, Liker[] likers, 
+        Saver[] savers)
     {
         _id = id;
         _name = name;
@@ -28,8 +37,11 @@ public class Recipe
         _cookId = cookId;
         _ingredients = ingredients;
         _preparationSteps = preparationSteps;
+        _reviews = reviews;
+        _likers = likers;
+        _savers = savers;
     }
-    
+
     public Guid Id => _id;
     public string Name => _name;
     public string ImageUrl => _imageUrl;
@@ -40,53 +52,11 @@ public class Recipe
     public DateTime UpdatedAt => _updatedAt;
     public Guid CookId => _cookId;
     
-    public List<Ingredient.Ingredient> Ingredients => _ingredients;
-    public List<PreparationStep> PreparationSteps => _preparationSteps;
-    
-    public void SetName(string name)
-    {
-        _name = name;
-    }
-    
-    public void SetImageUrl(string imageUrl)
-    {
-        _imageUrl = imageUrl;
-    }
-    
-    public void SetDescription(string description)
-    {
-        _description = description;
-    }
-    
-    public void SetPreparationTime(TimeSpan preparationTime)
-    {
-        _preparationTime = preparationTime;
-    }
-    
-    public void SetUpdatedAt(DateTime updatedAt)
-    {
-        _updatedAt = updatedAt;
-    }
-    
-    public void AddIngredient(Ingredient.Ingredient ingredient)
-    {
-        _ingredients.Add(ingredient);
-    }
-    
-    public void RemoveIngredient(Ingredient.Ingredient ingredient)
-    {
-        _ingredients.Remove(ingredient);
-    }
-    
-    public void AddPreparationStep(PreparationStep preparationStep)
-    {
-        _preparationSteps.Add(preparationStep);
-    }
-    
-    public void RemovePreparationStep(PreparationStep preparationStep)
-    {
-        _preparationSteps.Remove(preparationStep);
-    }
+    public Ingredient.Ingredient[] Ingredients => _ingredients;
+    public PreparationStep[] PreparationSteps => _preparationSteps;
+    public RecipeReview[] Reviews => _reviews;
+    public Liker[] Likers => _likers;
+    public Saver[] Savers => _savers;
 
     public class Builder
     {
@@ -99,9 +69,12 @@ public class Recipe
         private DateTime _createdAt = DateTime.Now;
         private DateTime _updatedAt = DateTime.Now;
         private Guid _cookId;
-    
-        private List<Ingredient.Ingredient> _ingredients = new();
-        private List<PreparationStep> _preparationSteps = new();
+
+        private Ingredient.Ingredient[] _ingredients = Array.Empty<Ingredient.Ingredient>();
+        private PreparationStep[] _preparationSteps = Array.Empty<PreparationStep>();
+        private RecipeReview[] _reviews = Array.Empty<RecipeReview>();
+        private Liker[] _likers = Array.Empty<Liker>();
+        private Saver[] _savers = Array.Empty<Saver>();
         
         public Builder WithId(Guid id)
         {
@@ -157,21 +130,42 @@ public class Recipe
             return this;
         }
         
-        public Builder WithIngredients(List<Ingredient.Ingredient> ingredients)
+        public Builder WithIngredients(Ingredient.Ingredient[] ingredients)
         {
             _ingredients = ingredients;
             return this;
         }
         
-        public Builder WithPreparationSteps(List<PreparationStep> preparationSteps)
+        public Builder WithPreparationSteps(PreparationStep[] preparationSteps)
         {
             _preparationSteps = preparationSteps;
             return this;
         }
         
+        public Builder WithReviews(RecipeReview[] reviews)
+        {
+            _reviews = reviews;
+            return this;
+        }
+        
+        public Builder WithLikers(Liker[] likers)
+        {
+            _likers = likers;
+            return this;
+        }
+        
+        public Builder WithSavers(Saver[] savers)
+        {
+            _savers = savers;
+            return this;
+        }
+        
         public Recipe Build()
         {
-            return new Recipe(_id, _name, _imageUrl, _description, _preparationTime, _category, _createdAt, _updatedAt, _cookId, _ingredients, _preparationSteps);
+            return new Recipe(_id, _name, _imageUrl, _description, 
+                _preparationTime, _category, _createdAt, _updatedAt, 
+                _cookId, _ingredients, _preparationSteps, _reviews, 
+                _likers, _savers);
         }
     }
 }

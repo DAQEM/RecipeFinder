@@ -3,28 +3,29 @@
 public abstract class Review
 {
     private readonly Guid _id;
-    private readonly string _reviewerFullname;
-    private readonly string _reviewerImageUrl;
     private string _comment;
     private int _rating;
     private readonly DateTime _createdAt;
     
-    protected Review(Guid id, string reviewerFullname, string reviewerImageUrl, string comment, int rating, DateTime createdAt)
+    private readonly Reviewer _reviewer;
+    
+    
+    
+    protected Review(Guid id, string comment, int rating, DateTime createdAt, Reviewer reviewer)
     {
         _id = id;
-        _reviewerFullname = reviewerFullname;
-        _reviewerImageUrl = reviewerImageUrl;
         _comment = comment;
         _rating = rating;
         _createdAt = createdAt;
+        _reviewer = reviewer;
     }
-    
+
     public Guid Id => _id;
-    public string ReviewerFullname => _reviewerFullname;
-    public string ReviewerImageUrl => _reviewerImageUrl;
     public string Comment => _comment;
     public int Rating => _rating;
     public DateTime CreatedAt => _createdAt;
+    
+    public Reviewer Reviewer => _reviewer;
     
     public void UpdateComment(string comment)
     {
@@ -38,31 +39,19 @@ public abstract class Review
 
     public abstract class ReviewBuilder<T>
     {
-        protected Guid Id;
-        protected string ReviewerFullname;
-        protected string ReviewerImageUrl;
-        protected string Comment;
-        protected int Rating;
-        protected DateTime CreatedAt;
+        protected Guid Id = new Guid();
+        protected string Comment = string.Empty;
+        protected int Rating = 0;
+        protected DateTime CreatedAt = DateTime.Now;
+
+        protected Reviewer Reviewer = Reviewer.Empty;
         
         public ReviewBuilder<T> WithId(Guid id)
         {
             Id = id;
             return this;
         }
-        
-        public ReviewBuilder<T> WithReviewerFullname(string reviewerFullname)
-        {
-            ReviewerFullname = reviewerFullname;
-            return this;
-        }
-        
-        public ReviewBuilder<T> WithReviewerImageUrl(string reviewerImageUrl)
-        {
-            ReviewerImageUrl = reviewerImageUrl;
-            return this;
-        }
-        
+
         public ReviewBuilder<T> WithComment(string comment)
         {
             Comment = comment;
@@ -78,6 +67,12 @@ public abstract class Review
         public ReviewBuilder<T> WithCreatedAt(DateTime createdAt)
         {
             CreatedAt = createdAt;
+            return this;
+        }
+        
+        public ReviewBuilder<T> WithReviewer(Reviewer reviewer)
+        {
+            Reviewer = reviewer;
             return this;
         }
 

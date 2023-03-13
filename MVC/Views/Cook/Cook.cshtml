@@ -67,10 +67,10 @@ else
                                 <div class="flex justify-content-between mx-2 wrap" style="width: 100%">
                                     <div class="flex acenter flex1" style="flex: 0 1 190px">
                                         <div>
-                                            <img src="@cookReview.ReviewerImageUrl" style="width: 60px; height: 60px; border-radius: 50%" alt="@cookReview.ReviewerFullname image"/>
+                                            <img src="@cookReview.Reviewer.ImageUrl" style="width: 60px; height: 60px; border-radius: 50%" alt="@cookReview.Reviewer.Fullname image"/>
                                         </div>
                                         <div class="ms-2 flex column">
-                                            <h1 class="text-l m-0">@cookReview.ReviewerFullname</h1>
+                                            <h1 class="text-l m-0">@cookReview.Reviewer.Fullname</h1>
                                             <div>
                                                 @for (int i = 1; i <= 10; i++)
                                                 {

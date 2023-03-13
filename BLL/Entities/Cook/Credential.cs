@@ -2,9 +2,9 @@
 
 public class Credential
 {
-    private string _email;
-    private string _hashedPassword;
-    private DateTime _updatedAt;
+    private readonly string _email;
+    private readonly string _hashedPassword;
+    private readonly DateTime _updatedAt;
     
     public Credential(string email, string password, DateTime updatedAt)
     {
@@ -13,18 +13,8 @@ public class Credential
         _updatedAt = updatedAt;
     }
     
+    public static Credential Empty => new(string.Empty, string.Empty, DateTime.Now);
     public string Email => _email;
     public string Password => _hashedPassword;
     public DateTime UpdatedAt => _updatedAt;
-    
-    public void UpdateEmail(string email)
-    {
-        _email = email;
-    }
-    
-    public void UpdatePassword(string hashedPassword)
-    {
-        _hashedPassword = hashedPassword;
-        _updatedAt = DateTime.Now;
-    }
 }

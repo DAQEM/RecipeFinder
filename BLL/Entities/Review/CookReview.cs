@@ -3,14 +3,12 @@
 public class CookReview : Review
 {
     private readonly Guid _cookId;
-    
-    public CookReview(Guid id, string reviewerFullname, string reviewerImageUrl, string comment, int rating, DateTime createdAt, Guid cookId) 
-        : base(id, reviewerFullname, reviewerImageUrl, comment, rating, createdAt)
+
+    private CookReview(Guid id, string comment, int rating, DateTime createdAt, Reviewer reviewer, Guid cookId) 
+        : base(id, comment, rating, createdAt, reviewer)
     {
         _cookId = cookId;
     }
-    
-    public Guid CookId => _cookId;
 
     public class Builder : ReviewBuilder<CookReview>
     {
@@ -24,7 +22,7 @@ public class CookReview : Review
         
         public override CookReview Build()
         {
-            return new CookReview(Id, ReviewerFullname, ReviewerImageUrl, Comment, Rating, CreatedAt, _cookId);
+            return new CookReview(Id, Comment, Rating, CreatedAt, Reviewer, _cookId);
         }
     }
 }

@@ -2,10 +2,10 @@
 
 public class Ingredient
 {
-    private string _name;
-    private string _description;
-    private decimal _quantity;
-    private Unit _unit;
+    private readonly string _name;
+    private readonly string _description;
+    private readonly decimal _quantity;
+    private readonly Unit _unit;
     
     public Ingredient(string name, string description, decimal quantity, Unit unit)
     {
@@ -19,24 +19,4 @@ public class Ingredient
     public string Description => _description;
     public decimal Quantity => _quantity;
     public Unit Unit => _unit;
-    
-    public void SetName(string name)
-    {
-        _name = name;
-    }
-    
-    public void SetDescription(string description)
-    {
-        _description = description;
-    }
-    
-    public void SetQuantity(decimal quantity)
-    {
-        _quantity = quantity;
-    }
-    
-    public void SetUnit(Unit unit)
-    {
-        _unit = unit;
-    }
 }

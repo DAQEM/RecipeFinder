@@ -2,8 +2,8 @@
 
 public class PreparationStep
 {
-    private int _order;
-    private string _description;
+    private readonly int _order;
+    private readonly string _description;
     
     public PreparationStep(int order, string description)
     {
@@ -12,16 +12,5 @@ public class PreparationStep
     }
     
     public int Order => _order;
-    
     public string Description => _description;
-    
-    public void SetOrder(int order)
-    {
-        _order = order;
-    }
-    
-    public void SetDescription(string description)
-    {
-        _description = description;
-    }
 }

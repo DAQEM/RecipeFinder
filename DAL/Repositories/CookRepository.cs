@@ -1,4 +1,5 @@
 ﻿using BLL.Data.Cook;
+using BLL.Data.Review.Reviewer;
 using BLL.Entities.Cook;
 using BLL.Entities.Recipe;
 using BLL.Entities.Review;
@@ -9,6 +10,13 @@ namespace DAL.Repositories;
 
 public class CookRepository : ICookRepository
 {
+    private readonly IReviewerRepository _reviewerRepository;
+    
+    public CookRepository(IReviewerRepository reviewerRepository)
+    {
+        _reviewerRepository = reviewerRepository;
+    }
+
     public List<Cook> GetAll()
     {
         const string query = "SELECT Cook.*, Credential.email, Credential.password, Credential.updated_at " +
@@ -169,15 +177,14 @@ public class CookRepository : ICookRepository
         return QueryHelper.QueryMultiple(query, parameters,
             reader =>
             {
-                Cook? reviewer = GetById(reader.GetGuid("reviewer_id"));
+                Reviewer? reviewer = _reviewerRepository.GetReviewerByCookId(reader.GetGuid("reviewer_id"));
                 return new CookReview.Builder()
                     .WithCookId(reader.GetGuid("cook_id"))
                     .WithId(reader.GetGuid("id"))
                     .WithRating(reader.GetInt32("rating"))
                     .WithComment(reader.GetString("comment"))
                     .WithCreatedAt(reader.GetDateTime("created_at"))
-                    .WithReviewerFullname(reviewer == null ? "" : reviewer.Fullname)
-                    .WithReviewerImageUrl(reviewer == null ? "" : reviewer.ImageUrl)
+                    .WithReviewer(reviewer ?? Reviewer.Empty)
                     .Build();
             });
     }

@@ -62,6 +62,24 @@ enum Category {
     Dessert
 }
 
+class Reviewer {
+    string UserName
+    string FullName
+    string ImageUrl
+}
+
+class Follower {
+    string UserName
+    string FullName
+    string ImageUrl
+}
+
+class Liker {
+    string UserName
+    string FullName
+    string ImageUrl
+}
+
 abstract class Review {
     Guid ReviewerId
     string Comment
@@ -81,12 +99,16 @@ Review <|-- RecipeReview
 Cook --> "*" Recipe
 Cook -- Credential
 Cook --> "*" CookReview
+Cook --> "*" Follower
 
 Recipe --> "*" Ingredient
 Recipe --> "*" PreparationStep
 Recipe --> "*" Category
 Recipe --> "*" RecipeReview
+Recipe --> "*" Liker
 
 Ingredient -- Unit
+
+Review -> Reviewer
 
 @enduml
