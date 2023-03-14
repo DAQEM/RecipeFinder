@@ -13,12 +13,12 @@ namespace MVC.Controllers;
 public class CookController : Controller
 {
     private readonly ICookService _cookService;
-    private readonly SecurityHandler _securityHandler;
+    private readonly AuthHandler _authHandler;
     
     public CookController(ICookService service)
     {
         _cookService = service;
-        _securityHandler = new SecurityHandler(this);
+        _authHandler = new AuthHandler(this);
     }
     
     [HttpGet]
@@ -42,7 +42,7 @@ public class CookController : Controller
     [Route("{username}")]
     public IActionResult Cook(string username)
     {
-        ViewBag.IsOwner = _securityHandler.IsUser(username);
+        ViewBag.IsOwner = _authHandler.IsUser(username);
         return View("CookRecipes", new CookModel { Cook = _cookService.GetByUsernameWithRecipes(username)!});
     }
     
@@ -50,7 +50,7 @@ public class CookController : Controller
     [Route("{username}/Reviews")]
     public IActionResult CookReviews(string username)
     {
-        ViewBag.IsOwner = _securityHandler.IsUser(username);
+        ViewBag.IsOwner = _authHandler.IsUser(username);
         return View("CookReviews", new CookModel { Cook = _cookService.GetByUsernameWithCookReviews(username)!});
     }
     
@@ -58,8 +58,8 @@ public class CookController : Controller
     [Route("{username}/Edit")]
     public IActionResult EditCook(string username)
     {
-        return !_securityHandler.IsUser(username) 
-            ? _securityHandler.RedirectToNoPermission() 
+        return !_authHandler.IsUser(username) 
+            ? _authHandler.RedirectToNoPermission() 
             : View(EditCookModel.FromCook(_cookService.GetByUsername(username)!));
     }
     
@@ -90,20 +90,20 @@ public class CookController : Controller
                 .Build());
         }
         ViewBag.ErrorMessages = errors;
-        return _securityHandler.IsUser(username)
+        return _authHandler.IsUser(username)
             ? View(model)
-            : _securityHandler.RedirectToNoPermission();
+            : _authHandler.RedirectToNoPermission();
     }
 
     [HttpPost]
     [Route("{username}/Delete")]
     public IActionResult Delete(string username)
     {
-        if (_securityHandler.IsUser(username))
+        if (_authHandler.IsUser(username))
         {
             _cookService.Delete(username);
-            return _securityHandler.LogoutAndRedirectToHome();
+            return _authHandler.LogoutAndRedirectToHome();
         }
-        return _securityHandler.RedirectToNoPermission();
+        return _authHandler.RedirectToNoPermission();
     }
 }

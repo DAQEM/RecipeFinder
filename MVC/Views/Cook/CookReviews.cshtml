@@ -23,7 +23,7 @@
                         </div>
                         <div class="ms-2 flex column">
                             <h1 class="text-l m-0">@cookReview.Reviewer.Fullname</h1>
-                            @await Html.PartialAsync("Partial/RatingPartial", new RatingModel { Rating = cookReview.Rating })
+                            @await Html.PartialAsync("Partial/_RatingPartial", new RatingModel { Rating = cookReview.Rating })
                         </div>
                     </div>
                     <div class="flex center p-3" style="flex: 0 1 600px">

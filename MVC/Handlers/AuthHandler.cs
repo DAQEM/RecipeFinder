@@ -2,12 +2,12 @@
 
 namespace MVC.Handlers;
 
-public class SecurityHandler
+public class AuthHandler
 {
     private const string UsernameSessionKey = "Username";
     private readonly Controller _controller;
     
-    public SecurityHandler(Controller controller)
+    public AuthHandler(Controller controller)
     {
         _controller = controller;
     }
