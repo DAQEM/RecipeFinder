@@ -5,12 +5,14 @@ namespace MVC.Controllers;
 
 public class BaseController<T> : Controller where T : BaseController<T>
 {
-    private readonly ILogger<T> _logger;
+    private ILogger<T>? _logger;
     private readonly AuthHandler _authHandler;
     
-    public BaseController(ILogger<T> logger)
+    public BaseController()
     {
-        _logger = logger;
         _authHandler = new AuthHandler(this);
     }
+
+    protected ILogger<T> Logger => _logger ??= HttpContext.RequestServices.GetRequiredService<ILogger<T>>();
+    protected AuthHandler Auth => _authHandler;
 }

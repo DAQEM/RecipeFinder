@@ -11,19 +11,17 @@ namespace MVC.Controllers;
 public class AuthController : BaseController<AuthController>
 {
     private readonly IAuthService _authService;
-    private readonly AuthHandler _authHandler;
     
-    public AuthController(ILogger<AuthController> logger, IAuthService service) : base(logger)
+    public AuthController(IAuthService service)
     {
         _authService = service;
-        _authHandler = new AuthHandler(this);
     }
     
     [HttpGet]
     [Route("Login")]
     public IActionResult Login()
     {
-        return _authHandler.IsLoggedIn() 
+        return Auth.IsLoggedIn() 
             ? RedirectToAction("Index", "Home") 
             : View();
     }
@@ -39,7 +37,7 @@ public class AuthController : BaseController<AuthController>
     [Route("Logout")]
     public IActionResult Logout()
     {
-        return _authHandler.LogoutAndRedirectToHome();
+        return Auth.LogoutAndRedirectToHome();
     }
 
     [HttpPost]
@@ -52,7 +50,7 @@ public class AuthController : BaseController<AuthController>
 
             if (username != null)
             {
-                return _authHandler.LoginAndRedirectToHome(username);
+                return Auth.LoginAndRedirectToHome(username);
             } 
         }
         ViewBag.ErrorMessage = "Invalid username or password.";
@@ -72,7 +70,7 @@ public class AuthController : BaseController<AuthController>
                 try
                 {
                     _authService.Register(model.Username, model.Fullname, model.Email, model.Password);
-                    return _authHandler.LoginAndRedirectToHome(model.Username);
+                    return Auth.LoginAndRedirectToHome(model.Username);
                 }
                 catch (Exception e) when (e is UsernameTakenException or EmailTakenException)
                 {
@@ -88,9 +86,9 @@ public class AuthController : BaseController<AuthController>
     [Route("ChangePassword")]
     public IActionResult ChangePassword()
     {
-        return !_authHandler.IsLoggedIn() 
-            ? _authHandler.RedirectToNoPermission() 
-            : View(new ChangePasswordModel { Username = _authHandler.GetSessionUsername()! });
+        return !Auth.IsLoggedIn() 
+            ? Auth.RedirectToNoPermission() 
+            : View(new ChangePasswordModel { Username = Auth.GetSessionUsername()! });
     }
     
     [HttpPost]
@@ -105,7 +103,7 @@ public class AuthController : BaseController<AuthController>
                 try
                 {
                     _authService.ChangePassword(model.Username, model.OldPassword, model.NewPassword);
-                    return _authHandler.LoginAndRedirectToHome(model.Username);
+                    return Auth.LoginAndRedirectToHome(model.Username);
                 }
                 catch (Exception e) when (e is WrongPasswordException or UsernameNotFoundException)
                 {

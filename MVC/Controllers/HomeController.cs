@@ -6,11 +6,7 @@ namespace MVC.Controllers;
 
 public class HomeController : BaseController<HomeController>
 {
-
-    public HomeController(ILogger<HomeController> logger) : base(logger)
-    {
-    }
-
+    
     [HttpGet]
     [Route("")]
     public IActionResult Index()
