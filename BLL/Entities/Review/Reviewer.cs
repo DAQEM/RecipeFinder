@@ -1,10 +1,12 @@
-﻿namespace BLL.Entities.Review;
+﻿using BLL.Exceptions;
+
+namespace BLL.Entities.Review;
 
 public class Reviewer
 {
-    private readonly string _fullname;
-    private readonly string _username;
-    private readonly string _imageUrl;
+    private string _fullname;
+    private string _username;
+    private string _imageUrl;
 
     public Reviewer(string fullname, string username, string imageUrl)
     {
@@ -13,8 +15,45 @@ public class Reviewer
         _imageUrl = imageUrl;
     }
 
-    public static Reviewer Empty => new(string.Empty, string.Empty, string.Empty);
-    public string Fullname => _fullname;
-    public string Username => _username;
-    public string ImageUrl => _imageUrl;
+    public string Fullname { get => _fullname; set => _fullname = value; }
+    public string Username { get => _username; set => _username = value; }
+    public string ImageUrl { get => _imageUrl; set => _imageUrl = value; }
+    
+    public class Builder
+    {
+        private Reviewer _reviewer = new(null, null, null);
+
+        public Builder FromCook(Cook.Cook cook)
+        {
+            _reviewer = new(cook.Fullname, cook.Username, cook.ImageUrl);
+            return this;
+        }
+        
+        public Builder WithFullname(string fullname)
+        {
+            _reviewer.Fullname = fullname;
+            return this;
+        }
+
+        public Builder WithUsername(string username)
+        {
+            _reviewer.Username = username;
+            return this;
+        }
+
+        public Builder WithImageUrl(string imageUrl)
+        {
+            _reviewer.ImageUrl = imageUrl;
+            return this;
+        }
+
+        public Reviewer Build()
+        {
+            if (_reviewer.Fullname == null || _reviewer.Username == null || _reviewer.ImageUrl == null)
+            {
+                throw new IncompleteBuilderException(typeof(Reviewer));
+            }
+            return _reviewer;
+        }
+    }
 }

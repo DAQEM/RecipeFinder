@@ -1,8 +1,5 @@
 ﻿using BLL.Data.Cook;
-using BLL.Data.Recipe;
-using BLL.Data.Review;
 using BLL.Entities.Cook;
-using BLL.Entities.Recipe;
 using DAL.Helpers;
 using MySql.Data.MySqlClient;
 
@@ -10,16 +7,6 @@ namespace DAL.Repositories;
 
 public class CookRepository : ICookRepository
 {
-    private readonly IRecipeRepository _recipeRepository;
-    private readonly ICookReviewRepository _cookReviewRepository;
-
-    public CookRepository(IRecipeRepository recipeRepository,
-        ICookReviewRepository cookReviewRepository)
-    {
-        _recipeRepository = recipeRepository;
-        _cookReviewRepository = cookReviewRepository;
-    }
-
     public List<Cook> GetAll()
     {
         const string query = "SELECT Cook.id as 'cook_id', Cook.username, Cook.fullname, Cook.image_url, Cook.created_at, Credential.id as 'credential_id', Credential.email, Credential.password, Credential.updated_at " +
@@ -146,17 +133,5 @@ public class CookRepository : ICookRepository
             new("@username", username)
         };
         QueryHelper.NonQuery(query, parameters);
-    }
-    
-    public Cook? GetByRecipeIdWithRecipe(Guid recipeId)
-    {
-        Recipe? recipe = _recipeRepository.GetById(recipeId);
-        if (recipe == null) return null;
-        Cook? cook = GetById(recipe!.CookId);
-        if (cook == null) return null;
-        return new Cook.Builder()
-            .FromCook(cook)
-            .WithRecipes(new[] {recipe})
-            .Build();
     }
 }

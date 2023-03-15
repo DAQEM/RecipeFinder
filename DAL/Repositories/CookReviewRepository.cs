@@ -8,13 +8,6 @@ namespace DAL.Repositories;
 
 public class CookReviewRepository : ICookReviewRepository
 {
-    private readonly IReviewerRepository _reviewerRepository;
-    
-    public CookReviewRepository(IReviewerRepository reviewerRepository)
-    {
-        _reviewerRepository = reviewerRepository;
-    }
-
     public List<CookReview> GetAll()
     {
         throw new NotImplementedException();
@@ -32,28 +25,28 @@ public class CookReviewRepository : ICookReviewRepository
 
     public List<CookReview> GetByCookId(Guid cookId)
     {
-        const string query = "SELECT CookReview.*" +
+        const string query = "SELECT CookReview.id as 'id', cook_id, rating, comment, CookReview.created_at as 'created_at', username, fullname, image_url " +
                              "FROM CookReview " +
-                             "INNER JOIN Cook ON CookReview.cook_id = Cook.id " +
-                             "WHERE Cook.id = @cook_id;";
+                             "INNER JOIN Cook ON CookReview.reviewer_id = Cook.id " +
+                             "WHERE CookReview.cook_id = @cook_id;";
         MySqlParameter[] parameters =
         {
             new("@cook_id", cookId)
         };
 
         return QueryHelper.QueryMultiple(query, parameters,
-            reader =>
-            {
-                Reviewer? reviewer = _reviewerRepository.GetReviewerByCookId(reader.GetGuid("reviewer_id"));
-                return new CookReview.Builder()
-                    .WithCookId(reader.GetGuid("cook_id"))
-                    .WithId(reader.GetGuid("id"))
-                    .WithRating(reader.GetInt32("rating"))
-                    .WithComment(reader.GetString("comment"))
-                    .WithCreatedAt(reader.GetDateTime("created_at"))
-                    .WithReviewer(reviewer ?? Reviewer.Empty)
-                    .Build();
-            });
+            reader => new CookReview.Builder()
+                .WithCookId(reader.GetGuid("cook_id"))
+                .WithId(reader.GetGuid("id"))
+                .WithRating(reader.GetInt32("rating"))
+                .WithComment(reader.GetString("comment"))
+                .WithCreatedAt(reader.GetDateTime("created_at"))
+                .WithReviewer(new Reviewer.Builder()
+                    .WithUsername(reader.GetString("username"))
+                    .WithFullname(reader.GetString("fullname"))
+                    .WithImageUrl(reader.GetString("image_url"))
+                    .Build())
+                .Build());
     }
 
     public List<CookReview> GetByRating(int rating)

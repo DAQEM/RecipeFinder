@@ -77,6 +77,7 @@ public class CookService : ICookService
         if (cook != null)
         {
             List<CookReview> reviews = _cookReviewService.GetByCookId(cook.Id);
+            Console.WriteLine(reviews[0].Comment);
             return new Entities.Cook.Cook.Builder()
                 .FromCook(cook)
                 .WithReviews(reviews.ToArray())
@@ -87,6 +88,13 @@ public class CookService : ICookService
 
     public Entities.Cook.Cook? GetByRecipeIdWithRecipe(Guid recipeId)
     {
-        return _cookRepository.GetByRecipeIdWithRecipe(recipeId);
+        Entities.Recipe.Recipe? recipe = _recipeService.GetById(recipeId);
+        if (recipe == null) return null;
+        Entities.Cook.Cook? cook = _cookRepository.GetById(recipe.CookId);
+        return cook == null ? null : 
+            new Entities.Cook.Cook.Builder()
+                .FromCook(cook)
+                .WithRecipes(new[] {recipe})
+                .Build();
     }
 }

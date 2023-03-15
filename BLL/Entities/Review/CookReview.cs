@@ -2,27 +2,33 @@
 
 public class CookReview : Review
 {
-    private readonly Guid _cookId;
+    private Guid _cookId;
 
+    //For Builder only
+    public CookReview() : base(Guid.Empty, null, 0, DateTime.Now, null)
+    {
+        _cookId = Guid.Empty;
+    }
+    
     private CookReview(Guid id, string comment, int rating, DateTime createdAt, Reviewer reviewer, Guid cookId) 
         : base(id, comment, rating, createdAt, reviewer)
     {
         _cookId = cookId;
     }
+    
+    public Guid CookId { get => _cookId; private set => _cookId = value; }
 
     public class Builder : ReviewBuilder<CookReview>
     {
-        private Guid _cookId;
-        
         public ReviewBuilder<CookReview> WithCookId(Guid cookId)
         {
-            _cookId = cookId;
+            Review.CookId = cookId;
             return this;
         }
         
         public override CookReview Build()
         {
-            return new CookReview(Id, Comment, Rating, CreatedAt, Reviewer, _cookId);
+            return Review;
         }
     }
 }

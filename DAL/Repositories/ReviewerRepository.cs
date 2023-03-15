@@ -9,7 +9,7 @@ public class ReviewerRepository : IReviewerRepository
 {
     public Reviewer? GetReviewerByCookId(Guid cookId)
     {
-        string query = "SELECT fullname, username, image_url FROM Cook WHERE id = @cookId;";
+        const string query = "SELECT fullname, username, image_url FROM Cook WHERE id = @cookId;";
         
         MySqlParameter[] parameters =
         {

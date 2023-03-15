@@ -2,14 +2,12 @@
 
 public abstract class Review
 {
-    private readonly Guid _id;
+    private Guid _id;
     private string _comment;
     private int _rating;
-    private readonly DateTime _createdAt;
+    private DateTime _createdAt;
     
-    private readonly Reviewer _reviewer;
-    
-    
+    private Reviewer _reviewer;
     
     protected Review(Guid id, string comment, int rating, DateTime createdAt, Reviewer reviewer)
     {
@@ -20,59 +18,44 @@ public abstract class Review
         _reviewer = reviewer;
     }
 
-    public Guid Id => _id;
-    public string Comment => _comment;
-    public int Rating => _rating;
-    public DateTime CreatedAt => _createdAt;
+    public Guid Id { get => _id; protected set => _id = value; }
+    public string Comment { get => _comment; protected set => _comment = value; }
+    public int Rating { get => _rating; protected set => _rating = value; }
+    public DateTime CreatedAt { get => _createdAt; protected set => _createdAt = value; }
     
-    public Reviewer Reviewer => _reviewer;
-    
-    public void UpdateComment(string comment)
-    {
-        _comment = comment;
-    }
-    
-    public void UpdateRating(int rating)
-    {
-        _rating = rating;
-    }
+    public Reviewer Reviewer { get => _reviewer; protected set => _reviewer = value; }
 
-    public abstract class ReviewBuilder<T>
+    public abstract class ReviewBuilder<T> where T : Review
     {
-        protected Guid Id = new Guid();
-        protected string Comment = string.Empty;
-        protected int Rating = 0;
-        protected DateTime CreatedAt = DateTime.Now;
-
-        protected Reviewer Reviewer = Reviewer.Empty;
+        protected readonly T Review = (T)Activator.CreateInstance(typeof(T))!;
         
         public ReviewBuilder<T> WithId(Guid id)
         {
-            Id = id;
+            Review.Id = id;
             return this;
         }
 
         public ReviewBuilder<T> WithComment(string comment)
         {
-            Comment = comment;
+            Review.Comment = comment;
             return this;
         }
         
         public ReviewBuilder<T> WithRating(int rating)
         {
-            Rating = rating;
+            Review.Rating = rating;
             return this;
         }
         
         public ReviewBuilder<T> WithCreatedAt(DateTime createdAt)
         {
-            CreatedAt = createdAt;
+            Review.CreatedAt = createdAt;
             return this;
         }
         
         public ReviewBuilder<T> WithReviewer(Reviewer reviewer)
         {
-            Reviewer = reviewer;
+            Review.Reviewer = reviewer;
             return this;
         }
 
