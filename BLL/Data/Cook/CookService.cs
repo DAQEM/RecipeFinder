@@ -1,4 +1,6 @@
-﻿using BLL.Entities.Recipe;
+﻿using BLL.Data.Cook.Credential;
+using BLL.Data.Recipe;
+using BLL.Data.Review;
 using BLL.Entities.Review;
 
 namespace BLL.Data.Cook;
@@ -6,10 +8,17 @@ namespace BLL.Data.Cook;
 public class CookService : ICookService
 {
     private readonly ICookRepository _cookRepository;
+    private readonly ICredentialService _credentialService;
+    private readonly IRecipeService _recipeService;
+    private readonly ICookReviewService _cookReviewService;
 
-    public CookService(ICookRepository cookRepository)
+    public CookService(ICookRepository cookRepository, ICredentialService credentialService, 
+        IRecipeService recipeService, ICookReviewService cookReviewService)
     {
         _cookRepository = cookRepository;
+        _credentialService = credentialService;
+        _recipeService = recipeService;
+        _cookReviewService = cookReviewService;
     }
     
     public List<Entities.Cook.Cook> GetAll()
@@ -37,6 +46,12 @@ public class CookService : ICookService
         _cookRepository.Update(cook);
     }
     
+    public void UpdateWithCredentials(Entities.Cook.Cook cook)
+    {
+        Update(cook);
+        _credentialService.Update(cook.Credential);
+    }
+    
     public void Delete(string username)
     {
         _cookRepository.Delete(username);
@@ -44,12 +59,30 @@ public class CookService : ICookService
 
     public Entities.Cook.Cook? GetByUsernameWithRecipes(string username)
     {
-        return _cookRepository.GetByUsernameWithRecipes(username);
+        Entities.Cook.Cook? cook = _cookRepository.GetByUserName(username);
+        if (cook != null)
+        {
+            List<Entities.Recipe.Recipe> recipes = _recipeService.GetByCookId(cook.Id);
+            return new Entities.Cook.Cook.Builder()
+                .FromCook(cook)
+                .WithRecipes(recipes.ToArray())
+                .Build();
+        }
+        return null;
     }
 
     public Entities.Cook.Cook? GetByUsernameWithCookReviews(string username)
     {
-        return _cookRepository.GetByUsernameWithCookReviews(username);
+        Entities.Cook.Cook? cook = _cookRepository.GetByUserName(username);
+        if (cook != null)
+        {
+            List<CookReview> reviews = _cookReviewService.GetByCookId(cook.Id);
+            return new Entities.Cook.Cook.Builder()
+                .FromCook(cook)
+                .WithReviews(reviews.ToArray())
+                .Build();
+        }
+        return null;
     }
 
     public Entities.Cook.Cook? GetByRecipeIdWithRecipe(Guid recipeId)

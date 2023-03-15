@@ -48,4 +48,9 @@ public class AuthHandler
     {
         return _controller.HttpContext.Session.GetString(UsernameSessionKey);
     }
+
+    public IActionResult ViewWithPermissionCheck(ViewResult defaultView, string username)
+    {
+        return IsUser(username) ? defaultView : RedirectToNoPermission();
+    }
 }

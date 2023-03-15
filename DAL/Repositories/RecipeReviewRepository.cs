@@ -15,17 +15,12 @@ public class RecipeReviewRepository : IRecipeReviewRepository
         throw new NotImplementedException();
     }
 
-    public RecipeReview GetByCookUsername(string username)
+    public List<RecipeReview> GetByCookId(Guid cookId)
     {
         throw new NotImplementedException();
     }
 
-    public List<RecipeReview> GetReviewsByCookUsername(string username)
-    {
-        throw new NotImplementedException();
-    }
-
-    public RecipeReview GetByRating(int rating)
+    public List<RecipeReview> GetByRating(int rating)
     {
         throw new NotImplementedException();
     }

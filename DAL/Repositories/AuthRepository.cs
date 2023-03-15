@@ -1,5 +1,4 @@
 ﻿using BLL.Data.Auth;
-using BLL.Exceptions;
 using DAL.Helpers;
 using MySql.Data.MySqlClient;
 
@@ -18,58 +17,32 @@ public class AuthRepository : IAuthRepository
         return QueryHelper.QuerySingle(query, parameters, reader => reader.GetString("username"));
     }
 
-    public void Register(Guid cookId, Guid credentialId, string username, string fullName, string email, string hashedPassword)
+    public bool PasswordCorrect(string username, string hashedPassword)
     {
-        if (UsernameTaken(username)) throw new UsernameTakenException();
-        if (EmailTaken(email)) throw new EmailTakenException();
-
-        CreateCook(cookId, username, fullName);
-        CreateCredential(credentialId, cookId, email, hashedPassword);
-    }
-
-    public void ChangePassword(string username, string hashedOldPassword, string hashedNewPassword)
-    {
-        if (!UsernameTaken(username)) throw new UsernameNotFoundException();
-        if (!PasswordCorrect(username, hashedOldPassword)) throw new WrongPasswordException();
-        
-        const string query = "UPDATE Credential " +
-                             "SET password = @hashedNewPassword " +
-                             "WHERE cook_id = (SELECT id FROM Cook WHERE username = @username);";
-        
-        MySqlParameter[] parameters = { 
-            new("@hashedNewPassword", hashedNewPassword), 
-            new("@username", username) 
-        };
-        
-        QueryHelper.NonQuery(query, parameters);
-    }
-
-    private bool PasswordCorrect(string username, string hashedOldPassword)
-    {
-        string query = "SELECT COUNT(*) " +
+        const string query = "SELECT COUNT(*) " +
                        "FROM Credential " +
                        "WHERE cook_id = (SELECT id FROM Cook WHERE username = @username) " +
-                       "AND password = @hashedOldPassword;";
+                       "AND password = @hashedPassword;";
         
         MySqlParameter[] parameters = {
             new("@username", username), 
-            new("@hashedOldPassword", hashedOldPassword)
+            new("@hashedPassword", hashedPassword)
         };
         
         return QueryHelper.QuerySingle(query, parameters, reader => reader.GetInt32("COUNT(*)")) == 1;
     }
 
-    private bool EmailTaken(string email)
+    public bool IsEmailTaken(string email)
     {
-        return CheckTaken("Credential", "email", email);
+        return IsTaken("Credential", "email", email);
     }
 
-    private bool UsernameTaken(string username)
+    public bool IsUsernameTaken(string username)
     {
-        return CheckTaken("Cook", "username", username);
+        return IsTaken("Cook", "username", username);
     }
 
-    private static bool CheckTaken(string table, string column, string toCheck)
+    private static bool IsTaken(string table, string column, string toCheck)
     {
         string query = $"SELECT COUNT(*) FROM {table} WHERE {column} = @toCheck;";
         MySqlParameter[] parameters =
@@ -77,33 +50,5 @@ public class AuthRepository : IAuthRepository
             new("@toCheck", toCheck)
         };
         return QueryHelper.QuerySingle(query, parameters, reader => reader.GetInt32("COUNT(*)")) > 0;
-    }
-    
-    private static void CreateCook(Guid id, string username, string fullName)
-    {
-        const string query =
-            "INSERT INTO Cook (id, username, fullname, image_url) VALUES (@id, @username, @fullname, @image_url);";
-        MySqlParameter[] parameters =
-        {
-            new("@id", id),
-            new("@username", username),
-            new("@fullname", fullName),
-            new("@image_url", "https://i.imgur.com/ShL15rC.png")
-        };
-        QueryHelper.NonQuery(query, parameters);
-    }
-    
-    private static void CreateCredential(Guid id, Guid cookId, string email, string password)
-    {
-        const string query =
-            "INSERT INTO Credential (id, email, password, cook_id) VALUES (@id, @email, @password, @cook_id);";
-        MySqlParameter[] parameters =
-        {
-            new("@id", id),
-            new("@email", email),
-            new("@password", password),
-            new("@cook_id", cookId)
-        };
-        QueryHelper.NonQuery(query, parameters);
     }
 }

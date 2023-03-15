@@ -9,13 +9,13 @@ public class RecipeService : IRecipeService
         _recipeRepository = recipeRepository;
     }
     
-    public List<Entities.Recipe.Recipe> GetRecipesByUsername(string username)
-    {
-        return _recipeRepository.GetRecipesByUsername(username);
-    }
-
     public Entities.Recipe.Recipe? GetById(Guid id)
     {
         return _recipeRepository.GetById(id);
+    }
+
+    public List<Entities.Recipe.Recipe> GetByCookId(Guid cookId)
+    {
+        return _recipeRepository.GetByCookId(cookId);
     }
 }

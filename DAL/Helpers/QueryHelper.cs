@@ -6,85 +6,80 @@ public static class QueryHelper
 {
     public static T? QuerySingle<T>(string query, MySqlParameter[]? parameters, Func<MySqlDataReader, T> mapper)
     {
-        using MySqlConnection connection = ConnectionHelper.GetConnection();
-        using MySqlCommand command = new(query, connection);
-        
-        if (parameters != null)
+        using (MySqlConnection connection = ConnectionHelper.GetConnection())
         {
-            foreach (MySqlParameter parameter in parameters)
+            using (MySqlCommand command = new(query, connection))
             {
-                command.Parameters.Add(parameter);
+                if (parameters != null) command.Parameters.AddRange(parameters);
+                try
+                {
+                    connection.Open();
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            T result = mapper(reader);
+                            return result;
+                        }
+                    }
+                }
+                catch (Exception ex) when(ex is MySqlException or InvalidOperationException)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
-        
-        try
-        {
-            connection.Open();
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            if (reader.Read())
-            {
-                T result = mapper(reader);
-                return result;
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-
         return default;
     }
     
     public static List<T> QueryMultiple<T>(string query, MySqlParameter[]? parameters, Func<MySqlDataReader, T> mapper)
     {
         List<T> results = new();
-        using MySqlConnection connection = ConnectionHelper.GetConnection();
-        using MySqlCommand command = new(query, connection);
-
-        if (parameters != null)
+        using (MySqlConnection connection = ConnectionHelper.GetConnection())
         {
-            foreach (MySqlParameter parameter in parameters)
+            using (MySqlCommand command = new(query, connection))
             {
-                command.Parameters.Add(parameter);
+                if (parameters != null) command.Parameters.AddRange(parameters);
+                try
+                {
+                    connection.Open();
+                    using (MySqlDataReader reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            results.Add(mapper(reader));
+                        }
+                    }
+                }
+                catch (Exception ex) when (ex is MySqlException or InvalidOperationException)
+                {
+                    Console.WriteLine(ex.Message);
+                }
+                finally
+                {
+                    connection.Close();
+                }
             }
         }
-
-        try
-        {
-            connection.Open();
-            using MySqlDataReader reader = command.ExecuteReader();
-
-            while (reader.Read())
-            {
-                results.Add(mapper(reader));
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        finally
-        {
-            
-        }
-
         return results;
     }
     
     public static void NonQuery(string query, MySqlParameter[]? parameters)
     {
-        using MySqlConnection connection = ConnectionHelper.GetConnection();
-        using MySqlCommand command = new(query, connection);
-        if (parameters != null)
+        using (MySqlConnection connection = ConnectionHelper.GetConnection())
         {
-            foreach (MySqlParameter parameter in parameters)
+            using (MySqlCommand command = new(query, connection))
             {
-                command.Parameters.Add(parameter);
+                if (parameters != null) command.Parameters.AddRange(parameters);
+
+                connection.Open();
+                command.ExecuteNonQuery();
+                connection.Close();
             }
         }
-
-        connection.Open();
-        command.ExecuteNonQuery();
     }
 }

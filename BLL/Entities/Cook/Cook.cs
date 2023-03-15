@@ -1,37 +1,50 @@
 ﻿using BLL.Entities.Review;
+using BLL.Exceptions;
 
 namespace BLL.Entities.Cook;
 
 public class Cook
 {
+    private Guid _id;
+    private string _username;
+    private string _fullname;
+    private string _imageUrl;
+    private DateTime _createdAt;
+    private Credential _credential;
+
+    private Recipe.Recipe[] _recipes;
+    private CookReview[] _reviews;
+    private Follower[] _followers;
+
     private Cook(Guid id, string username, string fullname, string imageUrl, 
         DateTime createdAt, Credential credential, Recipe.Recipe[] recipes, 
         CookReview[] reviews, Follower[] followers)
     {
-        Id = id;
-        Username = username;
-        Fullname = fullname;
-        ImageUrl = imageUrl;
-        CreatedAt = createdAt;
-        Credential = credential;
-        Recipes = recipes;
-        Reviews = reviews;
-        Followers = followers;
+        _id = id;
+        _username = username;
+        _fullname = fullname;
+        _imageUrl = imageUrl;
+        _createdAt = createdAt;
+        _credential = credential;
+        _recipes = recipes;
+        _reviews = reviews;
+        _followers = followers;
     }
     
-    public Guid Id { get; private set; }
-    public string Username { get; private set; }
-    public string Fullname { get; private set; }
-    public string ImageUrl { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public Credential Credential { get; private set; }
-    public Recipe.Recipe[] Recipes { get; private set; }
-    public CookReview[] Reviews { get; private set; }
-    public Follower[] Followers { get; private set; }
+    public Guid Id { get => _id; private set => _id = value; }
+    public string Username { get => _username; private set => _username = value; }
+    public string Fullname { get => _fullname; private set => _fullname = value; }
+    public string ImageUrl { get => _imageUrl; private set => _imageUrl = value; }
+    public DateTime CreatedAt { get => _createdAt; private set => _createdAt = value; }
+    public Credential Credential { get => _credential; private set => _credential = value; }
+    
+    public Recipe.Recipe[] Recipes { get => _recipes; private set => _recipes = value; }
+    public CookReview[] Reviews { get => _reviews; private set => _reviews = value; }
+    public Follower[] Followers { get => _followers; private set => _followers = value; }
 
     public class Builder
     {
-        private Cook _cook;
+        private Cook _cook = new(Guid.Empty, null, null, null, DateTime.Now, null, null, null, null);
 
         public Builder FromCook(Cook cook)
         {
@@ -39,7 +52,6 @@ public class Cook
             return this;
         }
 
-        
         public Builder WithId(Guid id)
         {
             _cook.Id = id;
@@ -96,6 +108,10 @@ public class Cook
         
         public Cook Build()
         {
+            if (_cook.Id == Guid.Empty || _cook.Username == null || _cook.Fullname == null || _cook.ImageUrl == null)
+            {
+                throw new IncompleteBuilderException(typeof(Cook));
+            }
             return _cook;
         }
     }

@@ -76,21 +76,21 @@ public class CookController : BaseController<CookController>
         {
             ViewBag.SuccessMessage = "Successfully saved changes.";
             Cook cook = _cookService.GetByUsername(username)!;
-            _cookService.Update(new Cook.Builder()
+            _cookService.UpdateWithCredentials(new Cook.Builder()
                 .WithId(cook.Id)
                 .WithUsername(cook.Username)
                 .WithFullname(model.Fullname)
                 .WithImageUrl(model.ImageUrl)
-                .WithCredential(new Credential(
-                    model.Email, 
-                    cook.Credential.Password, 
-                    cook.Credential.UpdatedAt))
+                .WithCredential(new Credential.Builder()
+                    .WithId(cook.Credential.Id)
+                    .WithEmail(model.Email)
+                    .WithPassword(cook.Credential.HashedPassword)
+                    .WithCookId(cook.Id)
+                    .Build())
                 .Build());
         }
         ViewBag.ErrorMessages = errors;
-        return Auth.IsUser(username)
-            ? View(model)
-            : Auth.RedirectToNoPermission();
+        return Auth.ViewWithPermissionCheck(View(model), username);
     }
 
     [HttpPost]

@@ -4,16 +4,16 @@ namespace BLL.Data.Review;
 
 public class CookReviewService : ICookReviewService
 {
-    private readonly ICookReviewRepository _recipeReviewRepository;
+    private readonly ICookReviewRepository _cookReviewRepository;
     
-    public CookReviewService(ICookReviewRepository recipeReviewRepository)
+    public CookReviewService(ICookReviewRepository cookReviewRepository)
     {
-        _recipeReviewRepository = recipeReviewRepository;
+        _cookReviewRepository = cookReviewRepository;
     }
     
     public CookReview GetForCookId(Guid cookId)
     {
-        return _recipeReviewRepository.GetForCookId(cookId);
+        return _cookReviewRepository.GetForCookId(cookId);
     }
 
     public List<CookReview> GetAll()
@@ -26,12 +26,12 @@ public class CookReviewService : ICookReviewService
         throw new NotImplementedException();
     }
 
-    public CookReview GetByCookUsername(string username)
+    public List<CookReview> GetByCookId(Guid cookId)
     {
-        throw new NotImplementedException();
+        return _cookReviewRepository.GetByCookId(cookId);
     }
 
-    public CookReview GetByRating(int rating)
+    public List<CookReview> GetByRating(int rating)
     {
         throw new NotImplementedException();
     }

@@ -9,6 +9,7 @@ public interface ICookService
     Entities.Cook.Cook? GetByUsername(string username);
     void Add(Entities.Cook.Cook cook);
     void Update(Entities.Cook.Cook cook);
+    void UpdateWithCredentials(Entities.Cook.Cook build);
     void Delete(string username);
     Entities.Cook.Cook? GetByUsernameWithRecipes(string username);
     Entities.Cook.Cook? GetByUsernameWithCookReviews(string username);

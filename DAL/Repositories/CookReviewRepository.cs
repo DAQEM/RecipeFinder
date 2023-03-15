@@ -30,15 +30,15 @@ public class CookReviewRepository : ICookReviewRepository
         throw new NotImplementedException();
     }
 
-    public List<CookReview> GetReviewsByCookUsername(string username)
+    public List<CookReview> GetByCookId(Guid cookId)
     {
         const string query = "SELECT CookReview.*" +
                              "FROM CookReview " +
                              "INNER JOIN Cook ON CookReview.cook_id = Cook.id " +
-                             "WHERE Cook.username = @username;";
+                             "WHERE Cook.id = @cook_id;";
         MySqlParameter[] parameters =
         {
-            new("@username", username)
+            new("@cook_id", cookId)
         };
 
         return QueryHelper.QueryMultiple(query, parameters,
@@ -56,7 +56,7 @@ public class CookReviewRepository : ICookReviewRepository
             });
     }
 
-    public CookReview GetByRating(int rating)
+    public List<CookReview> GetByRating(int rating)
     {
         throw new NotImplementedException();
     }
