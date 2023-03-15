@@ -8,12 +8,12 @@ using MVC.Models.Cook;
 
 namespace MVC.Controllers;
 
-public class AuthController : Controller
+public class AuthController : BaseController<AuthController>
 {
     private readonly IAuthService _authService;
     private readonly AuthHandler _authHandler;
     
-    public AuthController(IAuthService service)
+    public AuthController(ILogger<AuthController> logger, IAuthService service) : base(logger)
     {
         _authService = service;
         _authHandler = new AuthHandler(this);

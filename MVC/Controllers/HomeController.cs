@@ -4,13 +4,11 @@ using MVC.Models;
 
 namespace MVC.Controllers;
 
-public class HomeController : Controller
+public class HomeController : BaseController<HomeController>
 {
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public HomeController(ILogger<HomeController> logger) : base(logger)
     {
-        _logger = logger;
     }
 
     [HttpGet]

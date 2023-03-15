@@ -10,12 +10,12 @@ using MVC.Models.Cook;
 namespace MVC.Controllers;
 
 [Route("Cook")]
-public class CookController : Controller
+public class CookController : BaseController<CookController>
 {
     private readonly ICookService _cookService;
     private readonly AuthHandler _authHandler;
     
-    public CookController(ICookService service)
+    public CookController(ILogger<CookController> logger, ICookService service) : base(logger)
     {
         _cookService = service;
         _authHandler = new AuthHandler(this);
