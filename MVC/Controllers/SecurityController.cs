@@ -11,4 +11,11 @@ public class SecurityController : BaseController<SecurityController>
     {
         return View();
     }
+    
+    [HttpGet]
+    [Route("NotFound")]
+    public new IActionResult NotFound()
+    {
+        return View();
+    }
 }

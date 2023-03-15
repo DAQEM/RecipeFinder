@@ -167,4 +167,16 @@ public class CookRepository : ICookRepository
             .WithReviews(cookReviews.ToArray())
             .Build();
     }
+
+    public Cook? GetByRecipeIdWithRecipe(Guid recipeId)
+    {
+        Recipe? recipe = _recipeRepository.GetById(recipeId);
+        if (recipe == null) return null;
+        Cook? cook = GetById(recipe!.CookId);
+        if (cook == null) return null;
+        return new Cook.Builder()
+            .FromCook(cook)
+            .WithRecipes(new[] {recipe})
+            .Build();
+    }
 }

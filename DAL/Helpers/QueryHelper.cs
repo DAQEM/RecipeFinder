@@ -49,7 +49,7 @@ public static class QueryHelper
                 command.Parameters.Add(parameter);
             }
         }
-        
+
         try
         {
             connection.Open();
@@ -63,6 +63,10 @@ public static class QueryHelper
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
+        }
+        finally
+        {
+            
         }
 
         return results;

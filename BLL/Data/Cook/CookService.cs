@@ -51,4 +51,9 @@ public class CookService : ICookService
     {
         return _cookRepository.GetByUsernameWithCookReviews(username);
     }
+
+    public Entities.Cook.Cook? GetByRecipeIdWithRecipe(Guid recipeId)
+    {
+        return _cookRepository.GetByRecipeIdWithRecipe(recipeId);
+    }
 }

@@ -1,0 +1,46 @@
+﻿@using BLL.Entities.Recipe
+@model MVC.Models.Cook.CookModel
+
+@{
+    ViewBag.Title = "Recipe";
+    Layout = "_Layout";
+    Recipe recipe = Model.Cook.Recipes[0];
+}
+
+@functions
+{
+    private string GetPreparationTime()
+    {
+        TimeSpan preparationTime = Model.Cook.Recipes[0].PreparationTime;
+        if (preparationTime == TimeSpan.Zero) return "Unknown";
+        if (preparationTime.Hours == 0)
+        {
+            if (preparationTime.Minutes == 0)
+            {
+                return preparationTime.ToString(@"ss").TrimStart('0') + " sec";
+            }
+            if (preparationTime.Seconds == 0)
+            {
+                return preparationTime.ToString(@"mm").TrimStart('0') + " min";
+            }
+            return preparationTime.ToString(@"mm\:ss").TrimStart('0') + " min";
+        }
+        return preparationTime.ToString(@"hh").TrimStart('0') + " hr";
+    }
+}
+
+<div class="d-flex justify-content-center">
+    <div class="m-5">
+        <img src="@Model.Cook.ImageUrl" height="128px" class="rounded-circle" alt="Cook Image" />
+        <h1>@Model.Cook.Fullname</h1>
+        <p>@Model.Cook.Username</p>
+    </div>
+    <div class="m-5">
+        <img src="@recipe.ImageUrl" height="128px" class="rounded-circle" alt="Recipe Image" />
+        <h1 class="m-0">@recipe.Name</h1>
+        <p class="m-0">@recipe.Description</p>
+        <p class="m-0">@recipe.Category</p>
+        <p class="m-0">@GetPreparationTime()</p>
+        <p class="m-0">@recipe.CreatedAt</p>
+    </div>
+</div>

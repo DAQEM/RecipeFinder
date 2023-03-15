@@ -13,4 +13,9 @@ public class RecipeService : IRecipeService
     {
         return _recipeRepository.GetRecipesByUsername(username);
     }
+
+    public Entities.Recipe.Recipe? GetById(Guid id)
+    {
+        return _recipeRepository.GetById(id);
+    }
 }

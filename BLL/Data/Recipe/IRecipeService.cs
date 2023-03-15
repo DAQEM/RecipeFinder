@@ -3,4 +3,6 @@
 public interface IRecipeService
 {
     List<Entities.Recipe.Recipe> GetRecipesByUsername(string username);
+    
+    Entities.Recipe.Recipe? GetById(Guid id);
 }

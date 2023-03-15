@@ -12,4 +12,5 @@ public interface ICookService
     void Delete(string username);
     Entities.Cook.Cook? GetByUsernameWithRecipes(string username);
     Entities.Cook.Cook? GetByUsernameWithCookReviews(string username);
+    Entities.Cook.Cook? GetByRecipeIdWithRecipe(Guid recipeId);
 }
