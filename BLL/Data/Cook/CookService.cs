@@ -77,7 +77,6 @@ public class CookService : ICookService
         if (cook != null)
         {
             List<CookReview> reviews = _cookReviewService.GetByCookId(cook.Id);
-            Console.WriteLine(reviews[0].Comment);
             return new Entities.Cook.Cook.Builder()
                 .FromCook(cook)
                 .WithReviews(reviews.ToArray())

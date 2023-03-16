@@ -24,7 +24,7 @@ public abstract class Review
     public DateTime CreatedAt { get => _createdAt; protected set => _createdAt = value; }
     
     public Reviewer Reviewer { get => _reviewer; protected set => _reviewer = value; }
-
+    
     public abstract class ReviewBuilder<T> where T : Review
     {
         protected readonly T Review = (T)Activator.CreateInstance(typeof(T))!;

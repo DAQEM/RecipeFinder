@@ -25,9 +25,11 @@ public class Credential
     public DateTime UpdatedAt { get => _updatedAt; set => _updatedAt = value; }
     public Guid CookId { get => _cookId; set => _cookId = value; }
     
+    public static Credential Empty => new(Guid.Empty, string.Empty, string.Empty, DateTime.Now, Guid.Empty);
+
     public class Builder
     {
-        private Credential _credential = new(Guid.Empty, null, null, DateTime.Now, Guid.Empty);
+        private Credential _credential = Empty;
         
         public Builder FromCredential(Credential credential)
         {

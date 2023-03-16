@@ -5,7 +5,7 @@ public class RecipeReview : Review
     private Guid _recipeId;
 
     //For Builder only
-    public RecipeReview() : base(Guid.Empty, null, 0, DateTime.Now, null)
+    public RecipeReview() : base(Guid.Empty, string.Empty, 0, DateTime.Now, Reviewer.Empty)
     {
         _recipeId = Guid.Empty;
     }

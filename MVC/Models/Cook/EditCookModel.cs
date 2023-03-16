@@ -17,4 +17,12 @@ public class EditCookModel
             ImageUrl = cook.ImageUrl
         };
     }
+    
+    public void TrimAll()
+    {
+        Username = Username.Trim();
+        Email = Email.Trim();
+        Fullname = Fullname.Trim();
+        ImageUrl = ImageUrl.Trim();
+    }
 }

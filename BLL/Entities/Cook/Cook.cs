@@ -1,4 +1,5 @@
-﻿using BLL.Entities.Review;
+﻿using System.Security.Cryptography.X509Certificates;
+using BLL.Entities.Review;
 using BLL.Exceptions;
 
 namespace BLL.Entities.Cook;
@@ -42,9 +43,13 @@ public class Cook
     public CookReview[] Reviews { get => _reviews; private set => _reviews = value; }
     public Follower[] Followers { get => _followers; private set => _followers = value; }
 
+    private static Cook Empty => new(Guid.Empty, string.Empty, string.Empty, 
+        string.Empty, DateTime.Now, Credential.Empty, Array.Empty<Recipe.Recipe>(), 
+        Array.Empty<CookReview>(), Array.Empty<Follower>());
+    
     public class Builder
     {
-        private Cook _cook = new(Guid.Empty, null, null, null, DateTime.Now, null, null, null, null);
+        private Cook _cook = Empty;
 
         public Builder FromCook(Cook cook)
         {
@@ -108,7 +113,7 @@ public class Cook
         
         public Cook Build()
         {
-            if (_cook.Id == Guid.Empty || _cook.Username == null || _cook.Fullname == null || _cook.ImageUrl == null)
+            if (_cook.Id == Guid.Empty || _cook.Username == string.Empty || _cook.Fullname == string.Empty || _cook.ImageUrl == string.Empty)
             {
                 throw new IncompleteBuilderException(typeof(Cook));
             }

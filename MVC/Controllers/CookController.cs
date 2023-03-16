@@ -27,10 +27,11 @@ public class CookController : BaseController<CookController>
         StringValues searchValues = HttpContext.Request.Query["search"];
         if (searchValues.Any())
         {
+            //TODO: Move filter to service
             string search = searchValues.ToString();
             cooks = cooks
-                .Where(c => c.Username.ToLower().Contains(search.ToLower()) 
-                            || c.Fullname.ToLower().Contains(search.ToLower()))
+                .Where(c => c.Username.Contains(search.ToLower(), StringComparison.OrdinalIgnoreCase) 
+                            || c.Fullname.Contains(search.ToLower(), StringComparison.OrdinalIgnoreCase))
                 .ToList();
         } 
         return View(new CookListModel { Cooks = cooks });
@@ -56,23 +57,21 @@ public class CookController : BaseController<CookController>
     [Route("{username}/Edit")]
     public IActionResult EditCook(string username)
     {
-        return !Auth.IsUser(username) 
-            ? Auth.RedirectToNoPermission() 
-            : View(EditCookModel.FromCook(_cookService.GetByUsername(username)!));
+        return Auth.IsUser(username)
+            ? View(EditCookModel.FromCook(_cookService.GetByUsername(username)!))
+            : Auth.RedirectToNoPermission();
     }
     
     [HttpPost]
     [Route("{username}/Edit/")]
     public IActionResult EditCook(string username, EditCookModel model)
     {
-        List<string> errors = RegisterHandler.GetErrors(new RegisterModel { Username = model.Username, Fullname = model.Fullname, Email = model.Email })
-            .Where(s => !s.ToLower().Contains("password") && !s.ToLower().Contains("username")).ToList();
-        if (!(Uri.TryCreate(model.ImageUrl, UriKind.Absolute, out Uri? uriResult) 
-            && (uriResult.Scheme == Uri.UriSchemeHttp || uriResult.Scheme == Uri.UriSchemeHttps)))
+        List<string> errors = EditCookHandler.GetErrors(model);
+        if (errors.Any())
         {
-            errors.Add("Profile picture URL must be a valid URL. (don't forget http:// or https://)");
+            ViewBag.ErrorMessages = errors;
         }
-        if (!errors.Any())
+        else
         {
             ViewBag.SuccessMessage = "Successfully saved changes.";
             Cook cook = _cookService.GetByUsername(username)!;
@@ -89,7 +88,7 @@ public class CookController : BaseController<CookController>
                     .Build())
                 .Build());
         }
-        ViewBag.ErrorMessages = errors;
+
         return Auth.ViewWithPermissionCheck(View(model), username);
     }
 

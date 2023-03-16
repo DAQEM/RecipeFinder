@@ -19,9 +19,11 @@ public class Reviewer
     public string Username { get => _username; set => _username = value; }
     public string ImageUrl { get => _imageUrl; set => _imageUrl = value; }
     
+    public static Reviewer Empty => new(string.Empty, string.Empty, string.Empty);
+    
     public class Builder
     {
-        private Reviewer _reviewer = new(null, null, null);
+        private Reviewer _reviewer = Empty;
 
         public Builder FromCook(Cook.Cook cook)
         {
