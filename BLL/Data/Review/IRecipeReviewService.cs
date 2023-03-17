@@ -2,7 +2,7 @@
 
 namespace BLL.Data.Review;
 
-public interface IRecipeReviewService : IReviewService<RecipeReview>
+public interface IRecipeReviewService : IReviewService
 {
-    RecipeReview GetForRecipeId(Guid recipeId);
+    Entities.Review.Review GetForRecipeId(Guid recipeId);
 }

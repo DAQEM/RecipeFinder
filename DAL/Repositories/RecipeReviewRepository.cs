@@ -5,42 +5,42 @@ namespace DAL.Repositories;
 
 public class RecipeReviewRepository : IRecipeReviewRepository
 {
-    public List<RecipeReview> GetAll()
+    public List<Review> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public RecipeReview GetById(Guid id)
+    public Review GetById(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public List<RecipeReview> GetByCookId(Guid cookId)
+    public List<Review> GetByCookId(Guid cookId)
     {
         throw new NotImplementedException();
     }
 
-    public List<RecipeReview> GetByRating(int rating)
+    public List<Review> GetByRating(int rating)
     {
         throw new NotImplementedException();
     }
 
-    public void Add(RecipeReview review)
+    public void Add(Review review)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(RecipeReview review)
+    public void Update(Review review)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(RecipeReview review)
+    public void Delete(Review review)
     {
         throw new NotImplementedException();
     }
 
-    public RecipeReview GetForRecipeId(Guid recipeId)
+    public Review GetForRecipeId(Guid recipeId)
     {
         throw new NotImplementedException();
     }

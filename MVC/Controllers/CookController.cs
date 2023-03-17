@@ -58,7 +58,7 @@ public class CookController : BaseController<CookController>
     public IActionResult EditCook(string username)
     {
         return Auth.IsUser(username)
-            ? View(EditCookModel.FromCook(_cookService.GetByUsername(username)!))
+            ? View(EditCookModel.FromCook(_cookService.GetByUsernameWithCredentials(username)!))
             : Auth.RedirectToNoPermission();
     }
     
@@ -74,19 +74,17 @@ public class CookController : BaseController<CookController>
         else
         {
             ViewBag.SuccessMessage = "Successfully saved changes.";
-            Cook cook = _cookService.GetByUsername(username)!;
-            _cookService.UpdateWithCredentials(new Cook.Builder()
-                .WithId(cook.Id)
-                .WithUsername(cook.Username)
-                .WithFullname(model.Fullname)
-                .WithImageUrl(model.ImageUrl)
-                .WithCredential(new Credential.Builder()
-                    .WithId(cook.Credential.Id)
-                    .WithEmail(model.Email)
-                    .WithPassword(cook.Credential.HashedPassword)
-                    .WithCookId(cook.Id)
-                    .Build())
-                .Build());
+            Cook cook = _cookService.GetByUsernameWithCredentials(username)!;
+            
+            _cookService.UpdateWithCredentials(new Cook(
+                id: cook.Id,
+                username: cook.Username,
+                fullname: model.Fullname,
+                imageUrl: model.ImageUrl,
+                credential: new Credential(
+                    email: model.Email,
+                    hashedPassword: cook.Credential.HashedPassword,
+                    cookId: cook.Id)));
         }
 
         return Auth.ViewWithPermissionCheck(View(model), username);

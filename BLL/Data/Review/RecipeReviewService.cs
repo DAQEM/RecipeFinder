@@ -11,42 +11,42 @@ public class RecipeReviewService : IRecipeReviewService
         _recipeReviewRepository = recipeReviewRepository;
     }
     
-    public RecipeReview GetForRecipeId(Guid recipeId)
+    public Entities.Review.Review GetForRecipeId(Guid recipeId)
     {
         return _recipeReviewRepository.GetForRecipeId(recipeId);
     }
 
-    public List<RecipeReview> GetAll()
+    public List<Entities.Review.Review> GetAll()
     {
         throw new NotImplementedException();
     }
 
-    public RecipeReview GetById(Guid id)
+    public Entities.Review.Review GetById(Guid id)
     {
         throw new NotImplementedException();
     }
 
-    public List<RecipeReview> GetByCookId(Guid cookId)
+    public List<Entities.Review.Review> GetByCookId(Guid cookId)
     {
         throw new NotImplementedException();
     }
 
-    public List<RecipeReview> GetByRating(int rating)
+    public List<Entities.Review.Review> GetByRating(int rating)
     {
         throw new NotImplementedException();
     }
 
-    public void Add(RecipeReview review)
+    public void Add(Entities.Review.Review review)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(RecipeReview review)
+    public void Update(Entities.Review.Review review)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(RecipeReview review)
+    public void Delete(Entities.Review.Review review)
     {
         throw new NotImplementedException();
     }

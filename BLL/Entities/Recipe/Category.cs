@@ -18,5 +18,6 @@ public enum Category
     Beverage = 13,
     Cocktail = 14,
     Smoothie = 15,
-    Other = 16
+    Other = 16,
+    None = 17
 }

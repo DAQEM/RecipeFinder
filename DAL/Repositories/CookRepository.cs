@@ -9,33 +9,24 @@ public class CookRepository : ICookRepository
 {
     public List<Cook> GetAll()
     {
-        const string query = "SELECT Cook.id as 'cook_id', Cook.username, Cook.fullname, Cook.image_url, Cook.created_at, Credential.id as 'credential_id', Credential.email, Credential.password, Credential.updated_at " +
-                             "FROM Cook " +
-                             "INNER JOIN Credential ON Cook.id = Credential.cook_id;";
-        
+        const string query = "SELECT id, username, fullname, image_url, created_at " +
+                             "FROM Cook";
+
         return QueryHelper.QueryMultiple(query, null,
-            reader => new Cook.Builder()
-                .WithId(reader.GetGuid("cook_id"))
-                .WithUsername(reader.GetString("username"))
-                .WithFullname(reader.GetString("fullname"))
-                .WithImageUrl(reader.GetString("image_url"))
-                .WithCreatedAt(reader.GetDateTime("created_at"))
-                .WithCredential(new Credential.Builder()
-                    .WithId(reader.GetGuid("credential_id"))
-                    .WithEmail(reader.GetString("email"))
-                    .WithPassword(reader.GetString("password"))
-                    .WithUpdatedAt(reader.GetDateTime("updated_at"))
-                    .WithCookId(reader.GetGuid("cook_id"))
-                    .Build())
-                .Build());
+            reader => new Cook(
+                id: reader.GetGuid("id"),
+                username: reader.GetString("username"),
+                fullname: reader.GetString("fullname"),
+                imageUrl: reader.GetString("image_url"),
+                createdAt: reader.GetDateTime("created_at")
+            ));
     }
 
     public Cook? GetById(Guid id)
     {
-        const string query = "SELECT Cook.id as 'cook_id', Cook.username, Cook.fullname, Cook.image_url, Cook.created_at, Credential.id as 'credential_id', Credential.email, Credential.password, Credential.updated_at " +
-                             "FROM Cook " +
-                             "INNER JOIN Credential ON Cook.id = Credential.cook_id " +
-                             "WHERE Cook.id = @id;";
+        const string query = "SELECT id, username, fullname, image_url, created_at " +
+                             "FROM Cook " + 
+                             "WHERE id = @id;";
         
         MySqlParameter[] parameters =
         {
@@ -43,27 +34,19 @@ public class CookRepository : ICookRepository
         };
         
         return QueryHelper.QuerySingle(query, parameters,
-            reader => new Cook.Builder()
-                .WithId(reader.GetGuid("cook_id"))
-                .WithUsername(reader.GetString("username"))
-                .WithFullname(reader.GetString("fullname"))
-                .WithImageUrl(reader.GetString("image_url"))
-                .WithCreatedAt(reader.GetDateTime("created_at"))
-                .WithCredential(new Credential.Builder()
-                    .WithId(reader.GetGuid("credential_id"))
-                    .WithEmail(reader.GetString("email"))
-                    .WithPassword(reader.GetString("password"))
-                    .WithUpdatedAt(reader.GetDateTime("updated_at"))
-                    .WithCookId(reader.GetGuid("cook_id"))
-                    .Build())
-                .Build());
+            reader => new Cook(
+                id: reader.GetGuid("id"),
+                username: reader.GetString("username"),
+                fullname: reader.GetString("fullname"),
+                imageUrl: reader.GetString("image_url"),
+                createdAt: reader.GetDateTime("created_at")
+            ));
     }
 
     public Cook? GetByUserName(string username)
     {
-        const string query = "SELECT Cook.id as 'cook_id', Cook.username, Cook.fullname, Cook.image_url, Cook.created_at, Credential.id as 'credential_id', Credential.email, Credential.password, Credential.updated_at " +
+        const string query = "SELECT id, username, fullname, image_url, created_at " +
                              "FROM Cook " +
-                             "INNER JOIN Credential ON Cook.id = Credential.cook_id " +
                              "WHERE username = @username;";
         
         MySqlParameter[] parameters =
@@ -72,20 +55,13 @@ public class CookRepository : ICookRepository
         };
         
         return QueryHelper.QuerySingle(query, parameters,
-            reader => new Cook.Builder()
-                .WithId(reader.GetGuid("cook_id"))
-                .WithUsername(reader.GetString("username"))
-                .WithFullname(reader.GetString("fullname"))
-                .WithImageUrl(reader.GetString("image_url"))
-                .WithCreatedAt(reader.GetDateTime("created_at"))
-                .WithCredential(new Credential.Builder()
-                    .WithId(reader.GetGuid("credential_id"))
-                    .WithEmail(reader.GetString("email"))
-                    .WithPassword(reader.GetString("password"))
-                    .WithUpdatedAt(reader.GetDateTime("updated_at"))
-                    .WithCookId(reader.GetGuid("cook_id"))
-                    .Build())
-                .Build());
+            reader => new Cook(
+                id: reader.GetGuid("id"),
+                username: reader.GetString("username"),
+                fullname: reader.GetString("fullname"),
+                imageUrl: reader.GetString("image_url"),
+                createdAt: reader.GetDateTime("created_at")
+            ));
     }
 
     public void Add(Cook cook)
@@ -98,7 +74,7 @@ public class CookRepository : ICookRepository
             new("@id", cook.Id),
             new("@username", cook.Username),
             new("@fullname", cook.Fullname),
-            new("@image_url", cook.ImageUrl ?? "https://i.imgur.com/ShL15rC.png")
+            new("@image_url", cook.ImageUrl == string.Empty ? "https://i.imgur.com/ShL15rC.png" : cook.ImageUrl)
         };
         QueryHelper.NonQuery(query, parameters);
     }

@@ -1,5 +1,4 @@
 ﻿@startuml
-'https://plantuml.com/class-diagram
 
 skinparam groupInheritance 2
 
@@ -62,53 +61,26 @@ enum Category {
     Dessert
 }
 
-class Reviewer {
-    string UserName
-    string FullName
-    string ImageUrl
-}
-
-class Follower {
-    string UserName
-    string FullName
-    string ImageUrl
-}
-
-class Liker {
-    string UserName
-    string FullName
-    string ImageUrl
-}
-
-abstract class Review {
+class Review {
     Guid ReviewerId
     string Comment
     int Rating
     DateTime CreatedAt
 }
 
-class CookReview {
-}
+Cook --> "*" Recipe : "Recipes"
+Cook --> "1" Credential : "Credential"
+Cook --> "*" Review : "Reviews"
+Cook --> "*" Cook : "Followers"
 
-class RecipeReview {
-}
+Recipe --> "*" Ingredient : "Ingredients"
+Recipe --> "*" PreparationStep : "PreparationSteps"
+Recipe --> "*" Category : "Categories"
+Recipe --> "*" Cook : "Likers"
 
-Review <|-- CookReview
-Review <|-- RecipeReview
+Ingredient --> "1" Unit : "Unit"
 
-Cook --> "*" Recipe
-Cook -- Credential
-Cook --> "*" CookReview
-Cook --> "*" Follower
-
-Recipe --> "*" Ingredient
-Recipe --> "*" PreparationStep
-Recipe --> "*" Category
-Recipe --> "*" RecipeReview
-Recipe --> "*" Liker
-
-Ingredient -- Unit
-
-Review -> Reviewer
+Review --> "1" Cook : "Reviewer" 
+Review "*" <-- Recipe : "Reviews"
 
 @enduml

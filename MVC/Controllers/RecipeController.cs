@@ -21,7 +21,7 @@ public class RecipeController : BaseController<RecipeController>
     [Route("Recipe/{id}")]
     public IActionResult Recipe(Guid id)
     {
-        Cook? cook = _cookService.GetByRecipeIdWithRecipe(id);
+        Cook? cook = _cookService.GetWithRecipe(id);
         return cook == null || cook.Recipes.Length == 0 ? Redirect.NotFound : View( new CookModel { Cook = cook } );
     }
 }

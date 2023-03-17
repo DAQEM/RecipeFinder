@@ -28,9 +28,9 @@
             <label>Email address</label>
             @Html.TextBoxFor(model => model.Email, new { placeholder = "\uF0E0  Email address", type = "email", required = true, oninvalid = "this.setCustomValidity('Please enter your email address.')" })
             <label>Password</label>
-            @Html.PasswordFor(model => model.Password, new { placeholder = "\uF023  Password", required = true, oninvalid = "this.setCustomValidity('Please enter your password.')" })
-            <label>Confirm password</label>
-            @Html.PasswordFor(model => model.ConfirmPassword, new { placeholder = "\uF023  Confirm password", required = true, oninvalid = "this.setCustomValidity('Please enter your password again.')" })
+            @Html.PasswordFor(model => model.Password, new { placeholder = "\uF023  Password", required = true, oninvalid = "this.setCustomValidity('Please enter your hashedPassword.')" })
+            <label>Confirm hashedPassword</label>
+            @Html.PasswordFor(model => model.ConfirmPassword, new { placeholder = "\uF023  Confirm hashedPassword", required = true, oninvalid = "this.setCustomValidity('Please enter your hashedPassword again.')" })
             <button type="submit" class="button" style="margin-top: 16px">Register</button>
         </form>
     </section>

@@ -1,8 +1,6 @@
-﻿using BLL.Entities.Review;
+﻿namespace BLL.Data.Review;
 
-namespace BLL.Data.Review;
-
-public interface ICookReviewService : IReviewService<CookReview>
+public interface ICookReviewService : IReviewService
 {
-    CookReview GetForCookId(Guid cookId);
+    Entities.Review.Review GetForCookId(Guid cookId);
 }

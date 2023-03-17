@@ -16,7 +16,7 @@
                         <label>Username</label>
                         @Html.TextBoxFor(model => model.Username, new { placeholder="\uF007  Username", required = true, oninvalid = "this.setCustomValidity('Please enter your username.')" })
                         <label>Password</label>
-                        @Html.PasswordFor(model => model.Password, new { placeholder="\uF023  Password", required = true, oninvalid = "this.setCustomValidity('Please enter your password.')" })
+                        @Html.PasswordFor(model => model.Password, new { placeholder="\uF023  Password", required = true, oninvalid = "this.setCustomValidity('Please enter your hashedPassword.')" })
                     </div>
                     <button class="button" type="submit">Login!</button>
                 </form>

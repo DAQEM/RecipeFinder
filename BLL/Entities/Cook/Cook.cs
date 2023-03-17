@@ -1,123 +1,62 @@
-﻿using System.Security.Cryptography.X509Certificates;
-using BLL.Entities.Review;
-using BLL.Exceptions;
-
-namespace BLL.Entities.Cook;
+﻿namespace BLL.Entities.Cook;
 
 public class Cook
 {
-    private Guid _id;
-    private string _username;
-    private string _fullname;
-    private string _imageUrl;
-    private DateTime _createdAt;
+    private readonly Guid _id;
+    private readonly string _username;
+    private readonly string _fullname;
+    private readonly string _imageUrl;
+    private readonly DateTime _createdAt;
     private Credential _credential;
 
     private Recipe.Recipe[] _recipes;
-    private CookReview[] _reviews;
-    private Follower[] _followers;
+    private Review.Review[] _reviews;
+    private Cook[] _followers;
 
-    private Cook(Guid id, string username, string fullname, string imageUrl, 
-        DateTime createdAt, Credential credential, Recipe.Recipe[] recipes, 
-        CookReview[] reviews, Follower[] followers)
+    public Cook(Guid? id = null, string username = "", string fullname = "", string imageUrl = "", 
+        DateTime? createdAt = null, Credential? credential = null, Recipe.Recipe[]? recipes = null, 
+        Review.Review[]? reviews = null, Cook[]? followers = null)
     {
-        _id = id;
+        _id = id ?? Guid.Empty;
         _username = username;
         _fullname = fullname;
         _imageUrl = imageUrl;
-        _createdAt = createdAt;
-        _credential = credential;
-        _recipes = recipes;
-        _reviews = reviews;
-        _followers = followers;
+        _createdAt = createdAt ?? DateTime.MinValue;
+        _credential = credential ?? new Credential();
+        
+        _recipes = recipes ?? Array.Empty<Recipe.Recipe>();
+        _reviews = reviews ?? Array.Empty<Review.Review>();
+        _followers = followers ?? Array.Empty<Cook>();
+    }
+
+    public Guid Id => _id;
+    public string Username => _username;
+    public string Fullname => _fullname;
+    public string ImageUrl => _imageUrl;
+    public DateTime CreatedAt => _createdAt;
+    public Credential Credential => _credential;
+    
+    public Recipe.Recipe[] Recipes => _recipes;
+    public Review.Review[] Reviews => _reviews;
+    public Cook[] Followers => _followers;
+
+    public void SetReviews(List<Review.Review> reviews)
+    {
+        _reviews = reviews.ToArray();
     }
     
-    public Guid Id { get => _id; private set => _id = value; }
-    public string Username { get => _username; private set => _username = value; }
-    public string Fullname { get => _fullname; private set => _fullname = value; }
-    public string ImageUrl { get => _imageUrl; private set => _imageUrl = value; }
-    public DateTime CreatedAt { get => _createdAt; private set => _createdAt = value; }
-    public Credential Credential { get => _credential; private set => _credential = value; }
-    
-    public Recipe.Recipe[] Recipes { get => _recipes; private set => _recipes = value; }
-    public CookReview[] Reviews { get => _reviews; private set => _reviews = value; }
-    public Follower[] Followers { get => _followers; private set => _followers = value; }
-
-    private static Cook Empty => new(Guid.Empty, string.Empty, string.Empty, 
-        string.Empty, DateTime.Now, Credential.Empty, Array.Empty<Recipe.Recipe>(), 
-        Array.Empty<CookReview>(), Array.Empty<Follower>());
-    
-    public class Builder
+    public void SetRecipes(List<Recipe.Recipe> recipes)
     {
-        private Cook _cook = Empty;
+        _recipes = recipes.ToArray();
+    }
+    
+    public void SetFollowers(List<Cook> followers)
+    {
+        _followers = followers.ToArray();
+    }
 
-        public Builder FromCook(Cook cook)
-        {
-            _cook = cook;
-            return this;
-        }
-
-        public Builder WithId(Guid id)
-        {
-            _cook.Id = id;
-            return this;
-        }
-
-        public Builder WithUsername(string username)
-        {
-            _cook.Username = username;
-            return this;
-        }
-
-        public Builder WithFullname(string fullname)
-        {
-            _cook.Fullname = fullname;
-            return this;
-        }
-
-        public Builder WithImageUrl(string imageUrl)
-        {
-            _cook.ImageUrl = imageUrl;
-            return this;
-        }
-
-        public Builder WithCreatedAt(DateTime createdAt)
-        {
-            _cook.CreatedAt = createdAt;
-            return this;
-        }
-
-        public Builder WithCredential(Credential credential)
-        {
-            _cook.Credential = credential;
-            return this;
-        }
-        
-        public Builder WithRecipes(Recipe.Recipe[] recipes)
-        {
-            _cook.Recipes = recipes;
-            return this;
-        }
-        
-        public Builder WithReviews(CookReview[] reviews)
-        {
-            _cook.Reviews = reviews;
-            return this;
-        }
-        
-        public Builder WithFollowers(Follower[] followers)
-        {
-            _cook.Followers = followers;
-            return this;
-        }
-        
-        public Cook Build()
-        {
-            if (_cook.Id == Guid.Empty || _cook.Username == string.Empty || _cook.Fullname == string.Empty || _cook.ImageUrl == string.Empty)
-            {
-                throw new IncompleteBuilderException(typeof(Cook));
-            }
-            return _cook;
-        }
+    public void SetCredential(Credential credential)
+    {
+        _credential = credential;
     }
 }

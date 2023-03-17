@@ -35,6 +35,6 @@ public class EditCookHandler
     
     private static string CheckImageUrlValid(EditCookModel model)
     {
-        return UriHandler.IsValidUri(model.ImageUrl) ? "Profile picture URL must be a valid URL. (don't forget http:// or https://)" : Successful;
+        return !UriHandler.IsValidUri(model.ImageUrl) ? "Profile picture URL must be a valid URL. (don't forget http:// or https://)" : Successful;
     }
 }

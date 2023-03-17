@@ -18,47 +18,41 @@ public class RecipeRepository : IRecipeRepository
             new("@id", id)
         };
         
-        return QueryHelper.QuerySingle(query, parameters,
-            reader => new Recipe.Builder()
-                .WithId(reader.GetGuid("id"))
-                .WithName(reader.GetString("name"))
-                .WithImageUrl(reader.GetString("image_url"))
-                .WithDescription(reader.GetString("description"))
-                .WithPreparationTime(reader.GetTimeSpan("preparation_time"))
-                .WithCategory((Category)reader.GetInt32("category"))
-                .WithCreatedAt(reader.GetDateTime("created_at"))
-                .WithUpdatedAt(reader.GetDateTime("updated_at"))
-                .WithCookId(reader.GetGuid("cook_id"))
-                .WithIngredients(null)
-                .WithPreparationSteps(null)
-                .Build());
+        return QueryHelper.QuerySingle(query, parameters, 
+            reader => new Recipe( 
+                id: reader.GetGuid("id"),
+                name: reader.GetString("name"),
+                imageUrl: reader.GetString("image_url"),
+                description: reader.GetString("description"),
+                preparationTime: reader.GetTimeSpan("preparation_time"),
+                category: (Category)reader.GetInt32("category"),
+                createdAt: reader.GetDateTime("created_at"),
+                updatedAt: reader.GetDateTime("updated_at"),
+                cookId: reader.GetGuid("cook_id")
+            ));
     }
 
     public List<Recipe> GetByCookId(Guid cookId)
     {
-        const string query = "SELECT Recipe.id, name, Recipe.image_url, description, preparation_time, category, Recipe.created_at, updated_at, cook_id " +
+        const string query = "SELECT id, name, Recipe.image_url, description, preparation_time, category, created_at, updated_at, cook_id " +
                              "FROM Recipe " +
-                             "INNER JOIN Cook ON Recipe.cook_id = Cook.id " +
-                             "WHERE Cook.id = @cook_id;";
+                             "WHERE cook_id = @cook_id;";
         MySqlParameter[] parameters =
         {
             new("@cook_id", cookId)
         };
+        
         return QueryHelper.QueryMultiple(query, parameters,
-            reader => new Recipe.Builder()
-                .WithId(reader.GetGuid("id"))
-                .WithName(reader.GetString("name"))
-                .WithImageUrl(reader.GetString("image_url"))
-                .WithDescription(reader.GetString("description"))
-                .WithPreparationTime(reader.GetTimeSpan("preparation_time"))
-                .WithCategory((Category)reader.GetInt32("category"))
-                .WithCreatedAt(reader.GetDateTime("created_at"))
-                .WithUpdatedAt(reader.GetDateTime("updated_at"))
-                .WithCookId(reader.GetGuid("cook_id"))
-                .WithIngredients(null)
-                .WithPreparationSteps(null)
-                .WithReviews(null)
-                .WithLikers(null)
-                .Build());
+            reader => new Recipe(
+                id: reader.GetGuid("id"),
+                name: reader.GetString("name"),
+                imageUrl: reader.GetString("image_url"),
+                description: reader.GetString("description"),
+                preparationTime: reader.GetTimeSpan("preparation_time"),
+                category: (Category)reader.GetInt32("category"),
+                createdAt: reader.GetDateTime("created_at"),
+                updatedAt: reader.GetDateTime("updated_at"),
+                cookId: reader.GetGuid("cook_id")
+            ));
     }
 }

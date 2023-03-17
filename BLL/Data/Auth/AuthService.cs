@@ -34,8 +34,17 @@ public class AuthService : IAuthService
         Guid credentialId = Guid.NewGuid();
         string hashedPassword = PasswordSecurity.HashPassword(password);
         
-        _cookService.Add(new Entities.Cook.Cook.Builder().WithId(cookId).WithUsername(username).WithFullname(fullName).WithImageUrl("https://i.imgur.com/ShL15rC.png").Build());
-        _credentialService.Add(new Credential.Builder().WithId(credentialId).WithCookId(cookId).WithEmail(email).WithPassword(hashedPassword).Build());
+        _cookService.Add(new Entities.Cook.Cook(
+            id: cookId,
+            username: username,
+            fullname: fullName,
+            imageUrl: "https://i.imgur.com/ShL15rC.png"
+        ));
+        _credentialService.Add(new Credential(
+            cookId: cookId,
+            email: email,
+            hashedPassword: hashedPassword
+        ));
     }
 
     public void ChangePassword(string username, string oldPassword, string newPassword)
@@ -49,11 +58,11 @@ public class AuthService : IAuthService
 
         if (cook == null) throw new UsernameNotFoundException();
         {
-            _credentialService.Update(new Credential.Builder()
-                .WithCookId(cook.Id)
-                .WithEmail(cook.Credential.Email)
-                .WithPassword(hashedNewPassword)
-                .Build());
+            _credentialService.Update(new Credential(
+                cookId: cook.Id,
+                email: cook.Credential.Email,
+                hashedPassword: hashedNewPassword
+            ));
         }
     }
 

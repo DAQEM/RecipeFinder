@@ -5,7 +5,7 @@ IServiceCollection services = builder.Services;
 
 services.AddControllersWithViews().AddRazorRuntimeCompilation();
 
-DependencyInversion.Run(services);
+DependencyInjection.Run(services);
 
 services.AddSession(options =>
 {

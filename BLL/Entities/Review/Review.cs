@@ -1,21 +1,21 @@
 ﻿namespace BLL.Entities.Review;
 
-public abstract class Review
+public class Review
 {
     private Guid _id;
     private string _comment;
     private int _rating;
     private DateTime _createdAt;
     
-    private Reviewer _reviewer;
+    private Cook.Cook _reviewer;
     
-    protected Review(Guid id, string comment, int rating, DateTime createdAt, Reviewer reviewer)
+    public Review(Guid? id = null, string comment = "", int rating = 0, DateTime? createdAt = null, Cook.Cook? reviewer = null)
     {
-        _id = id;
+        _id = id ?? Guid.Empty;
         _comment = comment;
         _rating = rating;
-        _createdAt = createdAt;
-        _reviewer = reviewer;
+        _createdAt = createdAt ?? DateTime.MinValue;
+        _reviewer = reviewer ?? new Cook.Cook();
     }
 
     public Guid Id { get => _id; protected set => _id = value; }
@@ -23,42 +23,5 @@ public abstract class Review
     public int Rating { get => _rating; protected set => _rating = value; }
     public DateTime CreatedAt { get => _createdAt; protected set => _createdAt = value; }
     
-    public Reviewer Reviewer { get => _reviewer; protected set => _reviewer = value; }
-    
-    public abstract class ReviewBuilder<T> where T : Review
-    {
-        protected readonly T Review = (T)Activator.CreateInstance(typeof(T))!;
-        
-        public ReviewBuilder<T> WithId(Guid id)
-        {
-            Review.Id = id;
-            return this;
-        }
-
-        public ReviewBuilder<T> WithComment(string comment)
-        {
-            Review.Comment = comment;
-            return this;
-        }
-        
-        public ReviewBuilder<T> WithRating(int rating)
-        {
-            Review.Rating = rating;
-            return this;
-        }
-        
-        public ReviewBuilder<T> WithCreatedAt(DateTime createdAt)
-        {
-            Review.CreatedAt = createdAt;
-            return this;
-        }
-        
-        public ReviewBuilder<T> WithReviewer(Reviewer reviewer)
-        {
-            Review.Reviewer = reviewer;
-            return this;
-        }
-
-        public abstract T Build();
-    }
+    public Cook.Cook Reviewer { get => _reviewer; protected set => _reviewer = value; }
 }

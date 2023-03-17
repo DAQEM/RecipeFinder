@@ -11,11 +11,16 @@ public class CredentialService : ICredentialService
     
     public void Add(Entities.Cook.Credential credential)
     {
-        _credentialRepository.Add(credential.Id, credential.Email, credential.HashedPassword, credential.CookId);
+        _credentialRepository.Add(credential.Email, credential.HashedPassword, credential.CookId);
     }
 
     public void Update(Entities.Cook.Credential credential)
     {
         _credentialRepository.Update(credential.Email, credential.HashedPassword, credential.CookId);
+    }
+
+    public Entities.Cook.Credential? GetByCookId(Guid cookId)
+    {
+        return _credentialRepository.GetByCookId(cookId);
     }
 }

@@ -1,6 +1,4 @@
-﻿using BLL.Entities.Review;
-
-namespace BLL.Data.Cook;
+﻿namespace BLL.Data.Cook;
 
 public interface ICookService
 {
@@ -13,5 +11,6 @@ public interface ICookService
     void Delete(string username);
     Entities.Cook.Cook? GetByUsernameWithRecipes(string username);
     Entities.Cook.Cook? GetByUsernameWithCookReviews(string username);
-    Entities.Cook.Cook? GetByRecipeIdWithRecipe(Guid recipeId);
+    Entities.Cook.Cook? GetByUsernameWithCredentials(string username);
+    Entities.Cook.Cook? GetWithRecipe(Guid recipeId);
 }

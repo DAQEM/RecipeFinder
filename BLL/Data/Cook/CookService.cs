@@ -1,7 +1,6 @@
 ﻿using BLL.Data.Cook.Credential;
 using BLL.Data.Recipe;
 using BLL.Data.Review;
-using BLL.Entities.Review;
 
 namespace BLL.Data.Cook;
 
@@ -60,40 +59,46 @@ public class CookService : ICookService
     public Entities.Cook.Cook? GetByUsernameWithRecipes(string username)
     {
         Entities.Cook.Cook? cook = _cookRepository.GetByUserName(username);
-        if (cook != null)
-        {
-            List<Entities.Recipe.Recipe> recipes = _recipeService.GetByCookId(cook.Id);
-            return new Entities.Cook.Cook.Builder()
-                .FromCook(cook)
-                .WithRecipes(recipes.ToArray())
-                .Build();
-        }
-        return null;
+        if (cook == null) return null;
+
+        List<Entities.Recipe.Recipe> recipes = _recipeService.GetByCookId(cook.Id);
+        cook.SetRecipes(recipes);
+        
+        return cook;
     }
 
     public Entities.Cook.Cook? GetByUsernameWithCookReviews(string username)
     {
         Entities.Cook.Cook? cook = _cookRepository.GetByUserName(username);
-        if (cook != null)
-        {
-            List<CookReview> reviews = _cookReviewService.GetByCookId(cook.Id);
-            return new Entities.Cook.Cook.Builder()
-                .FromCook(cook)
-                .WithReviews(reviews.ToArray())
-                .Build();
-        }
-        return null;
+        if (cook == null) return null;
+        
+        List<Entities.Review.Review> reviews = _cookReviewService.GetByCookId(cook.Id);
+        cook.SetReviews(reviews);
+        
+        return cook;
     }
 
-    public Entities.Cook.Cook? GetByRecipeIdWithRecipe(Guid recipeId)
+    public Entities.Cook.Cook? GetByUsernameWithCredentials(string username)
+    {
+        Entities.Cook.Cook? cook = _cookRepository.GetByUserName(username);
+        if (cook == null) return null;
+        
+        Entities.Cook.Credential? credential = _credentialService.GetByCookId(cook.Id);
+        if (credential == null) return null;
+        
+        cook.SetCredential(credential);
+        return cook;
+    }
+
+    public Entities.Cook.Cook? GetWithRecipe(Guid recipeId)
     {
         Entities.Recipe.Recipe? recipe = _recipeService.GetById(recipeId);
         if (recipe == null) return null;
+        
         Entities.Cook.Cook? cook = _cookRepository.GetById(recipe.CookId);
-        return cook == null ? null : 
-            new Entities.Cook.Cook.Builder()
-                .FromCook(cook)
-                .WithRecipes(new[] {recipe})
-                .Build();
+        if (cook == null) return null;
+        
+        cook.SetRecipes(new List<Entities.Recipe.Recipe> {recipe});
+        return cook;
     }
 }

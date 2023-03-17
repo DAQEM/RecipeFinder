@@ -1,4 +1,5 @@
 ﻿using BLL.Data.Cook.Credential;
+using BLL.Entities.Cook;
 using DAL.Helpers;
 using MySql.Data.MySqlClient;
 
@@ -6,7 +7,7 @@ namespace DAL.Repositories;
 
 public class CredentialRepository : ICredentialRepository
 {
-    public void Add(Guid id, string email, string hashedPassword, Guid cookId)
+    public void Add(string email, string hashedPassword, Guid cookId)
     {
         const string query =
             "INSERT INTO Credential (id, email, password, cook_id)" +
@@ -14,7 +15,7 @@ public class CredentialRepository : ICredentialRepository
         
         MySqlParameter[] parameters =
         {
-            new("@id", id),
+            new("@id", Guid.NewGuid()),
             new("@email", email),
             new("@password", hashedPassword),
             new("@cook_id", cookId)
@@ -36,5 +37,25 @@ public class CredentialRepository : ICredentialRepository
         };
 
         QueryHelper.NonQuery(credentialQuery, credentialParameters);
+    }
+
+    public Credential? GetByCookId(Guid cookId)
+    {
+        const string query = "SELECT email, password, updated_at, cook_id " +
+                             "FROM Credential " +
+                             "WHERE cook_id = @cook_id;";
+        
+        MySqlParameter[] parameters = 
+        {
+            new("@cook_id", cookId)
+        };
+        
+        return QueryHelper.QuerySingle(query, parameters,
+            reader => new Credential(
+                email: reader.GetString("email"),
+                hashedPassword: reader.GetString("password"),
+                updatedAt: reader.GetDateTime("updated_at"),
+                cookId: reader.GetGuid("cook_id")
+            ));
     }
 }
