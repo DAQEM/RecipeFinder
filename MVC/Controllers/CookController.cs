@@ -1,10 +1,8 @@
 ﻿using BLL.Data.Cook;
 using BLL.Entities.Cook;
-using DAL.Repositories;
+using BLL.Exceptions;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 using MVC.Handlers;
-using MVC.Models.Auth;
 using MVC.Models.Cook;
 
 namespace MVC.Controllers;
@@ -23,49 +21,69 @@ public class CookController : BaseController<CookController>
     [Route("")]
     public IActionResult Index()
     {
-        List<Cook> cooks = _cookService.GetAll();
-        StringValues searchValues = HttpContext.Request.Query["search"];
-        if (searchValues.Any())
-        {
-            //TODO: Move filter to service
-            string search = searchValues.ToString();
-            cooks = cooks
-                .Where(c => c.Username.Contains(search.ToLower(), StringComparison.OrdinalIgnoreCase) 
-                            || c.Fullname.Contains(search.ToLower(), StringComparison.OrdinalIgnoreCase))
-                .ToList();
-        } 
-        return View(new CookListModel { Cooks = cooks });
+        string searchString = HttpContext.Request.Query["search"].ToString();
+
+        List<Cook> cooks = _cookService.GetBySearch(searchString);
+        Cook? viewer = GetViewer(_cookService);
+        
+        return View(new CookListModel { Cooks = cooks, Viewer = viewer });
     }
     
     [HttpGet]
     [Route("{username}")]
     public IActionResult Cook(string username)
     {
-        ViewBag.IsOwner = Auth.IsUser(username);
-        return View("CookRecipes", new CookModel { Cook = _cookService.GetByUsernameWithRecipes(username)!});
+        try
+        {
+            Cook cook = _cookService.GetByUsernameWithRecipes(username);
+            Cook? viewer = GetViewer(_cookService);
+            CookModel cookModel = new(){ Cook = cook, Viewer = viewer };
+            return View("CookRecipes", cookModel);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
     
     [HttpGet]
     [Route("{username}/Reviews")]
     public IActionResult CookReviews(string username)
     {
-        ViewBag.IsOwner = Auth.IsUser(username);
-        return View("CookReviews", new CookModel { Cook = _cookService.GetByUsernameWithCookReviews(username)!});
+        try
+        {
+            Cook cook = _cookService.GetByUsernameWithCookReviews(username);
+            Cook? viewer = GetViewer(_cookService);
+            return View("CookReviews", new CookModel { Cook = cook, Viewer = viewer});
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
     
     [HttpGet]
     [Route("{username}/Edit")]
     public IActionResult EditCook(string username)
     {
-        return Auth.IsUser(username)
-            ? View(EditCookModel.FromCook(_cookService.GetByUsernameWithCredentials(username)!))
-            : Auth.RedirectToNoPermission();
+        try
+        {
+            if (!Auth.IsUser(username)) return Unauthorized();
+            Cook cook = _cookService.GetByUsernameWithCredentials(username);
+            return View(EditCookModel.FromCook(cook));
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
     }
     
     [HttpPost]
     [Route("{username}/Edit/")]
     public IActionResult EditCook(string username, EditCookModel model)
     {
+        if (Auth.IsUser(username)) return Unauthorized();
+        
         List<string> errors = EditCookHandler.GetErrors(model);
         if (errors.Any())
         {
@@ -73,32 +91,44 @@ public class CookController : BaseController<CookController>
         }
         else
         {
-            ViewBag.SuccessMessage = "Successfully saved changes.";
-            Cook cook = _cookService.GetByUsernameWithCredentials(username)!;
-            
-            _cookService.UpdateWithCredentials(new Cook(
-                id: cook.Id,
-                username: cook.Username,
-                fullname: model.Fullname,
-                imageUrl: model.ImageUrl,
-                credential: new Credential(
-                    email: model.Email,
-                    hashedPassword: cook.Credential.HashedPassword,
-                    cookId: cook.Id)));
-        }
+            try
+            {
+                if (ModelState.IsValid)
+                {
 
-        return Auth.ViewWithPermissionCheck(View(model), username);
+                    ViewBag.SuccessMessage = "Successfully saved changes.";
+
+                    Cook cook = _cookService.GetByUsernameWithCredentials(username)!;
+
+                    _cookService.UpdateWithCredentials(new Cook(
+                        id: cook.Id,
+                        username: cook.Username,
+                        fullname: model.Fullname,
+                        imageUrl: model.ImageUrl,
+                        credential: new Credential(
+                            email: model.Email,
+                            hashedPassword: cook.Credential.HashedPassword,
+                            cookId: cook.Id)));
+                }
+            }
+            catch (NotFoundException)
+            {
+                return NotFound();
+            }
+        }
+        return View(model);
     }
 
     [HttpPost]
     [Route("{username}/Delete")]
     public IActionResult Delete(string username)
     {
-        if (Auth.IsUser(username))
-        {
-            _cookService.Delete(username);
-            return Auth.LogoutAndRedirectToHome();
-        }
-        return Auth.RedirectToNoPermission();
+        if (!Auth.IsUser(username)) return Unauthorized();
+        
+        _cookService.Delete(username);
+        Auth.Logout();
+        
+        return Redirect.Home;
+        
     }
 }

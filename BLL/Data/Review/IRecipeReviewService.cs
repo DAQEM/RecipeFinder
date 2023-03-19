@@ -4,5 +4,5 @@ namespace BLL.Data.Review;
 
 public interface IRecipeReviewService : IReviewService
 {
-    Entities.Review.Review GetForRecipeId(Guid recipeId);
+    List<Entities.Review.Review> GetForRecipeId(Guid recipeId);
 }

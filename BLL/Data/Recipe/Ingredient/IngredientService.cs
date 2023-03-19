@@ -8,4 +8,9 @@ public class IngredientService : IIngredientService
     {
         _ingredientRepository = ingredientRepository;
     }
+
+    public List<Entities.Recipe.Ingredient.Ingredient> GetByRecipeId(Guid id)
+    {
+        return _ingredientRepository.GetByRecipeId(id);
+    }
 }

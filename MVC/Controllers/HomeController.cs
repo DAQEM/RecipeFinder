@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models;
 
@@ -22,10 +23,15 @@ public class HomeController : BaseController<HomeController>
     }
 
     [HttpGet]
-    [Route("Error")]
-    [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
-    public IActionResult Error()
+    [Route("Error/{statusCode}")]
+    public IActionResult Error(int statusCode)
     {
-        return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
+        string errorMessage = statusCode switch
+        {
+            401 => "You are not authorized to view this page.",
+            404 => "The page you are looking for does not exist.",
+            _ => "Something went wrong."
+        };
+        return View(new ErrorViewModel { StatusCode = statusCode, ErrorMessage = errorMessage });
     }
 }

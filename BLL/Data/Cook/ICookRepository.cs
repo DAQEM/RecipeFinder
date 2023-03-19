@@ -8,4 +8,5 @@ public interface ICookRepository
     void Add(Entities.Cook.Cook cook);
     void Update(Entities.Cook.Cook cook);
     void Delete(string username);
+    List<Entities.Cook.Cook> GetBySearch(string searchString);
 }

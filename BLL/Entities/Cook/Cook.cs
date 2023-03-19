@@ -11,7 +11,7 @@ public class Cook
 
     private Recipe.Recipe[] _recipes;
     private Review.Review[] _reviews;
-    private Cook[] _followers;
+    private Cook[] _following;
 
     public Cook(Guid? id = null, string username = "", string fullname = "", string imageUrl = "", 
         DateTime? createdAt = null, Credential? credential = null, Recipe.Recipe[]? recipes = null, 
@@ -26,7 +26,7 @@ public class Cook
         
         _recipes = recipes ?? Array.Empty<Recipe.Recipe>();
         _reviews = reviews ?? Array.Empty<Review.Review>();
-        _followers = followers ?? Array.Empty<Cook>();
+        _following = followers ?? Array.Empty<Cook>();
     }
 
     public Guid Id => _id;
@@ -38,7 +38,7 @@ public class Cook
     
     public Recipe.Recipe[] Recipes => _recipes;
     public Review.Review[] Reviews => _reviews;
-    public Cook[] Followers => _followers;
+    public Cook[] Following => _following;
 
     public void SetReviews(List<Review.Review> reviews)
     {
@@ -52,7 +52,7 @@ public class Cook
     
     public void SetFollowers(List<Cook> followers)
     {
-        _followers = followers.ToArray();
+        _following = followers.ToArray();
     }
 
     public void SetCredential(Credential credential)

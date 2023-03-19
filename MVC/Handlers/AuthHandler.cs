@@ -1,13 +1,14 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using MVC.Controllers;
 
 namespace MVC.Handlers;
 
-public class AuthHandler
+public class AuthHandler<T> where T : BaseController<T>
 {
     private const string UsernameSessionKey = "Username";
-    private readonly Controller _controller;
+    private readonly BaseController<T> _controller;
     
-    public AuthHandler(Controller controller)
+    public AuthHandler(BaseController<T> controller)
     {
         _controller = controller;
     }
@@ -17,40 +18,23 @@ public class AuthHandler
         return GetSessionUsername() != null;
     }
     
-    public IActionResult LoginAndRedirectToHome(string username)
+    public void Login(string username)
     {
         _controller.HttpContext.Session.SetString(UsernameSessionKey, username);
-        return RedirectToHome();
     }
     
-    public IActionResult LogoutAndRedirectToHome()
+    public void Logout()
     {
         _controller.HttpContext.Session.Remove(UsernameSessionKey);
-        return RedirectToHome();
-    }
-    
-    private IActionResult RedirectToHome()
-    {
-        return _controller.RedirectToAction("Index", "Home");
     }
 
     public bool IsUser(string username)
     {
         return IsLoggedIn() && string.Equals(GetSessionUsername(), username, StringComparison.CurrentCultureIgnoreCase);
     }
-    
-    public IActionResult RedirectToNoPermission()
-    {
-        return _controller.RedirectToAction("NoPermission", "Security");
-    }
-    
+
     public string? GetSessionUsername()
     {
         return _controller.HttpContext.Session.GetString(UsernameSessionKey);
-    }
-
-    public IActionResult ViewWithPermissionCheck(ViewResult defaultView, string username)
-    {
-        return IsUser(username) ? defaultView : RedirectToNoPermission();
     }
 }

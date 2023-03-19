@@ -19,4 +19,9 @@
       <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="7.0.3" />
     </ItemGroup>
 
+    <ItemGroup>
+      <_ContentIncludedByDefault Remove="Views\Security\NoPermission.cshtml" />
+      <_ContentIncludedByDefault Remove="Views\Security\NotFound.cshtml" />
+    </ItemGroup>
+
 </Project>

@@ -1,0 +1,25 @@
+﻿@model MVC.Models.Cook.CookModel
+
+@{
+    string username = "@" + Model.Cook.Username;
+}
+
+<div class="flex bg-white jcenter b-radius" style="margin: 10px; max-width: 290px; min-width: 290px; min-height: 150px;">
+    <div class="flex center row w-100 text-center">
+        <a class="flex center column p-3" href="/Cook/@Model.Cook.Username" style="color: inherit; text-decoration: none; width: 100%">
+            <img class="m-2" src="@Model.Cook.ImageUrl" style="width: 80px; height: 80px; border-radius: 50%" alt="@Model.Cook.Fullname image"/>
+            <h1 class="text-l m-0">@Model.Cook.Fullname</h1>
+            <p class="text-s opacity-50 m-0">@username</p>
+        </a>
+        <div class="w-50 flex jcenter align-items-baseline" style="height: 50px">
+            @if (Model.Viewer != null && Model.Cook.Id != Model.Viewer.Id)
+            {
+                @await Html.PartialAsync("Partial/_FollowButtonPartial", Model)
+            }
+            else
+            {
+                <button class="w-100 button" onclick="location.href = '/Cook/@Model.Cook.Username'">View Profile</button>
+            }
+        </div>
+    </div>
+</div>

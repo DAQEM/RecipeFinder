@@ -1,0 +1,19 @@
+﻿@model MVC.Models.Cook.CookModel
+
+@if (Model.Viewer != null && Model.Viewer.Id != Model.Cook.Id)
+{
+    @if (Model.Viewer.Following.Any(cook => cook.Id == Model.Cook.Id))
+    {
+        <button class="w-100 button bg-color-transition button-secondary" id="button-@Model.Cook.Id" onclick="Unfollow('@Model.Cook.Id')">Unfollow</button>
+    }
+    else
+    {
+        <button class="w-100 button bg-color-transition" id="button-@Model.Cook.Id" onclick="Follow('@Model.Cook.Id')">Follow</button>
+    }
+    
+    <style>
+        .bg-color-transition {
+            transition: background-color 1s;
+        }
+    </style>
+}

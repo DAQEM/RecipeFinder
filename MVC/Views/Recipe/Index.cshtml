@@ -1,20 +1,18 @@
-﻿@using BLL.Entities.Cook
-@using MVC.Models.Cook
-@model MVC.Models.Cook.CookListModel
+﻿@using BLL.Entities.Recipe
+@using MVC.Models.Recipe
+@model MVC.Models.Recipe.RecipeListModel
 
 @{
-    ViewData["Title"] = "Cooks";
+    ViewBag.Title = "Recipes";
     Layout = "_LayoutWide";
 }
 
-<script src="~/js/follow.js"></script>
-
 <div class="flex jcenter w-100">
     <div class="w-100">
-        <div class="flex center w-100" style="padding: 40px; height: 300px; background-image: url(https://img.hellofresh.com/c_fill,f_auto,fl_lossy,h_650,q_auto:eco,w_1900/hellofresh_website/gb/cms/homepage/HF_App_web_landing_page_newbanners_desktop_2560x700.jpg);
-                                           background-repeat: no-repeat; background-size: cover; background-position: center center;">
+        <div class="flex center w-100" style="padding: 40px; height: 300px; background-image: url(https://cdn.hellofresh.com/nl/cms/bulk_upload/seo/Hello_Fresh_Background_LP_Vegetarian_NL_BE_Desktop.jpg);
+                                           background-repeat: no-repeat; background-size: cover; background-position: center;">
             <div class="flex column">
-                <h1>Search for Cooks</h1>
+                <h1>Search for Recipes</h1>
                 <div class="flex justify-content-between">
                     @Html.TextBox("search", "", new { placeholder = "Search on Recipe Finder", id = "searchBox", style = "width: 100%; flex: 0.83; margin: 0; border-width: 0", onkeydown = "OnKeyDown(event)" })
                     <button class="button" style="flex: 0.15" onclick="Search()">Search</button>
@@ -23,15 +21,15 @@
         </div>
         <div class="flex center wrap my-4 w-100">
             <div class="flex jcenter wrap" style="min-width: 360px">
-                @if (Model.Cooks.Count == 0)
+                @if (Model.Recipes.Count == 0)
                 {
-                    <p>No cooks found</p>
+                    <p>No recipes found</p>
                 }
                 else
                 {
-                    @foreach (Cook cook in Model.Cooks)
+                    @foreach (Recipe recipe in Model.Recipes)
                     {
-                        @await Html.PartialAsync("Partial/Card/_CookCardPartial", new CookModel { Cook = cook, Viewer = Model.Viewer })
+                        @await Html.PartialAsync("Partial/Card/_RecipeCardPartial", new RecipeModel { Recipe = recipe, Viewer = Model.Viewer })
                     }
                 }
             </div>
@@ -50,7 +48,7 @@
 
     function Search() {
         const search = document.getElementById("searchBox").value;
-        location.href = "/Cook/?search=" + search;
+        location.href = "/Recipe/?search=" + search;
     }
 </script>
 

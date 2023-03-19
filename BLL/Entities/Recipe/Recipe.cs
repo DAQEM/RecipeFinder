@@ -12,11 +12,11 @@ public class Recipe
     private readonly DateTime _updatedAt;
     private readonly Guid _cookId;
     
-    private readonly Ingredient.Ingredient[] _ingredients;
-    private readonly PreparationStep[] _preparationSteps;
-    private readonly Review.Review[] _reviews;
-    private readonly Cook.Cook[] _likers;
-    private readonly Cook.Cook[] _savers;
+    private Ingredient.Ingredient[] _ingredients;
+    private PreparationStep[] _preparationSteps;
+    private Review.Review[] _reviews;
+    private Cook.Cook[] _likers;
+    private Cook.Cook[] _savers;
     
     public Recipe(Guid? id = null, string name = "", string imageUrl = "", string description = "", 
         TimeSpan? preparationTime = null, Category? category = null, DateTime? createdAt = null, 
@@ -55,4 +55,19 @@ public class Recipe
     public Review.Review[] Reviews => _reviews;
     public Cook.Cook[] Likers => _likers;
     public Cook.Cook[] Savers => _savers;
+
+    public void SetIngredients(List<Ingredient.Ingredient> ingredients)
+    {
+        _ingredients = ingredients.ToArray();
+    }
+    
+    public void SetPreparationSteps(List<PreparationStep> preparationSteps)
+    {
+        _preparationSteps = preparationSteps.ToArray();
+    }
+    
+    public void SetReviews(List<Review.Review> reviews)
+    {
+        _reviews = reviews.ToArray();
+    }
 }

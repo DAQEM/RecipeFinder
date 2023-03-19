@@ -1,6 +1,4 @@
-﻿using BLL.Entities.Review;
-
-namespace BLL.Data.Review;
+﻿namespace BLL.Data.Review;
 
 public class RecipeReviewService : IRecipeReviewService
 {
@@ -11,7 +9,7 @@ public class RecipeReviewService : IRecipeReviewService
         _recipeReviewRepository = recipeReviewRepository;
     }
     
-    public Entities.Review.Review GetForRecipeId(Guid recipeId)
+    public List<Entities.Review.Review> GetForRecipeId(Guid recipeId)
     {
         return _recipeReviewRepository.GetForRecipeId(recipeId);
     }

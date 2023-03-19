@@ -1,0 +1,83 @@
+﻿@using BLL.Entities.Recipe
+@model MVC.Models.Recipe.RecipeModel
+
+@{
+    string clock = "\uF017";
+    string heart = "\uF08A";
+    string bookmark = "\uF097";
+}
+
+@functions {
+    private string GetPreparationTime()
+    {
+        TimeSpan preparationTime = Model.Recipe.PreparationTime;
+        if (preparationTime == TimeSpan.Zero) return "Unknown";
+        if (preparationTime.Hours == 0)
+        {
+            if (preparationTime.Minutes == 0)
+            {
+                return preparationTime.ToString(@"ss").TrimStart('0') + " sec";
+            }
+            if (preparationTime.Seconds == 0)
+            {
+                return preparationTime.ToString(@"mm").TrimStart('0') + " min";
+            }
+            return preparationTime.ToString(@"mm\:ss").TrimStart('0') + " min";
+        }
+        string hours = preparationTime.ToString(@"hh\:mm\:ss").TrimStart('0');
+        if (preparationTime.Seconds == 0 && preparationTime.Minutes != 0)
+        {
+            hours = preparationTime.ToString(@"hh\:mm").TrimStart('0');
+        }
+        if (preparationTime.Seconds == 0 && preparationTime.Minutes == 0)
+        {
+            hours = preparationTime.ToString(@"hh").TrimStart('0');
+        }
+        return hours + " h";
+    }
+    
+    private int GetAverageRating()
+    {
+        if (Model.Recipe.Reviews.Length == 0) return 0;
+        return (int) Math.Round(Model.Recipe.Reviews.Average(r => r.Rating));
+    }
+}
+
+<a class="flex column b-radius m-3 bg-white text-decoration-none"
+   style="max-width: 290px; min-width: 290px; min-height: 150px;"
+   href="@Url.Action("Recipe", "Recipe", new { id = Model.Recipe.Id })">
+    <div class="position-absolute p-2 m-2 bg-white b-radius">
+        <p class="m-0">@Model.Recipe.Category</p>
+    </div>
+    <img class="w-100 b-radius" src="@Model.Recipe.ImageUrl" alt="@Model.Recipe.Name image"
+         style="max-width: 290px; max-height: 150px; min-width: 290px; min-height: 150px; object-fit: cover"/>
+    <div class="mx-3 my-2">
+        <div class="flex rowx justify-content-between">
+            <div class="flex">
+                <p style="font-weight: 400" class="me-1 mb-0">@clock</p>
+                <p class="mb-0">@GetPreparationTime()</p>
+            </div>
+            <div class="flex">
+                <p style="font-weight: 900" class="me-1 mb-0">@bookmark</p>
+                <p class="mb-0">@Model.Recipe.Savers.Length</p>
+            </div>
+            <div class="flex">
+                <p style="font-weight: 900" class="me-1 mb-0">@heart</p>
+                <p class="mb-0">@Model.Recipe.Likers.Length</p>
+            </div>
+        </div>
+    </div>
+    <div class="flex jcenter">
+        @if (Model.Recipe.Reviews.Length == 0)
+        {
+            <p class="text-s opacity-50 m-0">No reviews yet</p>
+        }
+        else
+        {
+            @await Html.PartialAsync("Partial/_RatingPartial", new RatingModel { Rating = GetAverageRating() })
+        }
+    </div>
+    <div class="mx-3 my-2" style="font-weight: 600">
+        @Model.Recipe.Name
+    </div>
+</a>

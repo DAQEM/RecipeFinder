@@ -12,6 +12,7 @@ public class FollowerService : IFollowerService
     public List<Entities.Cook.Cook> GetForCook(Entities.Cook.Cook cook)
     {
         return _followerRepository.GetForCookId(cook.Id);
+        
     }
 
     public void Add(Entities.Cook.Cook cook, Entities.Cook.Cook following)

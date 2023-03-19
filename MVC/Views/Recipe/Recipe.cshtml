@@ -1,4 +1,6 @@
 ﻿@using BLL.Entities.Recipe
+@using BLL.Entities.Recipe.Ingredient
+@using System.Globalization
 @model MVC.Models.Cook.CookModel
 
 @{
@@ -17,30 +19,116 @@
         {
             if (preparationTime.Minutes == 0)
             {
-                return preparationTime.ToString(@"ss").TrimStart('0') + " sec";
+                return preparationTime.ToString(@"ss").TrimStart('0') + " seconds";
             }
             if (preparationTime.Seconds == 0)
             {
-                return preparationTime.ToString(@"mm").TrimStart('0') + " min";
+                string minutes1 = preparationTime.ToString(@"mm").TrimStart('0');
+                return preparationTime.Minutes == 1 ? minutes1 + " minute" : minutes1 + " minutes";
             }
-            return preparationTime.ToString(@"mm\:ss").TrimStart('0') + " min";
+            string minutes2 = preparationTime.ToString(@"mm\:ss").TrimStart('0');
+            return preparationTime.Minutes == 1 ? minutes2 + " minute" : minutes2 + " minutes";
         }
-        return preparationTime.ToString(@"hh").TrimStart('0') + " hr";
+        string hours = preparationTime.ToString(@"hh\:mm\:ss").TrimStart('0');
+        if (preparationTime.Seconds == 0 && preparationTime.Minutes != 0)
+        {
+            hours = preparationTime.ToString(@"hh\:mm").TrimStart('0');
+        }
+        if (preparationTime.Seconds == 0 && preparationTime.Minutes == 0)
+        {
+            hours = preparationTime.ToString(@"hh").TrimStart('0');
+        }
+        return preparationTime.Hours == 1 ? hours + " hour" : hours + " hours";
+    }
+
+    private string GetUsername()
+    {
+      return "@" + Model.Cook.Username;  
+    } 
+    
+    private string GetIngredientQuantity(Ingredient ingredient)
+    {
+        string ingredientQuantity = ingredient.Quantity.ToString(CultureInfo.InvariantCulture);
+        while (ingredientQuantity.EndsWith("0") && ingredientQuantity.Contains("."))
+        {
+            ingredientQuantity = ingredientQuantity.Remove(ingredientQuantity.Length - 1);
+        }
+        if (ingredientQuantity.EndsWith("."))
+        {
+            ingredientQuantity = ingredientQuantity.Remove(ingredientQuantity.Length - 1);
+        }
+        return ingredientQuantity;
     }
 }
 
-<div class="d-flex justify-content-center">
-    <div class="m-5">
-        <img src="@Model.Cook.ImageUrl" height="128px" class="rounded-circle" alt="Cook Image" />
-        <h1>@Model.Cook.Fullname</h1>
-        <p>@Model.Cook.Username</p>
+<div class="flex jcenter wrap">
+    <a href="/Cook/@Model.Cook.Username" class="m-2 p-3 bg-white b-radius text-decoration-none" style="flex: .20; min-width: 200px">
+        <div class="text-center">
+            <div class="flex center column">
+                <h2 class="text-center mb-4">Cook</h2>
+                <img src="@Model.Cook.ImageUrl" height="72px" width="72px" class="mb-3 rounded-circle" alt="Cook Image"/>
+                <h1 class="m-0 text-m" style="font-weight: 600">@Model.Cook.Fullname</h1>
+                <p class="text-black-50">@GetUsername()</p>
+                <p class="m-0 text-black-50">Active since:</p>
+                <p class="m-0 text-black-50">@Model.Cook.CreatedAt.ToShortDateString()</p>
+            </div>
+        </div>
+    </a>
+    <div class="m-2 bg-white b-radius w-100 flex1" style="min-width: 350px">
+        <div class="flex wrap">
+            <div style="flex: 1; min-width: 250px">
+                <div class="position-absolute p-2 m-2 bg-white b-radius">
+                    <p class="m-0">@recipe.Category</p>
+                </div>
+                <img class="b-radius w-100" src="@recipe.ImageUrl" alt="Recipe Image" style="object-fit: cover"/>
+            </div>
+            <div class="py-3 px-4" style="flex: 1; min-width: 250px">
+                <h1 class="m-0" style="font-weight: 600">@recipe.Name</h1>
+                <p class="m-0 text-xs">Uploaded: @recipe.CreatedAt</p>
+                @if (recipe.UpdatedAt.ToShortDateString() != recipe.CreatedAt.ToShortDateString())
+                {
+                    <p class="m-0 text-xs">Updated: @recipe.UpdatedAt</p>
+                }
+                <div class="my-3 p-2 b-radius" style="background-color: var(--background)">
+                    <p class="m-0"><strong>About the recipe.</strong></p>
+                    <p class="m-0">@recipe.Description</p>
+                </div>
+                <div class="my-3 p-2 b-radius" style="background-color: var(--background)">
+                    <p class="m-0"><strong>Preparation time: </strong>@GetPreparationTime()</p>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="m-5">
-        <img src="@recipe.ImageUrl" height="128px" class="rounded-circle" alt="Recipe Image" />
-        <h1 class="m-0">@recipe.Name</h1>
-        <p class="m-0">@recipe.Description</p>
-        <p class="m-0">@recipe.Category</p>
-        <p class="m-0">@GetPreparationTime()</p>
-        <p class="m-0">@recipe.CreatedAt</p>
+</div>
+
+<div class="flex wrap bg-white p-3 m-2 b-radius jcenter align-items-baseline">
+    <div class="flex column p-3 b-radius container me-5" style="min-width: 250px; max-width: 310px; background-color: var(--background)">
+        <h2 class="text-center">Ingredients</h2>
+        @foreach (Ingredient ingredient in recipe.Ingredients)
+        {
+            <div class="flex center text-s">
+                <div class="m-1" style="flex: .5">
+                    <p class="m-0 text-end" style="font-weight: 600">@GetIngredientQuantity(ingredient) @UnitExtensions.GetUnitAbbreviation(ingredient.Unit)</p>
+                </div>
+                <div class="flex1 m-1">
+                    <p class="m-0">@ingredient.Name</p>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="flex column flex1 container">
+        <h2>Preperation steps:</h2>
+        @foreach (PreparationStep preparationStep in recipe.PreparationSteps)
+        {
+            <div class="flex rowx mt-4">
+                <div class="flex center rounded-circle me-4" style="min-width: 48px; min-height: 48px; max-width: 48px; max-height: 48px; border: #242424 solid 3px">
+                    <p class="m-0 text-m" style="font-weight: 600">@preparationStep.Order</p>
+                </div>
+                <div class="flex acenter">
+                    <p class="m-0">@preparationStep.Description</p>
+                </div>
+            </div>
+        }
     </div>
 </div>

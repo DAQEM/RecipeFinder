@@ -36,7 +36,8 @@ public class AuthController : BaseController<AuthController>
     [Route("Logout")]
     public IActionResult Logout()
     {
-        return Auth.LogoutAndRedirectToHome();
+        Auth.Logout();
+        return Redirect.Home;
     }
 
     [HttpPost]
@@ -49,7 +50,8 @@ public class AuthController : BaseController<AuthController>
 
             if (username != null)
             {
-                return Auth.LoginAndRedirectToHome(username);
+                Auth.Login(username);
+                return Redirect.Home;
             } 
         }
         ViewBag.ErrorMessage = "Invalid username or password.";
@@ -69,7 +71,8 @@ public class AuthController : BaseController<AuthController>
                 try
                 {
                     _authService.Register(model.Username, model.Fullname, model.Email, model.Password);
-                    return Auth.LoginAndRedirectToHome(model.Username);
+                    Auth.Login(model.Username);
+                    return Redirect.Home;
                 }
                 catch (Exception e) when (e is UsernameTakenException or EmailTakenException)
                 {
@@ -86,7 +89,7 @@ public class AuthController : BaseController<AuthController>
     public IActionResult ChangePassword()
     {
         return !Auth.IsLoggedIn() 
-            ? Auth.RedirectToNoPermission() 
+            ? Unauthorized()
             : View(new ChangePasswordModel { Username = Auth.GetSessionUsername()! });
     }
     
@@ -102,7 +105,8 @@ public class AuthController : BaseController<AuthController>
                 try
                 {
                     _authService.ChangePassword(model.Username, model.OldPassword, model.NewPassword);
-                    return Auth.LoginAndRedirectToHome(model.Username);
+                    Auth.Login(model.Username);
+                    return Redirect.Home;
                 }
                 catch (Exception e) when (e is WrongPasswordException or UsernameNotFoundException)
                 {

@@ -4,7 +4,7 @@
 .column {
     flex-direction: column;
 }
-.row {
+.rowx {
     flex-direction: row;
 }
 .wrap {
@@ -95,6 +95,10 @@
     border-radius: .25rem;
     transition: color .15s ease-in-out,background-color .15s ease-in-out,border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 }
+.button-secondary {
+    background-color: var(--secondary) !important;
+}
+
 .button:hover {
     filter: brightness(.85);
 }

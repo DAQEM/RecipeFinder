@@ -110,4 +110,25 @@ public class CookRepository : ICookRepository
         };
         QueryHelper.NonQuery(query, parameters);
     }
+
+    public List<Cook> GetBySearch(string searchString)
+    {
+        const string query = "SELECT id, username, fullname, image_url, created_at " +
+                             "FROM Cook " +
+                             "WHERE username LIKE @searchString OR fullname LIKE @searchString;";
+
+        MySqlParameter[] parameters =
+        {
+            new("@searchString", "%" + searchString + "%")
+        };
+
+        return QueryHelper.QueryMultiple(query, parameters,
+        reader => new Cook(
+            id: reader.GetGuid("id"),
+            username: reader.GetString("username"),
+            fullname: reader.GetString("fullname"),
+            imageUrl: reader.GetString("image_url"),
+            createdAt: reader.GetDateTime("created_at")
+        ));
+    }
 }

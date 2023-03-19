@@ -12,6 +12,4 @@ public class RedirectionHandler
     }
     
     public IActionResult Home => _controller.RedirectToAction("Index", "Home");
-    public IActionResult NoPermission => _controller.RedirectToAction("NoPermission", "Security");
-    public IActionResult NotFound => _controller.RedirectToAction("NotFound", "Security");
 }
