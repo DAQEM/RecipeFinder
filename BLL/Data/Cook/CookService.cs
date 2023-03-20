@@ -99,6 +99,24 @@ public class CookService : ICookService
         return cook;
     }
 
+    public Entities.Cook.Cook GetByUsernameWithLikedRecipes(string username)
+    {
+        Entities.Cook.Cook cook = GetByUsername(username);
+        List<Entities.Recipe.Recipe> recipes = _recipeService.GetLikedByCookId(cook.Id);
+        
+        cook.SetRecipes(recipes);
+        return cook;
+    }
+
+    public Entities.Cook.Cook GetByUsernameWithSavedRecipes(string username)
+    {
+        Entities.Cook.Cook cook = GetByUsername(username);
+        List<Entities.Recipe.Recipe> recipes = _recipeService.GetSavedByCookId(cook.Id);
+        
+        cook.SetRecipes(recipes);
+        return cook;
+    }
+
     public Entities.Cook.Cook GetWithRecipe(Guid recipeId)
     {
         Entities.Recipe.Recipe recipe = _recipeService.GetByIdDetailed(recipeId);

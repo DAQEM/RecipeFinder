@@ -1,8 +1,44 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
+    Layout = "_LayoutWide";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="flex jcenter w-100">
+    <div class="w-100">
+        <div class="flex center w-100" style="padding: 40px; height: 600px; background-image: url(https://hf-website-live.s3-eu-west-1.amazonaws.com/gb/cms/homepage/HF_App_web_landing_page_newbanners_desktop_1199x650.jpg);
+                                           background-repeat: no-repeat; background-size: cover; background-position: center center">
+            <div class="flex column justify-content-center align-items-center text-center">
+                <h1>Welcome to Recipe Finder</h1>
+                <p>Where you can find and share the best recipes.</p>
+                <div class="flex rowx justify-content-between w-100" style="max-width: 400px">
+                    @Html.TextBox("search", "", new { @class = "px-3", placeholder = "\uF002 Search for recipes.", id = "searchBox", style = "width: 100%; flex: 0.83; margin: 0; border-width: 0", onkeydown = "OnKeyDown(event)" })
+                    <button class="button" style="flex: 0.15" onclick="Search()">Search</button>
+                </div>
+            </div>
+        </div>
+        <div class="flex center w-100" style="height: 600px">
+            <h1>More content</h1>
+        </div>
+    </div>
 </div>
+
+<script>
+    const EnterKey = 13;
+
+    function OnKeyDown(event) {
+        if (event.keyCode === EnterKey) {
+            Search();
+        }
+    }
+
+    function Search() {
+        const search = document.getElementById("searchBox").value;
+        location.href = "/Recipe/?search=" + search;
+    }
+</script>
+
+<style>
+    .navbar {
+        margin: 0 !important;
+    }
+</style>

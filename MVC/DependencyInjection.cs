@@ -4,7 +4,9 @@ using BLL.Data.Cook.Credential;
 using BLL.Data.Cook.Follower;
 using BLL.Data.Recipe;
 using BLL.Data.Recipe.Ingredient;
+using BLL.Data.Recipe.Liker;
 using BLL.Data.Recipe.Preparation;
+using BLL.Data.Recipe.Saver;
 using BLL.Data.Review;
 using DAL.Repositories;
 
@@ -42,5 +44,11 @@ public static class DependencyInjection
         
         services.AddScoped<IFollowerRepository, FollowerRepository>();
         services.AddScoped<IFollowerService, FollowerService>();
+        
+        services.AddScoped<ILikerRepository, LikerRepository>();
+        services.AddScoped<ILikerService, LikerService>();
+        
+        services.AddScoped<ISaverRepository, SaverRepository>();
+        services.AddScoped<ISaverService, SaverService>();
     }
 }

@@ -40,11 +40,25 @@
     <div class="flex jcenter my-3 py-2 bg-white b-radius">
         <button
             id="RecipesTab"
-            class="px-4 py-2 mx-1 border-0 bg-secondary rounded-pill active"
+            class="py-2 mx-1 border-0 bg-secondary rounded-pill active"
             onclick="{
-                location.href = '/Cook/@Model.Cook.Username';
+                location.href = '/Cook/@Model.Cook.Username/Recipes';
             }">
-            Recipes
+            <div class="flex rowx" style="color: inherit">
+                <p class="ps-4 pe-2 m-0" style="color: inherit">Recipes</p>
+                <div id="LikedRecipesTab" class="fa-heart mx-1 rounded-circle" 
+                     style="color: red; height: 24px; width: 24px"
+                     onclick="{
+                         event.stopPropagation();
+                         location.href = '/Cook/@Model.Cook.Username/Recipes/Liked';
+                     }"></div>
+                <div id="SavedRecipesTab" class="fa-bookmark mx-1 rounded-circle" 
+                     style="color: cornflowerblue; height: 24px; width: 24px"
+                     onclick="{
+                         event.stopPropagation();
+                         location.href = '/Cook/@Model.Cook.Username/Recipes/Saved';
+                     }"></div>
+            </div>
         </button>
         <button
             id="ReviewsTab"
@@ -67,15 +81,35 @@
         background-color: var(--primary) !important;
         color: white !important;
     }
+    .activeSub {
+        background-color: white !important;
+    }
 </style>
        
 <script>
     const url = window.location.href;
-    if (url.endsWith('Reviews') || url.endsWith('Reviews/')) {
-        document.getElementById('ReviewsTab').classList.add('active');
-        document.getElementById('RecipesTab').classList.remove('active');
-    } else {
-        document.getElementById('RecipesTab').classList.add('active');
-        document.getElementById('ReviewsTab').classList.remove('active');
+    const urlArr = url.split('/');
+    if (urlArr.length > 0) {
+        if (urlArr[urlArr.length - 1] == 'Reviews') {
+            document.getElementById('ReviewsTab').classList.add('active');
+            document.getElementById('RecipesTab').classList.remove('active');
+            document.getElementById('LikedRecipesTab').style.backgroundColor = 'white';
+            document.getElementById('SavedRecipesTab').style.backgroundColor = 'white';
+        }else if (urlArr[urlArr.length - 1] == 'Saved') {
+            document.getElementById('SavedRecipesTab').style.backgroundColor = 'white';
+            document.getElementById('LikedRecipesTab').style.backgroundColor = 'var(--primary)';
+            document.getElementById('RecipesTab').classList.add('active');
+            document.getElementById('ReviewsTab').classList.remove('active');
+        }else if (urlArr[urlArr.length - 1] == 'Liked') {
+            document.getElementById('LikedRecipesTab').style.backgroundColor = 'white';
+            document.getElementById('SavedRecipesTab').style.backgroundColor = 'var(--primary)';
+            document.getElementById('RecipesTab').classList.add('active');
+            document.getElementById('ReviewsTab').classList.remove('active');
+        } else {
+            document.getElementById('RecipesTab').classList.add('active');
+            document.getElementById('ReviewsTab').classList.remove('active');
+            document.getElementById('LikedRecipesTab').style.backgroundColor = 'var(--primary)';
+            document.getElementById('SavedRecipesTab').style.backgroundColor = 'var(--primary)';
+        }
     }
 </script>

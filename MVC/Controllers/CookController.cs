@@ -31,11 +31,46 @@ public class CookController : BaseController<CookController>
     
     [HttpGet]
     [Route("{username}")]
+    [Route("{username}/Recipes")]
     public IActionResult Cook(string username)
     {
         try
         {
             Cook cook = _cookService.GetByUsernameWithRecipes(username);
+            Cook? viewer = GetViewer(_cookService);
+            CookModel cookModel = new(){ Cook = cook, Viewer = viewer };
+            return View("CookRecipes", cookModel);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+    }
+    
+    [HttpGet]
+    [Route("{username}/Recipes/Liked")]
+    public IActionResult CookRecipesLiked(string username)
+    {
+        try
+        {
+            Cook cook = _cookService.GetByUsernameWithLikedRecipes(username);
+            Cook? viewer = GetViewer(_cookService);
+            CookModel cookModel = new(){ Cook = cook, Viewer = viewer };
+            return View("CookRecipes", cookModel);
+        }
+        catch (NotFoundException)
+        {
+            return NotFound();
+        }
+    }
+    
+    [HttpGet]
+    [Route("{username}/Recipes/Saved")]
+    public IActionResult CookRecipesSaved(string username)
+    {
+        try
+        {
+            Cook cook = _cookService.GetByUsernameWithSavedRecipes(username);
             Cook? viewer = GetViewer(_cookService);
             CookModel cookModel = new(){ Cook = cook, Viewer = viewer };
             return View("CookRecipes", cookModel);
@@ -61,7 +96,7 @@ public class CookController : BaseController<CookController>
             return NotFound();
         }
     }
-    
+
     [HttpGet]
     [Route("{username}/Edit")]
     public IActionResult EditCook(string username)

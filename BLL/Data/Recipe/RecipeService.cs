@@ -1,5 +1,7 @@
 ﻿using BLL.Data.Recipe.Ingredient;
+using BLL.Data.Recipe.Liker;
 using BLL.Data.Recipe.Preparation;
+using BLL.Data.Recipe.Saver;
 using BLL.Data.Review;
 using BLL.Entities.Recipe;
 using BLL.Exceptions;
@@ -12,14 +14,19 @@ public class RecipeService : IRecipeService
     private readonly IIngredientService _ingredientService;
     private readonly IPreparationStepService _preparationStepService;
     private readonly IRecipeReviewService _recipeReviewService;
+    private readonly ILikerService _likerService;
+    private readonly ISaverService _saverService;
     
     public RecipeService(IRecipeRepository recipeRepository, IIngredientService ingredientService, 
-        IPreparationStepService preparationStepService, IRecipeReviewService recipeReviewService)
+        IPreparationStepService preparationStepService, IRecipeReviewService recipeReviewService,
+        ILikerService likerService, ISaverService saverService)
     {
         _recipeRepository = recipeRepository;
         _ingredientService = ingredientService;
         _preparationStepService = preparationStepService;
         _recipeReviewService = recipeReviewService;
+        _likerService = likerService;
+        _saverService = saverService;
     }
     
     public Entities.Recipe.Recipe GetById(Guid id)
@@ -41,9 +48,13 @@ public class RecipeService : IRecipeService
         Entities.Recipe.Recipe recipe = GetByIdWithReviews(id);
         List<Entities.Recipe.Ingredient.Ingredient> ingredients = _ingredientService.GetByRecipeId(id);
         List<PreparationStep> preparationSteps = _preparationStepService.GetByRecipeId(id);
+        List<Entities.Cook.Cook> likers = _likerService.GetForRecipeId(id);
+        List<Entities.Cook.Cook> savers = _saverService.GetForRecipeId(id);
         
         recipe.SetIngredients(ingredients);
         recipe.SetPreparationSteps(preparationSteps);
+        recipe.SetLikers(likers);
+        recipe.SetSavers(savers);
 
         return recipe;
     }
@@ -68,5 +79,15 @@ public class RecipeService : IRecipeService
     public List<Entities.Recipe.Recipe> GetBySearch(string searchString)
     {
         return _recipeRepository.GetBySearch(searchString);
+    }
+
+    public List<Entities.Recipe.Recipe> GetLikedByCookId(Guid cookId)
+    {
+        return _recipeRepository.GetLikedByCookId(cookId);
+    }
+
+    public List<Entities.Recipe.Recipe> GetSavedByCookId(Guid cookId)
+    {
+        return _recipeRepository.GetSavedByCookId(cookId);
     }
 }

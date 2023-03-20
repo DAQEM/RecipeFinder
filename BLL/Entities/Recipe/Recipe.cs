@@ -70,4 +70,14 @@ public class Recipe
     {
         _reviews = reviews.ToArray();
     }
+    
+    public void SetLikers(List<Cook.Cook> likers)
+    {
+        _likers = likers.ToArray();
+    }
+    
+    public void SetSavers(List<Cook.Cook> savers)
+    {
+        _savers = savers.ToArray();
+    }
 }

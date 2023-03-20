@@ -1,5 +1,4 @@
 ﻿function Follow(id) {
-    console.log(id);
     const xhr = new XMLHttpRequest();
     xhr.open("POST", "/Follow/" + id);
     xhr.send();

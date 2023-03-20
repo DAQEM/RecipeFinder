@@ -28,6 +28,12 @@ public interface ICookService
     /// <exception cref="NotFoundException">When the cook was not found</exception>
     Entities.Cook.Cook GetByUsernameWithFollowers(string username);
     
+    /// <exception cref="NotFoundException">When the cook was not found</exception>
+    Entities.Cook.Cook GetByUsernameWithLikedRecipes(string username);
+    
+    /// <exception cref="NotFoundException">When the cook was not found</exception>
+    Entities.Cook.Cook GetByUsernameWithSavedRecipes(string username);
+    
     /// <exception cref="NotFoundException">When the cook or the recipe was not found</exception>
     Entities.Cook.Cook GetWithRecipe(Guid recipeId);
 

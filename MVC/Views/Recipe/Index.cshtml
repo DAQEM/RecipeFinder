@@ -50,6 +50,14 @@
         const search = document.getElementById("searchBox").value;
         location.href = "/Recipe/?search=" + search;
     }
+    
+    
+   function SetSearch() {
+        const urlParams = new URLSearchParams(window.location.search);
+        document.getElementById("searchBox").value = urlParams.get('search');
+    }
+    
+    SetSearch();
 </script>
 
 <style>

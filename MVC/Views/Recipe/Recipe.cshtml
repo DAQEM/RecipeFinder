@@ -7,6 +7,8 @@
     ViewBag.Title = "Recipe";
     Layout = "_Layout";
     Recipe recipe = Model.Cook.Recipes[0];
+    
+    string clock = "\uF017";
 }
 
 @functions
@@ -61,6 +63,9 @@
     }
 }
 
+<script src="~/js/like.js"></script>
+<script src="~/js/save.js"></script>
+
 <div class="flex jcenter wrap">
     <a href="/Cook/@Model.Cook.Username" class="m-2 p-3 bg-white b-radius text-decoration-none" style="flex: .20; min-width: 200px">
         <div class="text-center">
@@ -76,13 +81,51 @@
     </a>
     <div class="m-2 bg-white b-radius w-100 flex1" style="min-width: 350px">
         <div class="flex wrap">
-            <div style="flex: 1; min-width: 250px">
-                <div class="position-absolute p-2 m-2 bg-white b-radius">
-                    <p class="m-0">@recipe.Category</p>
+            <div id="image-container" class="position-relative flex column justify-content-start align-items-baseline flex1" style="min-width: 250px;">
+              <div class="position-absolute top-0 start-0 bg-white b-radius p-2 m-2">
+                <p class="m-0">@recipe.Category</p>
+              </div>
+                <div class="position-absolute bottom-0 end-0 text-center">
+                    <div class="flex rowx">
+                        <div class="bg-white b-radius p-2 m-2" >
+                            <p class="m-0">@clock @GetPreparationTime()</p>
+                        </div>
+                        @if (Model.Viewer != null)
+                        {
+                            @if (recipe.Savers.Any(saver => saver.Id == Model.Viewer.Id))
+                            {
+                                <div class="b-radius p-2 m-2 fa-bookmark"
+                                     style="color: cornflowerblue; width: 40px; background-color: lightskyblue; cursor: pointer;"
+                                     id="save-button-@recipe.Id" onclick="Unsave('@recipe.Id')">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="b-radius p-2 m-2 fa-bookmark"
+                                     style="color: cornflowerblue; width: 40px; background-color: white; cursor: pointer;"
+                                     id="save-button-@recipe.Id" onclick="Save('@recipe.Id')">
+                                </div>
+                            }
+                            @if (recipe.Likers.Any(liker => liker.Id == Model.Viewer.Id))
+                            {
+                                <div class="b-radius p-2 m-2 fa-heart"
+                                     style="color: red; width: 40px; background-color: indianred; cursor: pointer;"
+                                     id="like-button-@recipe.Id" onclick="Unlike('@recipe.Id')">
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="b-radius p-2 m-2 fa-heart"
+                                     style="color: red; width: 40px; background-color: white; cursor: pointer;"
+                                     id="like-button-@recipe.Id" onclick="Like('@recipe.Id')">
+                                </div>
+                            }
+                        }
+                    </div>
                 </div>
-                <img class="b-radius w-100" src="@recipe.ImageUrl" alt="Recipe Image" style="object-fit: cover"/>
+              <img id="recipe-image" class="b-radius w-100 h-auto" src="@recipe.ImageUrl" alt="Recipe Image" style="object-fit: cover;">
             </div>
-            <div class="py-3 px-4" style="flex: 1; min-width: 250px">
+            <div class="flex1 py-3 px-4" style="min-width: 250px">
                 <h1 class="m-0" style="font-weight: 600">@recipe.Name</h1>
                 <p class="m-0 text-xs">Uploaded: @recipe.CreatedAt</p>
                 @if (recipe.UpdatedAt.ToShortDateString() != recipe.CreatedAt.ToShortDateString())
@@ -92,9 +135,6 @@
                 <div class="my-3 p-2 b-radius" style="background-color: var(--background)">
                     <p class="m-0"><strong>About the recipe.</strong></p>
                     <p class="m-0">@recipe.Description</p>
-                </div>
-                <div class="my-3 p-2 b-radius" style="background-color: var(--background)">
-                    <p class="m-0"><strong>Preparation time: </strong>@GetPreparationTime()</p>
                 </div>
             </div>
         </div>
@@ -118,17 +158,46 @@
     </div>
 
     <div class="flex column flex1 container">
-        <h2>Preperation steps:</h2>
+        <h2>Preparation steps:</h2>
         @foreach (PreparationStep preparationStep in recipe.PreparationSteps)
         {
-            <div class="flex rowx mt-4">
-                <div class="flex center rounded-circle me-4" style="min-width: 48px; min-height: 48px; max-width: 48px; max-height: 48px; border: #242424 solid 3px">
-                    <p class="m-0 text-m" style="font-weight: 600">@preparationStep.Order</p>
+            <div class="flex rowx mt-4"
+                 onclick="ClickOnPreparationStep(@preparationStep.Order)"
+                 id="step-@preparationStep.Order">
+                <div class="flex center rounded-circle me-4" id="order-cirle-@preparationStep.Order" 
+                     style="min-width: 48px; min-height: 48px; max-width: 48px; max-height: 48px; border: #242424 solid 3px; color: inherit">
+                    <p class="m-0 text-m" style="font-weight: 600; color: inherit">@preparationStep.Order</p>
                 </div>
-                <div class="flex acenter">
-                    <p class="m-0">@preparationStep.Description</p>
+                <div class="flex acenter" style="color: inherit">
+                    <p class="m-0" style="color: inherit">@preparationStep.Description</p>
                 </div>
             </div>
         }
     </div>
 </div>
+
+<script>
+    function SetImageContainerHeight() {
+        let imageContainer = document.getElementById("image-container");
+        let image = document.getElementById("recipe-image");
+        imageContainer.style.height = image.clientHeight + "px";
+    }
+    
+    function ClickOnPreparationStep(order) {
+        
+        const clickedElement = document.getElementById("step-" + order);
+        if (clickedElement.style.color == "gray") {
+            clickedElement.style.color = "inherit";
+            clickedElement.style.textDecoration = "none";
+            const orderCircle = document.getElementById("order-cirle-" + order);
+            orderCircle.style.borderColor = "#242424";
+        } else {
+            clickedElement.style.color = "gray";
+            clickedElement.style.textDecoration = "line-through";
+            const orderCircle = document.getElementById("order-cirle-" + order);
+            orderCircle.style.borderColor = "gray";
+        }
+    }
+    
+    window.addEventListener("load", SetImageContainerHeight);
+</script>
