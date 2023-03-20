@@ -50,4 +50,28 @@ public class RecipeController : BaseController<RecipeController>
 
         
     }
+
+    [HttpGet]
+    [Route("{recipeId}/Edit")]
+    public IActionResult EditRecipe(Guid recipeId)
+    {
+        if (!Auth.IsLoggedIn()) return Unauthorized();
+        
+        Recipe recipe = _recipeService.GetByIdDetailed(recipeId);
+        Cook? viewer = GetViewer(_cookService);
+        
+        if (viewer != null && recipe.CookId != viewer.Id) return Unauthorized();
+
+        EditRecipeModel model = EditRecipeModel.FromRecipe(recipe, viewer);
+        
+        return View(model);
+    }
+    
+    [HttpPost]
+    [Route("{recipeId}/Edit")]
+    public IActionResult EditRecipe(Guid recipeId, EditRecipeModel model)
+    {
+        Console.WriteLine(model.Name);
+        return View("EditRecipe", model);
+    }
 }

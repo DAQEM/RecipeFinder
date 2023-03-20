@@ -1,0 +1,68 @@
+﻿@using BLL.Entities.Recipe
+@using BLL.Entities.Recipe.Ingredient
+@using MVC.Models.Recipe
+@model MVC.Models.Recipe.EditRecipeModel
+
+@{
+    Layout = "_Layout";
+}
+
+<div class="flex column w-100">
+    <h1>Edit Recipe</h1>
+    @using (Html.BeginForm("EditRecipe", "Recipe", FormMethod.Post))
+    {
+        <div class="flex column w-100">
+            <div class="flex column w-100">
+                <label>Name</label>
+                @Html.TextBoxFor(model => model.Name, new { @class = "w-100", @placeholder = "Name" })
+            </div>
+            <div class="flex column w-100">
+                <label>Description</label>
+                @Html.TextAreaFor(model => model.Description, new { @class = "w-100", @placeholder = "Description" })
+            </div>
+            <div class="flex column w-100">
+                <label>Preparation Time</label>
+                @Html.TextBoxFor(model => model.PreparationTime, new { @class = "w-100", @placeholder = "Preparation Time" })
+            </div>
+            <div class="flex column w-100">
+                <label>Category</label>
+                @Html.DropDownListFor(model => model.Category, new SelectList(Enum.GetNames(typeof(Category))),new { @class = "w-100", @placeholder = "Category" })
+            </div>
+            <div class="flex column w-100">
+                <label>Ingredients</label>
+                <div class="flex column w-100">
+                    @for(int i = 0; i < Model.Ingredients.Count; i++)
+                    {
+                        <div class="flex column">
+                            <div class="flex column">
+                                @Html.TextBoxFor(model => Model.Ingredients[i].Name, new { @class = "w-100", @placeholder = "Name" })
+                            </div>
+                            <div class="flex column">
+                                @Html.TextBoxFor(model => Model.Ingredients[i].Quantity, new { @class = "w-100", @placeholder = "Amount", @type = "number" })
+                            </div>
+                            <div class="flex column">
+                                @Html.DropDownListFor(model => Model.Ingredients[i].Unit, new SelectList(Enum.GetNames(typeof(Unit))),new { @class = "w-100", @placeholder = "Unit" })
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+            <div class="flex column w-100">
+                <label>Preparation steps</label>
+                <div class="flex column w-100">
+                    @for(int i = 0; i < Model.PreparationSteps.Count; i++)
+                    {
+                        <div class="flex column">
+                            <div class="flex column">
+                                @Html.TextBoxFor(model => Model.PreparationSteps[i].Description, new { @class = "w-100", @placeholder = "Amount" })
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="flex column w-100">
+            <button class="button" type="submit">Save</button>
+        </div>
+    }
+</div>
