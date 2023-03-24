@@ -31,7 +31,6 @@ public class AuthService : IAuthService
         if (IsEmailTaken(email)) throw new EmailTakenException();
         
         Guid cookId = Guid.NewGuid();
-        Guid credentialId = Guid.NewGuid();
         string hashedPassword = PasswordSecurity.HashPassword(password);
         
         _cookService.Add(new Entities.Cook.Cook(

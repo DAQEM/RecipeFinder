@@ -24,4 +24,34 @@ public class IngredientRepository : IIngredientRepository
                 unit: (Unit)reader.GetInt32("unit")
             ));
     }
+
+    public void DeleteByRecipeId(Guid recipeId)
+    {
+        const string query = "DELETE FROM Ingredient WHERE recipe_id = @RecipeId";
+        
+        MySqlParameter[] parameters =
+        {
+            new("@RecipeId", recipeId)
+        };
+        
+        QueryHelper.NonQuery(query, parameters);
+    }
+
+    public void Add(Guid recipeId, Ingredient ingredient)
+    {
+        const string query = "INSERT INTO Ingredient (id, recipe_id, name, description, quantity, unit) " +
+                             "VALUES (@Id, @RecipeId, @Name, @Description, @Quantity, @Unit);";
+        
+        MySqlParameter[] parameters =
+        {
+            new("@Id", Guid.NewGuid()),
+            new("@RecipeId", recipeId),
+            new("@Name", ingredient.Name),
+            new("@Description", ingredient.Description),
+            new("@Quantity", ingredient.Quantity),
+            new("@Unit", (int)ingredient.Unit)
+        };
+            
+        QueryHelper.NonQuery(query, parameters);
+    }
 }

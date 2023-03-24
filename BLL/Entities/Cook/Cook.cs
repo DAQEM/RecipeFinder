@@ -50,7 +50,7 @@ public class Cook
         _recipes = recipes.ToArray();
     }
     
-    public void SetFollowers(List<Cook> followers)
+    public void SetFollowing(List<Cook> followers)
     {
         _following = followers.ToArray();
     }

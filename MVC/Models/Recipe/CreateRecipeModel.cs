@@ -1,10 +1,10 @@
 ﻿using BLL.Entities.Recipe;
-using BLL.Entities.Recipe.Ingredient;
 
 namespace MVC.Models.Recipe;
 
-public class EditRecipeModel
+public class CreateRecipeModel
 {
+    public Guid Id { get; set; } = Guid.Empty;
     public string Name { get; set; } = "";
     public string ImageUrl { get; set; } = "";
     public string Description { get; set; } = "";
@@ -16,10 +16,11 @@ public class EditRecipeModel
     
     public BLL.Entities.Cook.Cook? Viewer { get; set; }
     
-    public static EditRecipeModel FromRecipe(BLL.Entities.Recipe.Recipe recipe, BLL.Entities.Cook.Cook? viewer)
+    public static CreateRecipeModel FromRecipe(BLL.Entities.Recipe.Recipe recipe, BLL.Entities.Cook.Cook? viewer)
     {
-        return new EditRecipeModel
+        return new CreateRecipeModel
         {
+            Id = recipe.Id,
             Name = recipe.Name,
             ImageUrl = recipe.ImageUrl,
             Description = recipe.Description,

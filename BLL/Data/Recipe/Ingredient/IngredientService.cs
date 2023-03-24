@@ -13,4 +13,21 @@ public class IngredientService : IIngredientService
     {
         return _ingredientRepository.GetByRecipeId(id);
     }
+
+    public void UpdateForRecipeId(Guid recipeId, Entities.Recipe.Ingredient.Ingredient[] recipeIngredients)
+    {
+        _ingredientRepository.DeleteByRecipeId(recipeId);
+        foreach (Entities.Recipe.Ingredient.Ingredient ingredient in recipeIngredients)
+        {
+            _ingredientRepository.Add(recipeId, ingredient);
+        }
+    }
+
+    public void CreateForRecipeId(Guid recipeId, Entities.Recipe.Ingredient.Ingredient[] recipeIngredients)
+    {
+        foreach (Entities.Recipe.Ingredient.Ingredient ingredient in recipeIngredients)
+        {
+            _ingredientRepository.Add(recipeId, ingredient);
+        }
+    }
 }

@@ -131,4 +131,43 @@ public class RecipeRepository : IRecipeRepository
                 cookId: reader.GetGuid("cook_id")
             ));
     }
+
+    public void Update(Recipe recipe)
+    {
+        const string query = "UPDATE Recipe " +
+                             "SET name = @name, image_url = @image_url, description = @description, preparation_time = @preparation_time, category = @category, updated_at = @updated_at " +
+                             "WHERE id = @id;";
+        MySqlParameter[] parameters =
+        {
+            new("@name", recipe.Name),
+            new("@image_url", recipe.ImageUrl),
+            new("@description", recipe.Description),
+            new("@preparation_time", recipe.PreparationTime),
+            new("@category", (int)recipe.Category),
+            new("@updated_at", DateTime.Now),
+            new("@id", recipe.Id)
+        };
+        
+        QueryHelper.NonQuery(query, parameters);
+    }
+
+    public void Create(Recipe recipe)
+    {
+        const string query = "INSERT INTO Recipe (id, name, image_url, description, preparation_time, category, created_at, updated_at, cook_id) " +
+                             "VALUES (@id, @name, @image_url, @description, @preparation_time, @category, @created_at, @updated_at, @cook_id);";
+        MySqlParameter[] parameters =
+        {
+            new("@id", recipe.Id),
+            new("@name", recipe.Name),
+            new("@image_url", recipe.ImageUrl),
+            new("@description", recipe.Description),
+            new("@preparation_time", recipe.PreparationTime),
+            new("@category", (int)recipe.Category),
+            new("@created_at", DateTime.Now),
+            new("@updated_at", DateTime.Now),
+            new("@cook_id", recipe.CookId)
+        };
+        
+        QueryHelper.NonQuery(query, parameters);
+    }
 }

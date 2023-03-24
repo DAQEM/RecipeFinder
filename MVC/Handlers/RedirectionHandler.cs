@@ -12,4 +12,5 @@ public class RedirectionHandler
     }
     
     public IActionResult Home => _controller.RedirectToAction("Index", "Home");
+    public IActionResult Login => _controller.RedirectToAction("Login", "Auth");
 }

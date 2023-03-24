@@ -51,7 +51,7 @@ form {
 label {
   font-size: 1rem;
 }
-input {
+input, select, textarea {
   width: 100%;
   height: 48px;
   border-radius: 4px;
@@ -67,7 +67,8 @@ input {
   outline: none;
   margin-bottom: 24px;
 }
-input:focus, input:active, input:hover {
+
+input:focus, input:active, input:hover, select:focus, select:active, select:hover, textarea:focus, textarea:active, textarea:hover {
   border-width: 2px;
   border-style: solid;
 }

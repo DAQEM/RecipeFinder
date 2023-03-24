@@ -87,11 +87,18 @@
               </div>
                 <div class="position-absolute bottom-0 end-0 text-center">
                     <div class="flex rowx">
-                        <div class="bg-white b-radius p-2 m-2" >
+                        <div class="bg-white b-radius p-2 m-2">
                             <p class="m-0">@clock @GetPreparationTime()</p>
                         </div>
                         @if (Model.Viewer != null)
                         {
+                            @if (recipe.CookId == Model.Viewer.Id)
+                            {
+                                <button class="bg-secondary b-radius p-2 m-2 px-4 border-0"
+                                        onclick="location.href = '/Recipe/@recipe.Id/Edit'">
+                                    <p class="text-white m-0">Edit</p>
+                                </button>
+                            }
                             @if (recipe.Savers.Any(saver => saver.Id == Model.Viewer.Id))
                             {
                                 <div class="b-radius p-2 m-2 fa-bookmark"
@@ -159,7 +166,7 @@
 
     <div class="flex column flex1 container">
         <h2>Preparation steps:</h2>
-        @foreach (PreparationStep preparationStep in recipe.PreparationSteps)
+        @foreach (PreparationStep preparationStep in recipe.PreparationSteps.OrderBy(step => step.Order))
         {
             <div class="flex rowx mt-4"
                  onclick="ClickOnPreparationStep(@preparationStep.Order)"
@@ -186,7 +193,7 @@
     function ClickOnPreparationStep(order) {
         
         const clickedElement = document.getElementById("step-" + order);
-        if (clickedElement.style.color == "gray") {
+        if (clickedElement.style.color === "gray") {
             clickedElement.style.color = "inherit";
             clickedElement.style.textDecoration = "none";
             const orderCircle = document.getElementById("order-cirle-" + order);

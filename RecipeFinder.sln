@@ -6,6 +6,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DAL", "DAL\DAL.csproj", "{5
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MVC", "MVC\MVC.csproj", "{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BLL.Tests", "BLL.Tests\BLL.Tests.csproj", "{FABC3180-FD5E-4781-ABA2-FE7F9ECA299E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -24,5 +26,9 @@ Global
 		{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C5B11CC9-BF7D-4CE6-8842-06B37A6878F9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FABC3180-FD5E-4781-ABA2-FE7F9ECA299E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FABC3180-FD5E-4781-ABA2-FE7F9ECA299E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FABC3180-FD5E-4781-ABA2-FE7F9ECA299E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FABC3180-FD5E-4781-ABA2-FE7F9ECA299E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

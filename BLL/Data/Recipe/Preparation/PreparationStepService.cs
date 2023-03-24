@@ -15,4 +15,21 @@ public class PreparationStepService : IPreparationStepService
     {
         return _preparationStepRepository.GetByRecipeId(id);
     }
+
+    public void UpdateForRecipeId(Guid recipeId, PreparationStep[] recipePreparationSteps)
+    {
+        _preparationStepRepository.DeleteByRecipeId(recipeId);
+        foreach (PreparationStep preparationStep in recipePreparationSteps)
+        {
+            _preparationStepRepository.Add(recipeId, preparationStep);
+        }
+    }
+
+    public void CreateForRecipeId(Guid recipeId, PreparationStep[] recipePreparationSteps)
+    {
+        foreach (PreparationStep preparationStep in recipePreparationSteps)
+        {
+            _preparationStepRepository.Add(recipeId, preparationStep);
+        }
+    }
 }

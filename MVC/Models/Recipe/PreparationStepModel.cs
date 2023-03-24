@@ -2,6 +2,6 @@
 
 public class PreparationStepModel
 {
-    public int Order { get; set; }
+    public int Order { get; set; } = 0;
     public string Description { get; set; } = "";
 }

@@ -1,0 +1,147 @@
+﻿@using BLL.Entities.Recipe
+@using BLL.Entities.Recipe.Ingredient
+@model MVC.Models.Recipe.CreateRecipeModel
+
+<div class="flex column w-100">
+    <h2 class="text-center">Basic information</h2>
+    <div class="flex wrap bg-white p-3 m-3 b-radius mb-5">
+        <div class="flex1" style="min-width: 300px">
+            <div class="flex column w-100 p-2">
+                <label style="font-weight: 600">Name</label>
+                @Html.TextBoxFor(model => model.Name, new { @class = "w-100", @placeholder = "Name" })
+            </div>
+            <div class="flex column w-100 p-2">
+                <label style="font-weight: 600">Image URL</label>
+                @Html.TextBoxFor(model => model.ImageUrl, new { @class = "w-100", @placeholder = "Image URL" })
+            </div>
+            <div class="flex column w-100 p-2">
+                <label style="font-weight: 600">Preparation Time</label>
+                @Html.TextBoxFor(model => model.PreparationTime, new { @class = "w-100", @placeholder = "Preparation Time", type = "time", step = "1" })
+            </div>
+            <div class="flex column w-100 p-2">
+                <label style="font-weight: 600">Category</label>
+                @Html.DropDownListFor(model => model.Category, new SelectList(Enum.GetNames(typeof(Category)).Where(s => !s.Equals("None")).Order()), new { @class = "w-100 mb-0", @placeholder = "Category" })
+            </div>
+        </div>
+        <div class="flex1 w-100 align-items-center" style="min-width: 300px; min-height: 300px">
+            <div class="flex column w-100 h-100 p-2">
+                <label style="font-weight: 600">Description</label>
+                @Html.TextAreaFor(model => model.Description, new { @class = "w-100 h-100 mb-0", @placeholder = "Description" })
+            </div>
+        </div>
+    </div>
+    <div class="flex column mb-5">
+        <h2 class="text-center">Ingredients</h2>
+        <div class="flex justify-content-evenly wrap">
+            @for (int i = 0; i < Model.Ingredients.Count; i++)
+            {
+                <div class="flex column bg-white p-3 m-3 b-radius" style="flex: 0 1 400px">
+                    <div class="flex column">
+                        @Html.TextBoxFor(model => Model.Ingredients[i].Name, new { @class = "w-100", @placeholder = "Name" })
+                    </div>
+                    <div class="flex gap-3">
+                        <div class="flex column flex1">
+                            @Html.TextBoxFor(model => Model.Ingredients[i].Quantity, new { @class = "w-100", @placeholder = "Amount" })
+                        </div>
+                        <div class="flex column flex1">
+                            @Html.DropDownListFor(model => Model.Ingredients[i].Unit, new SelectList(Enum.GetNames(typeof(Unit)).Order()), new { @class = "w-100", @placeholder = "Unit" })
+                        </div>
+                    </div>
+                </div>
+            }
+            <div id="extra-ingredient" class="flex column justify-content-center align-items-center bg-primary p-3 m-3 b-radius" style="flex: 0 1 400px">
+                <p class="text-white text-xxl">Add new ingredient</p>
+                <button type="button" class="button bg-white text-black w-50"
+                        onclick="AddIngredient()">+</button>
+            </div>
+        </div>
+    </div>
+    <div class="flex column w-100">
+        <h2 class="text-center">Preparation steps</h2>
+        <div class="flex column w-100">
+            @for (int i = 0; i < Model.PreparationSteps.Count; i++)
+            {
+                <div class="flex bg-white p-3 m-3 b-radius">
+                    <div class="flex center rounded-circle me-4"
+                         style="min-width: 48px; min-height: 48px; max-width: 48px; max-height: 48px; border: #242424 solid 3px; color: inherit">
+                        <p class="m-0 text-m" style="font-weight: 600; color: inherit">@(i + 1)</p>
+                    </div>
+                    <div class="flex column w-100">
+                        @Html.HiddenFor(model => Model.PreparationSteps[i].Order)
+                        @Html.TextAreaFor(model => Model.PreparationSteps[i].Description, new { @class = "w-100 mb-0", @placeholder = "Amount", style = "min-height: 100px" })
+                    </div>
+                </div>
+            }
+            <div id="extra-preparation-step" class="flex column justify-content-center align-items-center bg-primary p-3 m-3 b-radius">
+                <p class="text-white text-xxl">Add new preparation step</p>
+                <button type="button" class="button bg-white text-black w-50"
+                        onclick="AddPreparationStep()">+</button>
+            </div>
+        </div>
+    </div>
+</div>
+@if (ViewBag.PageType == "EditRecipe")
+{
+    <div class="flex justify-content-center gap-5 w-100">
+        <button style="width: 250px" class="button bg-danger" type="button" onclick="location.href = '/Recipe/@Model.Id'">Back</button>
+        <button style="width: 250px" class="button" type="submit">Save</button>
+    </div>
+}
+else
+{
+    <div class="flex justify-content-center gap-5 w-100">
+        <button style="width: 250px" class="button" type="submit">Create</button>
+    </div>
+}
+
+
+<script>
+    function AddIngredient() {
+        let extra = document.getElementById("extra-ingredient");
+        let newIngredient = document.createElement("div");
+        newIngredient.classList.add("flex", "column", "bg-white", "p-3", "m-3", "b-radius");
+        newIngredient.style.flex = "0 1 400px";
+        let lastNumber = "-1";
+        if (extra.previousElementSibling !== null) lastNumber = extra.previousElementSibling.firstElementChild.firstElementChild.name.split("[")[1].split("]")[0];
+        let nextNumber = Number.parseInt(lastNumber, 10) + 1;
+        newIngredient.innerHTML = `
+            <div class="flex column">
+                <input class="w-100" placeholder="Name" name="Ingredients[${nextNumber}].Name" type="text" value="">
+            </div>
+            <div class="flex gap-3">
+                <div class="flex column flex1">
+                    <input class="w-100" placeholder="Amount" name="Ingredients[${nextNumber}].Quantity" type="number" value="">
+                </div>
+                <div class="flex column flex1">
+                    <select class="w-100" name="Ingredients[${nextNumber}].Unit">
+                        @for (int i = 0; i < Enum.GetNames(typeof(Unit)).Length; i++)
+                        {
+                            <option>@Enum.GetNames(typeof(Unit)).Order().ToArray()[i]</option>
+                        }
+                    </select>
+                </div>
+            </div>
+        `;
+        extra.before(newIngredient);
+    }
+    
+    function AddPreparationStep() {
+        let extra = document.getElementById("extra-preparation-step");
+        let newPreparationStep = document.createElement("div");
+        newPreparationStep.classList.add("flex", "bg-white", "p-3", "m-3", "b-radius");
+        let lastNumber = "-1";
+        if (extra.previousElementSibling !== null) lastNumber = extra.previousElementSibling.lastElementChild.firstElementChild.name.split("[")[1].split("]")[0];
+        let nextNumber = Number.parseInt(lastNumber, 10) + 1;
+        newPreparationStep.innerHTML = `
+            <div class="flex center rounded-circle me-4"
+                 style="min-width: 48px; min-height: 48px; max-width: 48px; max-height: 48px; border: #242424 solid 3px; color: inherit">
+                <p class="m-0 text-m" style="font-weight: 600; color: inherit">${nextNumber + 1}</p>
+            </div>
+            <div class="flex column w-100">
+                <input name="PreparationSteps[${nextNumber}].Order" type="hidden" value="${nextNumber + 1}">
+                <textarea class="w-100 mb-0" placeholder="Preparation step" name="PreparationSteps[${nextNumber}].Description" style="min-height: 100px"></textarea>
+            </div>
+        `;
+        extra.before(newPreparationStep);
+    }
+</script>

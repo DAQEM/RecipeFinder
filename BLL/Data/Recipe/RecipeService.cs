@@ -90,4 +90,18 @@ public class RecipeService : IRecipeService
     {
         return _recipeRepository.GetSavedByCookId(cookId);
     }
+
+    public void UpdateWithIngredientsAndPreparationSteps(Guid recipeId, Entities.Recipe.Recipe recipe)
+    {
+        _recipeRepository.Update(recipe);
+        _ingredientService.UpdateForRecipeId(recipeId, recipe.Ingredients);
+        _preparationStepService.UpdateForRecipeId(recipeId, recipe.PreparationSteps);
+    }
+
+    public void CreateWithIngredientsAndPreparationSteps(Entities.Recipe.Recipe recipe, Guid viewerId)
+    {
+        _recipeRepository.Create(recipe);
+        _ingredientService.CreateForRecipeId(recipe.Id, recipe.Ingredients);
+        _preparationStepService.CreateForRecipeId(recipe.Id, recipe.PreparationSteps);
+    }
 }

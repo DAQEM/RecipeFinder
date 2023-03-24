@@ -2,6 +2,7 @@
 using BLL.Data.Recipe;
 using BLL.Entities.Cook;
 using BLL.Entities.Recipe;
+using BLL.Entities.Recipe.Ingredient;
 using BLL.Exceptions;
 using Microsoft.AspNetCore.Mvc;
 using MVC.Models.Cook;
@@ -59,19 +60,81 @@ public class RecipeController : BaseController<RecipeController>
         
         Recipe recipe = _recipeService.GetByIdDetailed(recipeId);
         Cook? viewer = GetViewer(_cookService);
-        
+
         if (viewer != null && recipe.CookId != viewer.Id) return Unauthorized();
 
-        EditRecipeModel model = EditRecipeModel.FromRecipe(recipe, viewer);
+        CreateRecipeModel model = CreateRecipeModel.FromRecipe(recipe, viewer);
         
         return View(model);
     }
     
     [HttpPost]
     [Route("{recipeId}/Edit")]
-    public IActionResult EditRecipe(Guid recipeId, EditRecipeModel model)
+    public IActionResult EditRecipe(Guid recipeId, CreateRecipeModel model)
     {
-        Console.WriteLine(model.Name);
+        Recipe recipe = new(
+            id: recipeId,
+            name: model.Name,
+            imageUrl: model.ImageUrl,
+            description: model.Description,
+            preparationTime: model.PreparationTime,
+            category: model.Category,
+            ingredients: model.Ingredients.Select(ingredient => new Ingredient(
+                name: ingredient.Name,
+                description: "",
+                quantity: ingredient.Quantity,
+                unit: ingredient.Unit ?? Unit.Gram
+            )).ToArray(),
+            preparationSteps: model.PreparationSteps.Select(step => new PreparationStep(
+                order: step.Order,
+                description: step.Description
+            )).ToArray());
+        
+        _recipeService.UpdateWithIngredientsAndPreparationSteps(recipeId, recipe);
+        
         return View("EditRecipe", model);
+    }
+    
+    [HttpGet]
+    [Route("Create")]
+    public IActionResult CreateRecipe()
+    {
+        if (!Auth.IsLoggedIn()) return Redirect.Login;
+        
+        Cook? viewer = GetViewer(_cookService);
+        return View(CreateRecipeModel.FromRecipe(new Recipe(), viewer));
+    }
+    
+    [HttpPost]
+    [Route("Create")]
+    public IActionResult CreateRecipe(CreateRecipeModel model)
+    {
+        if (!Auth.IsLoggedIn()) return Unauthorized();
+        
+        Cook? viewer = GetViewer(_cookService);
+        if (viewer == null) return Unauthorized();
+        
+        Recipe recipe = new(
+            id: Guid.NewGuid(),
+            name: model.Name,
+            imageUrl: model.ImageUrl,
+            description: model.Description,
+            preparationTime: model.PreparationTime,
+            category: model.Category,
+            cookId: viewer.Id,
+            ingredients: model.Ingredients.Select(ingredient => new Ingredient(
+                name: ingredient.Name,
+                description: "",
+                quantity: ingredient.Quantity,
+                unit: ingredient.Unit ?? Unit.Gram
+            )).ToArray(),
+            preparationSteps: model.PreparationSteps.Select(step => new PreparationStep(
+                order: step.Order,
+                description: step.Description
+            )).ToArray());
+        
+        _recipeService.CreateWithIngredientsAndPreparationSteps(recipe, viewer.Id);
+        
+        return Redirect.Home;
     }
 }

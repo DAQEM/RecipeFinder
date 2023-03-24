@@ -1,0 +1,16 @@
+﻿@model MVC.Models.Recipe.CreateRecipeModel
+
+@{
+    Layout = "_Layout";
+    ViewBag.PageType = "CreateRecipe";
+}
+
+<div class="flex column w-100">
+    <h1 class="text-center mb-5">Create Recipe</h1>
+    @using (Html.BeginForm("CreateRecipe", "Recipe", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        @await Html.PartialAsync("Partial/CreateRecipePartial", Model)
+    }
+</div>
+

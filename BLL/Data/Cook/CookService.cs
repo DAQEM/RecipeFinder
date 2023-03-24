@@ -95,7 +95,7 @@ public class CookService : ICookService
         Entities.Cook.Cook cook = GetByUsername(username);
         List<Entities.Cook.Cook> followers = _followerService.GetForCook(cook);
         
-        cook.SetFollowers(followers);
+        cook.SetFollowing(followers);
         return cook;
     }
 
