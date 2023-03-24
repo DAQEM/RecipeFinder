@@ -10,7 +10,7 @@
     @using (Html.BeginForm("CreateRecipe", "Recipe", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        @await Html.PartialAsync("Partial/CreateRecipePartial", Model)
+        @await Html.PartialAsync("Partial/_CreateRecipePartial", Model)
     }
 </div>
 

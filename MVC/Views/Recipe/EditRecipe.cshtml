@@ -11,6 +11,6 @@
     @using (Html.BeginForm("EditRecipe", "Recipe", FormMethod.Post))
     {
         @Html.AntiForgeryToken()
-        @await Html.PartialAsync("Partial/CreateRecipePartial")
+        @await Html.PartialAsync("Partial/_CreateRecipePartial")
     }
 </div>
