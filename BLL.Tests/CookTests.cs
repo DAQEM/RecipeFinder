@@ -8,7 +8,7 @@ public class Tests
 {
 
     [Test]
-    public void SetReviewsTest()
+    public void SetReviews_ShouldSetCookReviewsToGivenReviewsList()
     {
         //Arrange
         Cook cook = new();
@@ -22,7 +22,7 @@ public class Tests
     }
 
     [Test]
-    public void SetRecipesTest()
+    public void SetRecipes_ShouldSetCookRecipesToGivenRecipesList()
     {
         //Arrange
         Cook cook = new();
@@ -36,7 +36,7 @@ public class Tests
     }
 
     [Test]
-    public void SetFollowersTest()
+    public void SetFollowers_ShouldSetCookFollowingToGivenFollowingList()
     {
         //Arrange
         Cook cook = new();
@@ -50,7 +50,7 @@ public class Tests
     }
 
     [Test]
-    public void SetCredentialTest()
+    public void SetCredential_ShouldSetCookCredentialToGivenCredential()
     {
         //Arrange
         Cook cook = new();

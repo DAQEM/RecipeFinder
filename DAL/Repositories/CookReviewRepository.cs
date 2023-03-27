@@ -51,22 +51,22 @@ public class CookReviewRepository : ICookReviewRepository
         throw new NotImplementedException();
     }
 
-    public void Add(Review review)
+    public void Add(Guid reviewedId, Review review)
     {
         throw new NotImplementedException();
     }
 
-    public void Update(Review review)
+    public void Update(Guid reviewedId, Review review)
     {
         throw new NotImplementedException();
     }
 
-    public void Delete(Review review)
+    public void Delete(Guid reviewedId, Review review)
     {
         throw new NotImplementedException();
     }
 
-    public Review GetForCookId(Guid userId)
+    public List<Review> GetForCookId(Guid userId)
     {
         throw new NotImplementedException();
     }

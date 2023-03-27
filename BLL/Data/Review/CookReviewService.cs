@@ -1,4 +1,4 @@
-﻿using BLL.Entities.Review;
+﻿using BLL.Exceptions;
 
 namespace BLL.Data.Review;
 
@@ -11,19 +11,20 @@ public class CookReviewService : ICookReviewService
         _cookReviewRepository = cookReviewRepository;
     }
     
-    public Entities.Review.Review GetForCookId(Guid cookId)
+    public List<Entities.Review.Review> GetForCookId(Guid cookId)
     {
         return _cookReviewRepository.GetForCookId(cookId);
     }
 
     public List<Entities.Review.Review> GetAll()
     {
-        throw new NotImplementedException();
+        return _cookReviewRepository.GetAll();
     }
 
     public Entities.Review.Review GetById(Guid id)
     {
-        throw new NotImplementedException();
+        Entities.Review.Review? review = _cookReviewRepository.GetById(id);
+        return review ?? throw new NotFoundException(typeof(CookReviewService), nameof(GetById), typeof(Entities.Review.Review), id);
     }
 
     public List<Entities.Review.Review> GetByCookId(Guid cookId)

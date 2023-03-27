@@ -8,7 +8,7 @@ namespace BLL.Tests;
 public class RecipeTests
 {
     [Test]
-    public void SetReviewsTest()
+    public void SetSavers_ShouldSetRecipeReviewsToGivenReviewsList()
     {
         //Arrange
         Recipe recipe = new();
@@ -22,7 +22,7 @@ public class RecipeTests
     }
     
     [Test]
-    public void SetIngredientsTest()
+    public void SetSavers_ShouldSetRecipeIngredientsToGivenIngredientsList()
     {
         //Arrange
         Recipe recipe = new();
@@ -36,7 +36,7 @@ public class RecipeTests
     }
     
     [Test]
-    public void SetPreparationStepsTest()
+    public void SetSavers_ShouldSetRecipePreparationStepsToGivenPreparationStepsList()
     {
         //Arrange
         Recipe recipe = new();
@@ -50,7 +50,7 @@ public class RecipeTests
     }
     
     [Test]
-    public void SetLikersTest()
+    public void SetSavers_ShouldSetRecipeLikersToGivenLikersList()
     {
         //Arrange
         Recipe recipe = new();
@@ -64,7 +64,7 @@ public class RecipeTests
     }
     
     [Test]
-    public void SetSaversTest()
+    public void SetSavers_ShouldSetRecipeSaversToGivenSaversList()
     {
         //Arrange
         Recipe recipe = new();

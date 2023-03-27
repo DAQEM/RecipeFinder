@@ -2,5 +2,5 @@
 
 public interface ICookReviewService : IReviewService
 {
-    Entities.Review.Review GetForCookId(Guid cookId);
+    List<Entities.Review.Review> GetForCookId(Guid cookId);
 }
